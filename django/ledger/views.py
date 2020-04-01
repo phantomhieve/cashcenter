@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
+from django.shortcuts import get_object_or_404
+from django.views import View
+from django.http import HttpResponseRedirect
 
 from .models import LedgerData
 from .filters import LedgerDataFilter
+from .forms import LedgerDataForm
 
 class LedgerListView(ListView):
     model = LedgerData
@@ -15,16 +19,25 @@ class LedgerListView(ListView):
             queryset=self.get_queryset()
         )
         return context
-    
 
 
 
-
-'''def ledgerView(request):
-    args = {}
+def ledgerAddView(request, id=None):
+    instance = None
+    if id:
+        instance = get_object_or_404(LedgerData,id=id)
+    if request.method == 'POST':
+        form = LedgerDataForm(request.POST ,instance=instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/ledger/')
+        return render(
+            request,
+            '404.html',
+        )
+    args = {'form': LedgerDataForm(instance=instance)}
     return render(
-        request, 
-        'ledger/view_ledger.html',
+        request,
+        'ledger/add_ledger.html',
         args
     )
-'''

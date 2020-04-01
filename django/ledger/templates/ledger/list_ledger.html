@@ -1,19 +1,18 @@
 {% extends 'base.html' %}
 
-{% csrf_token %}
-
 {% block title %}
     Ledger
 {% endblock title %} 
 
 {% block body %}
     <form action="" method="get">
+        {% csrf_token %}
         {{ filter.form.as_p }}
         <input type="submit" value="Submit">
     </form>
     {% for ledger in filter.qs %}
         <li>
-            {{ ledger.l_r_no }}
+            <a href="{% url 'ledger_add' %}{{ ledger.id }}">{{ ledger.l_r_no }}</a>
         </li>
     {% endfor %}
 {% endblock body %}
