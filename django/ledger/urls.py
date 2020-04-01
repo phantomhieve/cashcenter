@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import ledgerView
+from django.contrib.auth.decorators import login_required
+from .views import LedgerListView
 
 urlpatterns = [
     path(
         '',
-        ledgerView,
+        login_required(LedgerListView.as_view(), login_url='/login/'),
         name='ledger_list'
     )
 ]
