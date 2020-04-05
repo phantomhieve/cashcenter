@@ -16,10 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from ledger.views import LedgerListView
+from django.conf.urls.static import static
+from django.contrib.auth.decorators import login_required
+from . import settings
 
 urlpatterns = [
-    path('', LedgerListView.as_view()),
+    # need to change this
+    path(
+        '',
+        login_required(LedgerListView.as_view(), login_url='/login/'),
+        name='index_page'
+    ),
     path('admin/', admin.site.urls),
     path('ledger/', include('ledger.urls')),
     path('login/', include('user.urls'))
-]
+]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
