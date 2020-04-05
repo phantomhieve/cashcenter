@@ -24,10 +24,10 @@ urlpatterns = [
     # need to change this
     path(
         '',
-        login_required(LedgerListView.as_view(), login_url='/login/'),
+        login_required(LedgerListView.as_view(), login_url='/user/login/'),
         name='index_page'
     ),
     path('admin/', admin.site.urls),
     path('ledger/', include('ledger.urls')),
-    path('login/', include('user.urls'))
+    path('user/', include('user.urls'))
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
