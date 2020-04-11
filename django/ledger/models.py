@@ -21,3 +21,8 @@ class LedgerData(models.Model):
 
     def __str__(self):
         return f'{self.l_r_no} - {self.supplier}'
+    
+    def save(self, *args, **kwargs):
+        if self.l_r_date!=None and self.delivery!=None:
+            self.status= True
+        super(LedgerData, self).save(*args, **kwargs)
