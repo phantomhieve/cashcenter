@@ -13,35 +13,27 @@
 
 {% block body %}
 {% include 'navbar.html' %}
-
     <!--Filter form-->
-    <form action="" method="get" class="container">
+    <form action="" method="get">
         {% csrf_token %}
-        <div class="form-row mb-2">
-            <div class="col datepicker">
-                <label for="id_l_r_date center">L R Date</label>
-                {% render_field filter.form.l_r_date class+="form-control" type="date"%}
-            </div>
-            <div class="col">
-                <label for="id_delivery datepicker">Delivery Date</label>
-                {% render_field filter.form.delivery class+="form-control" type="date"%}
-            </div>
-            <div class="col">
-                <label for="id_reciept">Reciept</label>
-                {% render_field filter.form.reciept class+="form-control" type="number"%}
-            </div>
-            <div class="col">
-                <label for="id_status">Status</label>
-                {% render_field filter.form.status class+="form-control"%}
-            </div>
-            <div class="col">
-                <label for="id_ordering">Order by</label>
-                {% render_field filter.form.ordering class+="form-control"%}
-            </div>
-            <div class="col">
-                <input type="Submit" class="form-control btn btn-primary submit-button" value="Filter">
-            </div>
+        <div class="row form-item">
+            <div class="col-md-4 form-item"> L R Date</div>
+            <div class="col-md-1 form-item"> L R No</div>
+            <div class="col-md-2 form-item"> Delivery Date</div>
+            <div class="col-md-1 form-item"> Reciept</div>
+            <div class="col-md-1 form-item"> Status</div>
+            <div class="col-md-2 form-item"> Order by</div>
         </div>
+        <div class="row form-item">
+            {% render_field filter.form.l_r_date class+="form-control"%}
+            {% render_field filter.form.l_r_no__contains class+="form-control col-md-1 form-item"%}
+            {% render_field filter.form.delivery class+="form-control col-md-2 form-item" type="date"%}
+            {% render_field filter.form.reciept class+="form-control col-md-1 form-item" type="number"%}
+            {% render_field filter.form.status class+="form-control col-md-1 form-item"%}
+            {% render_field filter.form.ordering class+="form-control col-md-1 form-item"%}
+            <input type="Submit" class="form-control btn btn-primary submit-button col-md-1 form-item" value="Filter">
+        </div>
+
     </form>
     <!-- Filter form end-->
 
