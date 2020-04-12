@@ -474,3 +474,9 @@ form {
 .form-item-half {
   margin-left: 5px;
 }
+.form-row {
+  padding-bottom: 10px;
+}
+.form-button {
+  margin-top: 31px;
+}
