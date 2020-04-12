@@ -183,9 +183,6 @@ input, label {
   font-family: Lato-Regular;
   text-align: center !important;
 }
-.submit-button {
-  margin-top: 32px;
-}
 
 
 .table100.ver1 .table100-body tr:nth-child(even) {
@@ -466,4 +463,14 @@ input, label {
 
 .table100.ver5 .ps__rail-y .ps__thumb-y::before {
   background-color: #cccccc;
+}
+
+form {
+  padding-bottom: 5px;
+}
+.form-item {
+  margin-left: 10px;
+}
+.form-item-half {
+  margin-left: 5px;
 }
