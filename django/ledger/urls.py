@@ -1,6 +1,11 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from .views import LedgerListView, ledgerAddView
+from .views import (
+    LedgerListView, 
+    ledgerAddView, 
+    ledgerDeleteView, 
+    autoComplete,
+)
 
 urlpatterns = [
     path(
@@ -17,5 +22,16 @@ urlpatterns = [
         'add/<int:id>/',
         login_required(ledgerAddView, login_url='/user/login/'),
         name='ledger_update'
-    )
+    ),
+    path(
+        'delete/<int:id>/',
+        login_required(ledgerDeleteView, login_url='/user/login/'),
+        name='ledger_delete'
+    ),
+    path(
+        'autocomplete/',
+        login_required(autoComplete, login_url='/user/login/'),
+        name='autocomplete'
+    ),
+    
 ]
