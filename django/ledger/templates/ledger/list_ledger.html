@@ -80,7 +80,7 @@
                                 <td class="cell100 column-small">{{ledger.pcs_mtr|default_if_none:"-"}}</td>
                                 <td class="cell100 column-small">{{ledger.price|default_if_none:"-"}}</td>
                                 <td class="cell100 column-small">{{ledger.weight|default_if_none:"-"}}</td>
-                                <td class="cell100 column-small">{{ledger.frieght|default_if_none:"-"}}</td>
+                                <td class="cell100 column-small">{{ledger.frieght|default_if_none:"-"|floatformat:2}}</td>
                                 <td class="cell100 column">{{ledger.transport|default_if_none:"-"}}</td>
                                 <td class="cell100 column">{{ledger.delivery|default_if_none:"-"}}</td>
                                 <td class="cell100 column-small">{{ledger.reciept|default_if_none:"-"}}</td>
