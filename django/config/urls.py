@@ -21,12 +21,6 @@ from django.contrib.auth.decorators import login_required
 from . import settings
 
 urlpatterns = [
-    # need to change this
-    path(
-        '',
-        login_required(LedgerListView.as_view(), login_url='/user/login/'),
-        name='index_page'
-    ),
     path('admin/', admin.site.urls),
     path('ledger/', include('ledger.urls')),
     path('user/', include('user.urls'))
