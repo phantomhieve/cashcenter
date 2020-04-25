@@ -11,11 +11,11 @@ class LedgerData(models.Model):
     item      = models.CharField(blank=True, null=True, max_length=255)
     pcs_mtr   = models.FloatField(blank=True, null=True)
     price     = models.FloatField(blank=True, null=True)
-    weight    = models.IntegerField(blank=True, null=True)
+    weight    = models.CharField(blank=True, null=True, max_length=255)
     frieght   = models.FloatField(blank=True, null=True)
     transport = models.CharField(blank=True, null=True, max_length=255)
     delivery  = models.DateField(blank=True, null=True)
-    reciept   = models.IntegerField(blank=True, null=True)
+    reciept   = models.CharField(blank=True, null=True, max_length=255)
     remark    = models.CharField(blank=True, null=True, max_length=255)
     status    = models.BooleanField(default=False)
 
