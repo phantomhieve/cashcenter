@@ -31,17 +31,17 @@
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_supplier">Supplier</label>
-                    {% render_field form.supplier class+="form-control" type="text"%}
+                    {% render_field form.supplier class+="supplierAutoComplete form-control " type="text" autocomplete="off" %}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="id_location">Location</label>
-                    {% render_field form.location class+="form-control" type="text"%}
+                    {% render_field form.location class+="locationAutoComplete form-control" type="text" autocomplete="off" %}
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_item">Item</label>
-                    {% render_field form.item class+="form-control" type="text"%}
+                    {% render_field form.item class+="itemAutoComplete form-control" type="text" autocomplete="off" %}
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_pcs/mtr">PCS/MTR</label>
@@ -55,15 +55,15 @@
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="id_weight">Weight</label>
-                    {% render_field form.weight class+="form-control" type="number"%}
+                    {% render_field form.weight class+="form-control" type="text" autocomplete="off"%}
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_frieght">Friegnt</label>
-                    {% render_field form.frieght class+="form-control" type="number" step="0.01"%}
+                    {% render_field form.frieght class+="form-control" type="number" step="0.01" %}
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_transport">Transport</label>
-                    {% render_field form.transport class+="form-control" type="text"%}
+                    {% render_field form.transport class+="form-control transportAutoComplete" type="text" autocomplete="off"%}
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_delivery">Delivery</label>
@@ -73,16 +73,80 @@
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="id_reciept">Reciept</label>
-                    {% render_field form.reciept class+="form-control" type="number"%}
+                    {% render_field form.reciept class+="form-control" type="text" autocomplete="off"%}
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_remark">Remark</label>
-                    {% render_field form.remark class+="form-control" type="text"%}
+                    {% render_field form.remark class+="form-control" type="text" autocomplete="off"%}
                 </div>
+                {% if  instance %}
+                <div class="form-group col-md-3">
+                    <input type="submit" value="Add/Update" class="form-control btn btn-primary form-button">
+                </div>
+                <div class="form-group col-md-3">
+                    <button type="button" class="form-control btn btn-danger form-button" data-toggle="modal" data-target="#deleteConformation">
+                    Delete
+                    </button>
+                </div>
+                {% else %}
                 <div class="form-group col-md-6">
                     <input type="submit" value="Add/Update" class="form-control btn btn-primary form-button">
                 </div>
-            </div>
+
+                {% endif %}
         </form>
-    </div>
+        <!-- Modal -->
+        <div class="modal fade" id="deleteConformation" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="form-control btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="{% url 'ledger_delete' id=instance %}" class="form-control btn btn-danger ">Delete</a>
+                </div>
+                </div>
+            </div>
+        </div>
 {% endblock body %}
+{% block script %}
+<script>
+    $('.supplierAutoComplete').autoComplete({
+        minLength: 1,
+        resolverSettings: {
+            url: "{% url 'autocomplete'%}?field=supplier"
+        }
+    });
+    $('.locationAutoComplete').autoComplete({
+        minLength: 1,
+        resolverSettings: {
+            url: "{% url 'autocomplete'%}?field=location"
+        }
+    });
+    $('.transportAutoComplete').autoComplete({
+        minLength: 1,
+        resolverSettings: {
+            url: "{% url 'autocomplete'%}?field=transport"
+        }
+    });
+
+    $('.itemAutoComplete').autoComplete({
+        minLength: 1,
+        resolverSettings: {
+            url: "{% url 'autocomplete'%}?field=item"
+        }
+    });
+
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+    })
+
+    document.getElementById('id_frieght').onchange = function(event){
+        this.value = parseFloat(this.value).toFixed(2);
+    }
+</script>
+{% endblock script %}
