@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class LedgerData(models.Model):
-    l_r_no    = models.IntegerField()
+    l_r_no    = models.CharField(max_length=255)
     l_r_date  = models.DateField(blank=True, null=True)
     bale_no   = models.IntegerField(blank=True, null=True)
     supplier  = models.CharField(blank=True, null=True, max_length=255)
