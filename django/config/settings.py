@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'ledger.apps.LedgerConfig',
     'user.apps.UserConfig',
+    'stock.apps.StockConfig',
     'django_filters',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'mathfilters',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load mathfilters %}
+
+{% block title %}
+    Stock
+{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'stock/css/main.css'%}">
+{% endblock css %}
+
+
+{% block body %}
+{% include 'stock/stock_navbar.html' %}
+    <!--Filter form-->
+    <form action="" method="get">
+        {% csrf_token %}
+        <div class="row form-item">
+            <div class="col-md-2 form-item"> Item</div>
+            <div class="col-md-2 form-item"> HSN</div>
+            <div class="col-md-2 form-item"> Category</div>
+        </div>
+        <div class="row form-item">
+            {% for field in filter.form.visible_fields %}
+                {% render_field field class+="form-control col-md-2 form-item"%}
+            {% endfor %}
+            <input type="Submit" class="form-control btn btn-primary submit-button col-md-2 form-item" value="Filter">
+        </div>
+
+    </form>
+    <!-- Filter form end-->
+    
+    <!-- Table data -->
+    <div class="limiter" style="overflow-x:auto;">
+        <div class="wrap-table100">
+            <div class="table100 ver1 m-b-50">
+                <div class="table100-head">
+                    <table>
+                        <tr class="row100 head">
+                            <th class="cell100 column">HSN</th>
+                            <th class="cell100 column-main column">Category</th>
+                            <th class="cell100 column">Company</th>
+                            <th class="cell100 column">Item</th>
+                            <th class="cell100 column">Rate</th>
+                            <th class="cell100 column">PCS/MTR</th>
+                            <th class="cell100 column">Value</th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="table100-body js-pscroll">
+                    <table>
+                        <tbody>
+                            {% for stock in filter.qs %}
+                            <tr class="row100 body ">
+                                <td class="cell100 column-main column">
+                                    <!--<a href="{% url 'ledger_add' %}{{ ledger.id }}">-->
+                                        {{stock.hsn}}
+                                    <!--</a>-->
+                                </td>
+                                <td class="cell100 column">{{stock.category|default_if_none:"-"}}</td>
+                                <td class="cell100 column">{{stock.company|default_if_none:"-"}}</td>
+                                <td class="cell100 column">{{stock.item|default_if_none:"-"}}</td>
+                                <td class="cell100 column">{{stock.rate|floatformat:2}}</td>
+                                <td class="cell100 column">{{stock.pcs_mtr|floatformat:2}}</td>
+                                <td class="cell100 column">{{stock.rate|mul:stock.pcs_mtr|floatformat:2}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Table data end-->
+    <h4 style="text-align: left; padding-left: 50px; float: left">
+        Total:
+    </h4>
+    <h4 style="text-align: right; padding-right: 50px; float; right">
+        {{total|floatformat:2}}
+    </h4>
+{% endblock body %}
