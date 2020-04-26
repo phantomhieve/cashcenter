@@ -23,5 +23,6 @@ from . import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ledger/', include('ledger.urls')),
-    path('user/', include('user.urls'))
+    path('user/', include('user.urls')),
+    path('stock/', include('stock.urls'))
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
