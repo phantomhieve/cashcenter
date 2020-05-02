@@ -14,9 +14,11 @@
                 <li class="nav-item active navbar-item">
                     <a href="{% url 'ledger_list' %}" class="btn btn-light btn">Ledger</a>
                 </li>
+                {% if request.user.is_superuser %}
                 <li class="nav-item active navbar-item">
                     <a href="{% url 'stock_list' %}" class="btn btn-light btn">Stock</a>
                 </li>
+                {% endif %}
                 {% block links %}
                 {% endblock links %}
                 <li class="nav-item navbar-item">
