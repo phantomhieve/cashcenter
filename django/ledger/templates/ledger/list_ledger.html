@@ -36,63 +36,57 @@
 
     </form>
     <!-- Filter form end-->
-    <!-- Table data -->
-    <div class="limiter" style="overflow-x:auto;">
-        <div class="wrap-table100">
-            <div class="table100 ver1 m-b-50">
-                <div class="table100-head">
-                    <table>
-                        <tr class="row100 head">
-                            <th class="cell100 column-main column-small">L R No</th>
-                            <th class="cell100 column">L R Date</th>
-                            <th class="cell100 column-small">Bale No</th>
-                            <th class="cell100 column">Supplier</th>
-                            <th class="cell100 column">Location</th>
-                            <th class="cell100 column">Item</th>
-                            <th class="cell100 column-small">Pcs/Mtr</th>
-                            <th class="cell100 column-small">Price</th>
-                            <th class="cell100 column-small">Weight</th>
-                            <th class="cell100 column-small">Frieght</th>
-                            <th class="cell100 column">Transport</th>
-                            <th class="cell100 column">Delivery</th>
-                            <th class="cell100 column-small">Reciept</th>
-                            <th class="cell100 column">Remark</th>
-                            <th class="cell100 column-small">Status</th>
-                        </tr>
-                    </table>
-                </div>
-                <div class="table100-body js-pscroll">
-                    <table>
-                        <tbody>
-                            {% for ledger in filter.qs %}
-                            <tr class="row100 body ">
-                                <td class="cell100 column-main column-small">
-                                    <a href="{% url 'ledger_add' %}{{ ledger.id }}">
-                                        {{ledger.l_r_no}}
-                                    </a>
-                                </td>
-                                <td class="cell100 column">{{ledger.l_r_date|default_if_none:"-"}}</td>
-                                <td class="cell100 column-small">{{ledger.bale_no|default_if_none:"-"}}</td>
-                                <td class="cell100 column">{{ledger.supplier|default_if_none:"-"}}</td>
-                                <td class="cell100 column">{{ledger.location|default_if_none:"-"}}</td>
-                                <td class="cell100 column">{{ledger.item|default_if_none:"-"}}</td>
-                                <td class="cell100 column-small">{{ledger.pcs_mtr|default_if_none:"-"}}</td>
-                                <td class="cell100 column-small">{{ledger.price|default_if_none:"-"}}</td>
-                                <td class="cell100 column-small">{{ledger.weight|default_if_none:"-"}}</td>
-                                <td class="cell100 column-small">{{ledger.frieght|default_if_none:"-"|floatformat:2}}</td>
-                                <td class="cell100 column">{{ledger.transport|default_if_none:"-"}}</td>
-                                <td class="cell100 column">{{ledger.delivery|default_if_none:"-"}}</td>
-                                <td class="cell100 column-small">{{ledger.reciept|default_if_none:"-"}}</td>
-                                <td class="cell100 column">{{ledger.remark|default_if_none:"-"}}</td>
-                                <td class="cell100 column-small">{{ledger.status|default_if_none:"-"}}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+
+    <!--Table Bootstrap-->
+    <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">L R No</th>
+                    <th scope="col">L R Date</th>
+                    <th scope="col">Bale No</th>
+                    <th scope="col">Supplier</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Pcs/Mtr</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Weight</th>
+                    <th scope="col">Frieght</th>
+                    <th scope="col">Transport</th>
+                    <th scope="col">Delivery</th>
+                    <th scope="col">Reciept</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Remark</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ledger in filter.qs %}
+                <tr class ="clickable-row" data-href="{% url 'ledger_add' %}{{ ledger.id }}">
+                    <td class="first">{{ledger.l_r_no}}</td>
+                    <td>{{ledger.l_r_date|default_if_none:"-"}}</td>
+                    <td>{{ledger.bale_no|default_if_none:"-"}}</td>
+                    <td>{{ledger.supplier|default_if_none:"-"}}</td>
+                    <td>{{ledger.location|default_if_none:"-"}}</td>
+                    <td>{{ledger.item|default_if_none:"-"}}</td>
+                    <td>{{ledger.pcs_mtr|default_if_none:"-"}}</td>
+                    <td>{{ledger.price|default_if_none:"-"}}</td>
+                    <td>{{ledger.weight|default_if_none:"-"}}</td>
+                    <td>{{ledger.transport|default_if_none:"-"}}</td>
+                    <td>{{ledger.delivery|default_if_none:"-"}}</td>
+                    <td>{{ledger.reciept|default_if_none:"-"}}</td>
+                    <td>{{ledger.status|default_if_none:"-"}}</td>
+                    <td>{{ledger.remark|default_if_none:"-"}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    
-    <!-- Table data end-->
+    <!--Table Bootstrap End-->
 {% endblock body %}
+
+{% block script %}  
+    <script>
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    </script>
+{% endblock script %}

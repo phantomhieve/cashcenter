@@ -31,54 +31,51 @@
 
     </form>
     <!-- Filter form end-->
-    
-    <!-- Table data -->
-    <div class="limiter" style="overflow-x:auto;">
-        <div class="wrap-table100">
-            <div class="table100 ver1 m-b-50">
-                <div class="table100-head">
-                    <table>
-                        <tr class="row100 head">
-                            <th class="cell100 column">HSN</th>
-                            <th class="cell100 column-main column">Category</th>
-                            <th class="cell100 column">Company</th>
-                            <th class="cell100 column">Item</th>
-                            <th class="cell100 column">Rate</th>
-                            <th class="cell100 column">PCS/MTR</th>
-                            <th class="cell100 column">Value</th>
-                        </tr>
-                    </table>
-                </div>
-                <div class="table100-body js-pscroll">
-                    <table>
-                        <tbody>
-                            {% for stock in filter.qs %}
-                            <tr class="row100 body ">
-                                <td class="cell100 column-main column">
-                                    <!--<a href="{% url 'ledger_add' %}{{ ledger.id }}">-->
-                                        {{stock.hsn}}
-                                    <!--</a>-->
-                                </td>
-                                <td class="cell100 column">{{stock.category|default_if_none:"-"}}</td>
-                                <td class="cell100 column">{{stock.company|default_if_none:"-"}}</td>
-                                <td class="cell100 column">{{stock.item|default_if_none:"-"}}</td>
-                                <td class="cell100 column">{{stock.rate|floatformat:2}}</td>
-                                <td class="cell100 column">{{stock.pcs_mtr|floatformat:2}}</td>
-                                <td class="cell100 column">{{stock.rate|mul:stock.pcs_mtr|floatformat:2}}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-        </div>
+    <!--Table Bootstrap-->
+    <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">HSN</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Company</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Rate</th>
+                    <th scope="col">Pcs/Mtr</th>
+                    <th scope="col">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stock in filter.qs %}
+                <tr class ="clickable-row" data-href="{% url 'stock_add' %}{{ stock.id }}">
+                    <td class="first">{{stock.hsn}}</td>
+                    <td>{{stock.category|default_if_none:"-"}}</td>
+                    <td>{{stock.company|default_if_none:"-"}}</td>
+                    <td>{{stock.item|default_if_none:"-"}}</td>
+                    <td>{{stock.rate|floatformat:2}}</td>
+                    <td>{{stock.pcs_mtr|floatformat:2}}</td>
+                    <td>{{stock.rate|mul:stock.pcs_mtr|floatformat:2}}</td>
+                </tr>
+                {% endfor %}
+                <tr class="last">
+                    <th scope="col">Total</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col">{{total|floatformat:2}}</th>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <!-- Table data end-->
-    <h4 style="text-align: left; padding-left: 50px; float: left">
-        Total:
-    </h4>
-    <h4 style="text-align: right; padding-right: 50px; float; right">
-        {{total|floatformat:2}}
-    </h4>
+    <!--Table Bootstrap End-->
 {% endblock body %}
+
+{% block script %}  
+    <script>
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    </script>
+{% endblock script %}
