@@ -5,7 +5,7 @@ from django.db import models
 class LedgerData(models.Model):
     l_r_no    = models.CharField(max_length=255)
     l_r_date  = models.DateField(blank=True, null=True)
-    bale_no   = models.IntegerField(blank=True, null=True)
+    bale_no   = models.CharField(blank=True, null=True, max_length=255)
     supplier  = models.CharField(blank=True, null=True, max_length=255)
     location  = models.CharField(blank=True, null=True, max_length=255)
     item      = models.CharField(blank=True, null=True, max_length=255)
