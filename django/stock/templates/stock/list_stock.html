@@ -2,6 +2,7 @@
 {% load static %}
 {% load widget_tweaks %}
 {% load mathfilters %}
+{% load humanize %}
 
 {% block title %}
     Stock
@@ -52,9 +53,9 @@
                     <td>{{stock.category|default_if_none:"-"}}</td>
                     <td>{{stock.company|default_if_none:"-"}}</td>
                     <td>{{stock.item|default_if_none:"-"}}</td>
-                    <td>{{stock.rate|floatformat:2}}</td>
+                    <td>{{stock.rate|floatformat:2|intcomma}}</td>
                     <td>{{stock.pcs_mtr|floatformat:2}}</td>
-                    <td>{{stock.rate|mul:stock.pcs_mtr|floatformat:2}}</td>
+                    <td>{{stock.rate|mul:stock.pcs_mtr|floatformat:2|intcomma}}</td>
                 </tr>
                 {% endfor %}
                 <tr class="last">
@@ -64,7 +65,7 @@
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>
-                    <th scope="col">{{total|floatformat:2}}</th>
+                    <th scope="col">{{total|floatformat:2|intcomma}}</th>
                 </tr>
             </tbody>
         </table>

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load widget_tweaks %}
+{% load humanize %}
 
 {% block title %}
     Ledger
@@ -49,9 +50,10 @@
                     <th scope="col">Item</th>
                     <th scope="col">Pcs/Mtr</th>
                     <th scope="col">Price</th>
+                    <th scope="col">City</th>
+                    <th scope="col">Transport</th>
                     <th scope="col">Weight</th>
                     <th scope="col">Frieght</th>
-                    <th scope="col">Transport</th>
                     <th scope="col">Delivery</th>
                     <th scope="col">Reciept</th>
                     <th scope="col">Status</th>
@@ -65,15 +67,22 @@
                     <td>{{ledger.l_r_date|default_if_none:"-"}}</td>
                     <td>{{ledger.bale_no|default_if_none:"-"}}</td>
                     <td>{{ledger.supplier|default_if_none:"-"}}</td>
-                    <td>{{ledger.location|default_if_none:"-"}}</td>
                     <td>{{ledger.item|default_if_none:"-"}}</td>
-                    <td>{{ledger.pcs_mtr|default_if_none:"-"}}</td>
-                    <td>{{ledger.price|default_if_none:"-"}}</td>
-                    <td>{{ledger.weight|default_if_none:"-"}}</td>
+                    <td>{{ledger.pcs_mtr|default_if_none:"-"|floatformat:2}}</td>
+                    <td>{{ledger.price|default_if_none:"-"|floatformat:2|intcomma}}</td>
+                    <td>{{ledger.location|default_if_none:"-"}}</td>
                     <td>{{ledger.transport|default_if_none:"-"}}</td>
+                    <td>{{ledger.weight|default_if_none:"-"}}</td>
+                    <td>{{ledger.frieght|default_if_none:"-"|floatformat:2}}</td>
                     <td>{{ledger.delivery|default_if_none:"-"}}</td>
                     <td>{{ledger.reciept|default_if_none:"-"}}</td>
-                    <td>{{ledger.status|default_if_none:"-"}}</td>
+                    <td>
+                    {% if ledger.status %}
+                        Recieved
+                    {% else %}
+                        Not-Recieved
+                    {% endif %}
+                    </td>
                     <td>{{ledger.remark|default_if_none:"-"}}</td>
                 </tr>
                 {% endfor %}
