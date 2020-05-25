@@ -7,18 +7,18 @@ class LedgerData(models.Model):
     supplier     = models.CharField(blank=True, null=True, max_length=255)
     location     = models.CharField(blank=True, null=True, max_length=255)
     item         = models.CharField(blank=True, null=True, max_length=255)
-    pcs_mtr      = models.FloatField(default=0)
-    price        = models.FloatField(default=0)
+    pcs_mtr      = models.FloatField(default=0, blank=True)
+    price        = models.FloatField(default=0, blank=True)
     weight       = models.CharField(blank=True, null=True, max_length=255)
-    frieght      = models.FloatField(default=0)
+    frieght      = models.FloatField(default=0, blank=True)
     transport    = models.CharField(blank=True, null=True, max_length=255)
     delivery     = models.DateField(blank=True, null=True)
     reciept      = models.CharField(blank=True, null=True, max_length=255)
     remark       = models.CharField(blank=True, null=True, max_length=255)
     status       = models.BooleanField(default=False)
     hsn_code     = models.CharField(blank=True, null=True, max_length=255)
-    bill_ammount = models.FloatField(default=0)
-    l_r_count    = models.IntegerField(default=1)
+    bill_ammount = models.FloatField(default=0, blank=True)
+    l_r_count    = models.IntegerField(default=1, blank=True)
 
     def __str__(self):
         return f'{self.l_r_no} - {self.supplier}'
