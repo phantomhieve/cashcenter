@@ -15,12 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from ledger.views import LedgerListView
+from django.views.generic import RedirectView
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 from . import settings
 
 urlpatterns = [
+    path('', RedirectView.as_view(pattern_name='user_login', permanent=True)),
     path('admin/', admin.site.urls),
     path('ledger/', include('ledger.urls')),
     path('user/', include('user.urls')),
