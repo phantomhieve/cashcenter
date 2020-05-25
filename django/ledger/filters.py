@@ -7,6 +7,7 @@ DEFAULT = (
     'item',
     'transport',
     'status',
+    'id'
 )
 
 class LedgerDataFilter(django_filters.FilterSet):
@@ -17,7 +18,7 @@ class LedgerDataFilter(django_filters.FilterSet):
         ('bale_no', 'Bale No'),
         ('supplier', 'Supplier'),
         ('location', 'Location'),
-        ('item ', 'Item'),
+        ('item', 'Item'),
         ('pcs_mtr', 'PCS/MTR'),
         ('price', 'Price'),
         ('weight', 'Weight'),
@@ -29,7 +30,7 @@ class LedgerDataFilter(django_filters.FilterSet):
         ('status', 'Status'),
         ('hsn_code','HSN Code'),
         ('bill_ammount', 'Bill Ammount'),
-        ('l_r_count', 'L R Count')
+        ('l_r_count', 'L R Count'),
     )
 
     class Meta:
@@ -47,10 +48,10 @@ class LedgerDataFilter(django_filters.FilterSet):
         label  = 'Columns',
         choices = CHOICES,
         method = 'filter_by_column',
-        initial= DEFAULT
     )
 
     def filter_by_column(self, queryset, name, value):
+        value.append('id')
         return queryset.values(*value)
 
 

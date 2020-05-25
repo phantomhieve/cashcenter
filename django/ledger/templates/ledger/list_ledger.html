@@ -56,7 +56,7 @@
                 <tr>
                     {% with object_list|first as first %}
                         {% for key in first%}
-                            <th scope="col">{{key}}</th>
+                            {% if key != 'id' %}<th scope="col">{{key}}</th>{% endif %}
                         {% endfor %}
                     {% endwith %}
                 </tr>
@@ -65,18 +65,15 @@
                 {% for ledger in object_list %}
                 <tr class ="clickable-row" data-href="{% url 'ledger_add' %}{{ ledger.id }}">
                     {% for key, value in  ledger.items %}
-                        <td>
                             {% if key == 'status' %}
                                 {% if value == True %}
-                                    Recieved
+                                    <td>Recieved</td>
                                 {% else%}
-                                    Not-Recieved
+                                    <td>Not-Recieved</td>
                                 {% endif %}
-                            {% else %}
-                                {{value|default_if_none:"-"}}
+                            {% elif key != 'id'%}
+                                <td>{{value|default_if_none:"-"}}</td>
                             {% endif %}
-
-                        </td>
                     {% endfor %}
                 {% endfor %}
             </tbody>
@@ -84,47 +81,6 @@
     </div>
     <!--Table Bootstrap End-->
 
-
-    <!--Pagination-->
-    {% if is_paginated %}
-    <nav>
-        <ul class="pagination " style="padding:15px">
-            <li class="page-item">
-                <a href="{% url 'ledger_list' %}?page=1" class="page-link">
-                    First
-                </a>
-            </li>
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a href="{% url 'ledger_list' %}?page={{page_obj.previous_page_number}}" class="page-link">
-                    {{ page_obj.previous_page_number }}
-                </a>
-            </li>
-            {% endif %}
-
-            <li class="page-item active">
-                <a href="{% url 'ledger_list' %}?page={{page_obj.number}}" class="page-link">
-                    {{ page_obj.number }}
-                </a>
-            </li>
-
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a href="{% url 'ledger_list' %}?page={{page_obj.next_page_number}}" class="page-link">
-                    {{ page_obj.next_page_number }}
-                </a>
-            </li>
-            {% endif %}
-
-            <li class="page-item">
-                <a href="{% url 'ledger_list' %}?page=last" class="page-link">
-                    Last
-                </a>
-            </li>
-        </ul>
-    </nav>
-    <!--Pagination End-->
-    {% endif %}
 {% endblock body %}
 
 {% block script %}  

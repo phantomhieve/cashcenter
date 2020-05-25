@@ -12,7 +12,6 @@ class LedgerListView(FilterView):
     model = LedgerData
     template_name = 'ledger/list_ledger.html'
     filterset_class  = LedgerDataFilter
-    paginate_by  = 10
     
     
     def get_context_data(self, **kwargs):

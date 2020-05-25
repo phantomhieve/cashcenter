@@ -76,24 +76,38 @@
                     {% render_field form.reciept class+="form-control" type="text" autocomplete="off"%}
                 </div>
                 <div class="form-group col-md-3">
+                    <label for="id_hsn_code">HSN Code</label>
+                    {% render_field form.hsn_code class+="form-control" type="text" autocomplete="off"%}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="id_bill_ammount">Bill Amount</label>
+                    {% render_field form.bill_ammount class+="form-control" type="number" autocomplete="off"%}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="id_l_r_count">L R Count</label>
+                    {% render_field form.l_r_count class+="form-control" type="number" autocomplete="off"%}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
                     <label for="id_remark">Remark</label>
                     {% render_field form.remark class+="form-control" type="text" autocomplete="off"%}
                 </div>
                 {% if  instance %}
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                     <input type="submit" value="Add/Update" class="form-control btn btn-primary form-button">
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                     <button type="button" class="form-control btn btn-danger form-button" data-toggle="modal" data-target="#deleteConformation">
                     Delete
                     </button>
                 </div>
                 {% else %}
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-9">
                     <input type="submit" value="Add/Update" class="form-control btn btn-primary form-button">
                 </div>
-
                 {% endif %}
+            </div>
         </form>
     </div>
 
