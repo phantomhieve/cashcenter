@@ -1,26 +1,25 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView
+from django_filters.views import FilterView
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 
 from .models import LedgerData
-from .filters import LedgerDataFilter
+from .filters import LedgerDataFilter, DEFAULT
 from .forms import LedgerDataForm
 
-class LedgerListView(ListView):
+class LedgerListView(FilterView):
     model = LedgerData
     template_name = 'ledger/list_ledger.html'
-
-    def get_context_data(self, *args, **kwargs):
+    filterset_class  = LedgerDataFilter
+    paginate_by  = 10
+    
+    
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["filter"] = LedgerDataFilter(
-            self.request.GET, 
-            queryset=self.get_queryset()
-        )
+        if context['object_list'] and  type(context['object_list'][0])!=dict:
+            context['object_list'] = context['object_list'].values(*DEFAULT)
         return context
-
-
 
 def ledgerAddView(request, id=None):
     instance = None

@@ -22,19 +22,30 @@
             <div class="col-md-1 form-item"> L R No</div>
             <div class="col-md-2 form-item"> Delivery Date</div>
             <div class="col-md-1 form-item"> Reciept</div>
+            <div class="col-md-1 form-item"> Bale No</div>
+            <div class="col-md-1 form-item"> Item</div>
             <div class="col-md-1 form-item"> Status</div>
-            <div class="col-md-2 form-item"> Order by</div>
         </div>
         <div class="row form-item">
             {% render_field filter.form.l_r_date class+="form-control"%}
             {% render_field filter.form.l_r_no__contains class+="form-control col-md-1 form-item"%}
             {% render_field filter.form.delivery class+="form-control col-md-2 form-item" type="date"%}
             {% render_field filter.form.reciept class+="form-control col-md-1 form-item" type="text"%}
+            {% render_field filter.form.bale_no__contains class+="form-control col-md-1 form-item" type="text"%}
+            {% render_field filter.form.item__contains class+="form-control col-md-1 form-item" type="text"%}
             {% render_field filter.form.status class+="form-control col-md-1 form-item"%}
-            {% render_field filter.form.ordering class+="form-control col-md-1 form-item"%}
-            <input type="Submit" class="form-control btn btn-primary submit-button col-md-1 form-item" value="Filter">
+        </div>
+        <div class="row form-item" style="margin-top:10px;">
+            <div class="col-md-2 form-item"> Select Columns</div>
         </div>
 
+        <div class="row form-item">
+            {% render_field filter.form.columns class+="selectpicker form-control col-md-3 form-item" data-live-search="true" size="3"%}
+            <div>
+                <input type="Submit" class=" form-control btn btn-primary submit-button col-md-12" value="Filter">
+            </div>
+        </div>
+        
     </form>
     <!-- Filter form end-->
 
@@ -43,53 +54,77 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">L R No</th>
-                    <th scope="col">L R Date</th>
-                    <th scope="col">Bale No</th>
-                    <th scope="col">Supplier</th>
-                    <th scope="col">Item</th>
-                    <th scope="col">Pcs/Mtr</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">City</th>
-                    <th scope="col">Transport</th>
-                    <th scope="col">Weight</th>
-                    <th scope="col">Frieght</th>
-                    <th scope="col">Delivery</th>
-                    <th scope="col">Reciept</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Remark</th>
+                    {% with object_list|first as first %}
+                        {% for key in first%}
+                            <th scope="col">{{key}}</th>
+                        {% endfor %}
+                    {% endwith %}
                 </tr>
             </thead>
             <tbody>
-                {% for ledger in filter.qs %}
+                {% for ledger in object_list %}
                 <tr class ="clickable-row" data-href="{% url 'ledger_add' %}{{ ledger.id }}">
-                    <td class="first">{{ledger.l_r_no}}</td>
-                    <td>{{ledger.l_r_date|default_if_none:"-"}}</td>
-                    <td>{{ledger.bale_no|default_if_none:"-"}}</td>
-                    <td>{{ledger.supplier|default_if_none:"-"}}</td>
-                    <td>{{ledger.item|default_if_none:"-"}}</td>
-                    <td>{{ledger.pcs_mtr|default_if_none:"-"|floatformat:2}}</td>
-                    <td>{{ledger.price|default_if_none:"-"|floatformat:2|intcomma}}</td>
-                    <td>{{ledger.location|default_if_none:"-"}}</td>
-                    <td>{{ledger.transport|default_if_none:"-"}}</td>
-                    <td>{{ledger.weight|default_if_none:"-"}}</td>
-                    <td>{{ledger.frieght|default_if_none:"-"|floatformat:2}}</td>
-                    <td>{{ledger.delivery|default_if_none:"-"}}</td>
-                    <td>{{ledger.reciept|default_if_none:"-"}}</td>
-                    <td>
-                    {% if ledger.status %}
-                        Recieved
-                    {% else %}
-                        Not-Recieved
-                    {% endif %}
-                    </td>
-                    <td>{{ledger.remark|default_if_none:"-"}}</td>
-                </tr>
+                    {% for key, value in  ledger.items %}
+                        <td>
+                            {% if key == 'status' %}
+                                {% if value == True %}
+                                    Recieved
+                                {% else%}
+                                    Not-Recieved
+                                {% endif %}
+                            {% else %}
+                                {{value|default_if_none:"-"}}
+                            {% endif %}
+
+                        </td>
+                    {% endfor %}
                 {% endfor %}
             </tbody>
         </table>
     </div>
     <!--Table Bootstrap End-->
+
+
+    <!--Pagination-->
+    {% if is_paginated %}
+    <nav>
+        <ul class="pagination " style="padding:15px">
+            <li class="page-item">
+                <a href="{% url 'ledger_list' %}?page=1" class="page-link">
+                    First
+                </a>
+            </li>
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a href="{% url 'ledger_list' %}?page={{page_obj.previous_page_number}}" class="page-link">
+                    {{ page_obj.previous_page_number }}
+                </a>
+            </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <a href="{% url 'ledger_list' %}?page={{page_obj.number}}" class="page-link">
+                    {{ page_obj.number }}
+                </a>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a href="{% url 'ledger_list' %}?page={{page_obj.next_page_number}}" class="page-link">
+                    {{ page_obj.next_page_number }}
+                </a>
+            </li>
+            {% endif %}
+
+            <li class="page-item">
+                <a href="{% url 'ledger_list' %}?page=last" class="page-link">
+                    Last
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <!--Pagination End-->
+    {% endif %}
 {% endblock body %}
 
 {% block script %}  

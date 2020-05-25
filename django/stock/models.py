@@ -1,4 +1,4 @@
-from django.db import models
+from djongo import models
 
 class StockData(models.Model):
     category = models.CharField(max_length=255)
@@ -7,6 +7,9 @@ class StockData(models.Model):
     hsn      = models.CharField(max_length=255)
     pcs_mtr  = models.FloatField()
     rate     = models.FloatField()
+    
+    class Meta:
+        ordering = ('hsn',)
 
     def __str__(self):
         return f'{self.hsn} - {self.item}'
