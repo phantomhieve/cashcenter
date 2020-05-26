@@ -1,5 +1,6 @@
 import django_filters
 from .models import LedgerData
+from user.models import UserGroup
 
 DEFAULT = (
     'l_r_no',
@@ -9,6 +10,23 @@ DEFAULT = (
     'status',
     'id'
 )
+
+
+def filterData(values, user, queryset):
+    user_group = UserGroup.objects.filter(primary_user=user)\
+        | UserGroup.objects.filter(main_user=user)
+    
+    try:
+        primary = user_group[0].primary_user
+        main    = user_group[0].main_user
+    except:
+        primary = main = user
+
+    queryset_ = queryset.filter(user=primary).values(*values)\
+        | queryset.filter(user=main).values(*values)
+        
+    return queryset_.order_by('id')
+
 
 class LedgerDataFilter(django_filters.FilterSet):
     def __init__(self, data=None, queryset=None, request=None, prefix=None):
@@ -56,9 +74,7 @@ class LedgerDataFilter(django_filters.FilterSet):
     def filter_by_column(self, queryset, name, value):
         value.append('id')
         self.values = value
-        return queryset.filter(user=self.request.user).\
-            values(*self.values).order_by('id')
-
+        return filterData(self.values, self.request.user, queryset)
 
     l_r_date = django_filters.DateFromToRangeFilter(
         field_name='l_r_date',
@@ -69,5 +85,4 @@ class LedgerDataFilter(django_filters.FilterSet):
     @property
     def qs(self):
         parent = super(LedgerDataFilter, self).qs
-        return parent.filter(user=self.request.user).\
-            values(*self.values).order_by('id')
+        return filterData(self.values, self.request.user, parent)
