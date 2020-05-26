@@ -2,7 +2,10 @@
     <div class="container-fluid">
         <a class="navbar-brand scroll navbar-heading" href="{% url 'ledger_list' %}">
             <h1>
-                Cash Center
+                {{ request.user.userprofile.shop}}
+                {% if request.user.is_staff %}
+                    - Admin
+                {% endif %}
             </h1>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -14,7 +17,7 @@
                 <li class="nav-item active navbar-item">
                     <a href="{% url 'ledger_list' %}" class="btn btn-light btn">Ledger</a>
                 </li>
-                {% if request.user.is_superuser %}
+                {% if request.user.is_staff %}
                 <li class="nav-item active navbar-item">
                     <a href="{% url 'stock_list' %}" class="btn btn-light btn">Stock</a>
                 </li>
