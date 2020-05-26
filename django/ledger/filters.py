@@ -3,7 +3,7 @@ from .models import LedgerData
 
 DEFAULT = (
     'l_r_no',
-    'l_r_date',
+    'bale_no',
     'item',
     'transport',
     'status',
@@ -11,6 +11,9 @@ DEFAULT = (
 )
 
 class LedgerDataFilter(django_filters.FilterSet):
+    def __init__(self, data=None, queryset=None, request=None, prefix=None):
+        self.values = DEFAULT
+        super().__init__(data=data, queryset=queryset, request=request, prefix=prefix)
 
     CHOICES = (
         ('l_r_no', 'L R No'),
@@ -52,7 +55,9 @@ class LedgerDataFilter(django_filters.FilterSet):
 
     def filter_by_column(self, queryset, name, value):
         value.append('id')
-        return queryset.values(*value)
+        self.values = value
+        return queryset.filter(user=self.request.user).\
+            values(*self.values).order_by('id')
 
 
     l_r_date = django_filters.DateFromToRangeFilter(
@@ -61,3 +66,8 @@ class LedgerDataFilter(django_filters.FilterSet):
             attrs={'type':'date', 'class': 'col-md-2 form-item-half'}
         )
     )
+    @property
+    def qs(self):
+        parent = super(LedgerDataFilter, self).qs
+        return parent.filter(user=self.request.user).\
+            values(*self.values).order_by('id')

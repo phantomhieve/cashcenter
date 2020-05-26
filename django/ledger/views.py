@@ -12,13 +12,7 @@ class LedgerListView(FilterView):
     model = LedgerData
     template_name = 'ledger/list_ledger.html'
     filterset_class  = LedgerDataFilter
-    
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if context['object_list'] and  type(context['object_list'][0])!=dict:
-            context['object_list'] = context['object_list'].values(*DEFAULT)
-        return context
+    paginate_by=10
 
 def ledgerAddView(request, id=None):
     instance = None
@@ -27,7 +21,9 @@ def ledgerAddView(request, id=None):
     if request.method == 'POST':
         form = LedgerDataForm(request.POST, instance=instance)
         if form.is_valid():
-            form.save()
+            ledger = form.save(commit=False)
+            ledger.user = request.user
+            ledger.save()
             return HttpResponseRedirect('/ledger/')
         return render(
             request,
