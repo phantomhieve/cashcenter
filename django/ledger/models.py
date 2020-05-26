@@ -1,6 +1,8 @@
 from djongo import models
+from django.contrib.auth.models import User
 
 class LedgerData(models.Model):
+    user         = models.OneToOneField(User, on_delete=models.CASCADE)
     l_r_no       = models.CharField(max_length=255)
     l_r_date     = models.DateField(blank=True, null=True)
     bale_no      = models.CharField(blank=True, null=True, max_length=255)
