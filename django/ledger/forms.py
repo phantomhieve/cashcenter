@@ -4,6 +4,6 @@ from .models import LedgerData
 class LedgerDataForm(ModelForm):
     
     class Meta:
-        model = LedgerData
-        fields = '__all__'
+        model   = LedgerData
+        exclude = ('user', )
 
