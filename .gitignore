@@ -138,3 +138,4 @@ django/staticfiles
 # Libraries
 django/static/library/fonts
 django/static/library/vendor
+django/static/library/css/util.css
