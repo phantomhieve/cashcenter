@@ -3,6 +3,7 @@
 {% load widget_tweaks %}
 {% load mathfilters %}
 {% load humanize %}
+{% load list_tags %}
 
 {% block title %}
     Stock
@@ -47,7 +48,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for stock in filter.qs %}
+                {% for stock in object_list %}
                 <tr class ="clickable-row" data-href="{% url 'stock_add' %}{{ stock.id }}">
                     <td class="first">{{stock.hsn}}</td>
                     <td>{{stock.category|default_if_none:"-"}}</td>
@@ -71,6 +72,47 @@
         </table>
     </div>
     <!--Table Bootstrap End-->
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav>
+        <ul class="pagination">
+            <li class="page-item">
+                <a href="{% url 'stock_list' %}?page=1" class="page-link">
+                    First
+                </a>
+            </li>
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a href="{% url 'stock_list' %}?{% url_replace page=page_obj.previous_page_number%}" class="page-link">
+                    {{ page_obj.previous_page_number }}
+                </a>
+            </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <a href="{% url 'stock_list' %}?{% url_replace page=page_obj.number%}" class="page-link">
+                    {{ page_obj.number }}
+                </a>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a href="{% url 'stock_list' %}?{% url_replace page=page_obj.next_page_number%}" class="page-link">
+                    {{ page_obj.next_page_number }}
+                </a>
+            </li>
+            {% endif %}
+
+            <li class="page-item">
+                <a href="{% url 'stock_list' %}?{% url_replace page=last %}" class="page-link">
+                    Last
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {% endif %}
+    <!-- Pagination End-->
+
 {% endblock body %}
 
 {% block script %}  

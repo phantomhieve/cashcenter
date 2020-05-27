@@ -11,3 +11,9 @@ class StockDataFilter(django_filters.FilterSet):
             'hsn': ['contains'],
             'category': ['contains']
         }
+    
+    @property
+    def qs(self):
+        parent = super(StockDataFilter, self).qs
+        return parent.filter(user = self.request.user)\
+            .order_by('id')

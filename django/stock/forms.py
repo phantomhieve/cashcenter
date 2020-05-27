@@ -5,4 +5,4 @@ class StockDataForm(ModelForm):
     
     class Meta:
         model = StockData
-        fields = '__all__'
+        exclude = ('user', )
