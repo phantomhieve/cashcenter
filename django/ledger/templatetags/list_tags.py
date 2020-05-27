@@ -16,4 +16,6 @@ def get_shop(context, **kwargs):
     main    =  user.main_user.filter().values('shop')
     if primary: return primary[0]['shop']
     elif main: return f"{main[0]['shop']} - Admin"
-    return 'Super User'
+    elif context['request'].user.is_superuser:
+        return 'Super User'
+    return context['request'].user.username
