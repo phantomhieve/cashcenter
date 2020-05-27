@@ -26,7 +26,9 @@ class LedgerData(models.Model):
         return f'{self.l_r_no} - {self.supplier}'
     
     def save(self, *args, **kwargs):
-        self.price = self.bill_ammount/self.pcs_mtr
+        if self.pcs_mtr:
+            self.price = self.bill_ammount/self.pcs_mtr
+            
         if self.reciept!=None and self.delivery!=None:
             self.status= True
         super(LedgerData, self).save(*args, **kwargs)
