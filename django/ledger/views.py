@@ -57,7 +57,7 @@ def autoComplete(request):
         kwargs = {
             '{0}__{1}'.format(field, 'startswith'): q,
         }
-        data = LedgerData.objects.filter(**kwargs).values_list(field, flat=True)
+        data = LedgerData.objects.filter(**kwargs, user=request.user).values_list(field, flat=True)
         json = list(set(data))
         return JsonResponse(json, safe=False)
     else:
