@@ -132,5 +132,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-django/static
-django/user/static/user/fonts
+# Static files
+django/staticfiles
+
+# Libraries
+django/static/library/fonts
+django/static/library/vendor
