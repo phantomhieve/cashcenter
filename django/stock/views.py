@@ -16,7 +16,7 @@ class StockListView(FilterView):
     paginate_by      = 10
 
     def get(self, *args, **kwargs):
-        if not self.request.user.is_superuser:
+        if not self.request.user.is_staff:
             return redirect('/')
         return super(StockListView, self).get(*args, **kwargs)
 
@@ -29,7 +29,7 @@ class StockListView(FilterView):
         context["total"] = total
         return context
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u: u.is_staff)
 def stockAddView(request, id=None):
     instance = None
     if id:
@@ -55,7 +55,7 @@ def stockAddView(request, id=None):
         args
     )
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u: u.is_staff)
 def stockDeleteView(request, id=None):
     instance = None
     if id:
@@ -67,7 +67,7 @@ def stockDeleteView(request, id=None):
         '404.html',
     )
 
-@user_passes_test(lambda u: u.is_superuser)
+@user_passes_test(lambda u: u.is_staff)
 def autoComplete(request):
     if request.GET.get('q') and request.GET['field']:
         field = request.GET['field']
