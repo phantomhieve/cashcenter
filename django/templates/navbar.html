@@ -1,11 +1,9 @@
- <nav class="navbar navbar-expand-md sticky-top">
+{% load list_tags %}
+<nav class="navbar navbar-expand-md sticky-top">
     <div class="container-fluid">
         <a class="navbar-brand scroll navbar-heading" href="{% url 'ledger_list' %}">
             <h1>
-                {{ request.user.userprofile.shop}}
-                {% if request.user.is_staff %}
-                    - Admin
-                {% endif %}
+                {% get_shop %}
             </h1>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
