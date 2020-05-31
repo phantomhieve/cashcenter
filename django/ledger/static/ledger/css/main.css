@@ -16,12 +16,10 @@
 [ RESTYLE TAG ]*/
 
 body, html {
-	height: 100%;
-	font-family: sans-serif;
-}
-body {
-  margin-top: 110px;
-  margin-bottom: 110px;
+  height: 100%;
+  margin-top: 50px;
+  margin-bottom: 300px;
+  font-family: sans-serif;
 }
 
 /*//////////////////////////////////////////////////////////////////
