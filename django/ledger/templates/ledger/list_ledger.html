@@ -16,38 +16,44 @@
 {% block body %}
 {% include 'ledger/ledger_navbar.html' %}
     <!--Filter form-->
-    <form action="" method="get">
-        {% csrf_token %}
-        <div class="row form-item">
-            <div class="col-md-4 form-item"> L R Date</div>
-            <div class="col-md-1 form-item"> L R No</div>
-            <div class="col-md-2 form-item"> Delivery Date</div>
-            <div class="col-md-1 form-item"> Reciept</div>
-            <div class="col-md-1 form-item"> Bale No</div>
-            <div class="col-md-1 form-item"> Item</div>
-            <div class="col-md-1 form-item"> Status</div>
-        </div>
-        <div class="row form-item">
-            {% render_field filter.form.l_r_date class+="form-control"%}
-            {% render_field filter.form.l_r_no__contains class+="form-control col-md-1 form-item"%}
-            {% render_field filter.form.delivery class+="form-control col-md-2 form-item" type="date"%}
-            {% render_field filter.form.reciept class+="form-control col-md-1 form-item" type="text"%}
-            {% render_field filter.form.bale_no__contains class+="form-control col-md-1 form-item" type="text"%}
-            {% render_field filter.form.item__contains class+="form-control col-md-1 form-item" type="text"%}
-            {% render_field filter.form.status class+="form-control col-md-1 form-item"%}
-        </div>
-        <div class="row form-item" style="margin-top:10px;">
-            <div class="col-md-2 form-item"> Select Columns</div>
-        </div>
-
-        <div class="row form-item">
-            {% render_field filter.form.columns class+="selectpicker form-control col-md-3 form-item" data-live-search="true" size="3"%}
-            <div>
-                <input type="Submit" class=" form-control btn btn-primary submit-button col-md-12" value="Filter">
+    <p>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Filter Options
+        </button>
+    </p>
+    <div class="collapse" id="collapseExample">
+        <form action="" method="get">
+            {% csrf_token %}
+            <div class="row form-item">
+                <div class="col-md-4 form-item"> L R Date</div>
+                <div class="col-md-1 form-item"> L R No</div>
+                <div class="col-md-2 form-item"> Delivery Date</div>
+                <div class="col-md-1 form-item"> Reciept</div>
+                <div class="col-md-1 form-item"> Bale No</div>
+                <div class="col-md-1 form-item"> Item</div>
+                <div class="col-md-1 form-item"> Status</div>
             </div>
-        </div>
-        
-    </form>
+            <div class="row form-item">
+                {% render_field filter.form.l_r_date class+="form-control"%}
+                {% render_field filter.form.l_r_no__contains class+="form-control col-md-1 form-item"%}
+                {% render_field filter.form.delivery class+="form-control col-md-2 form-item" type="date"%}
+                {% render_field filter.form.reciept class+="form-control col-md-1 form-item" type="text"%}
+                {% render_field filter.form.bale_no__contains class+="form-control col-md-1 form-item" type="text"%}
+                {% render_field filter.form.item__contains class+="form-control col-md-1 form-item" type="text"%}
+                {% render_field filter.form.status class+="form-control col-md-1 form-item"%}
+            </div>
+            <div class="row form-item" style="margin-top:10px;">
+                <div class="col-md-2 form-item"> Select Columns</div>
+            </div>
+
+            <div class="row form-item">
+                {% render_field filter.form.columns class+="selectpicker form-control col-md-3 form-item" data-live-search="true" size="3"%}
+                <div>
+                    <input type="Submit" class=" form-control btn btn-primary submit-button col-md-12" value="Filter">
+                </div>
+            </div>
+        </form>    
+    </div>
     <!-- Filter form end-->
 
     <!--Table Bootstrap-->

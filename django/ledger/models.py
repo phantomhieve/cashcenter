@@ -20,7 +20,7 @@ class LedgerData(models.Model):
     status       = models.BooleanField(default=False)
     hsn_code     = models.CharField(blank=True, null=True, max_length=255)
     bill_ammount = models.FloatField(default=0, blank=True)
-    l_r_count    = models.IntegerField(default=1, blank=True)
+    no_of_bale   = models.IntegerField(default=1, blank=True)
 
     def __str__(self):
         return f'{self.l_r_no} - {self.supplier}'
