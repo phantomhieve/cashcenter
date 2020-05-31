@@ -4,6 +4,7 @@ from user.models import UserGroup
 
 DEFAULT = (
     'l_r_no',
+    'no_of_bale',
     'bale_no',
     'item',
     'transport',
@@ -35,6 +36,7 @@ class LedgerDataFilter(django_filters.FilterSet):
 
     CHOICES = (
         ('l_r_no', 'L R No'),
+        ('no_of_bale', 'No Of Bale'),
         ('l_r_date', 'L R Date'),
         ('bale_no', 'Bale No'),
         ('supplier', 'Supplier'),
@@ -51,7 +53,6 @@ class LedgerDataFilter(django_filters.FilterSet):
         ('status', 'Status'),
         ('hsn_code','HSN Code'),
         ('bill_ammount', 'Bill Ammount'),
-        ('l_r_count', 'L R Count'),
     )
 
     class Meta:
