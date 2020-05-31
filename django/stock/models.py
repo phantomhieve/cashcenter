@@ -2,7 +2,7 @@ from djongo import models
 from django.contrib.auth.models import User
 
 class StockData(models.Model):
-    user     = models.OneToOneField(User, on_delete=models.CASCADE)
+    user     = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=255)
     company  = models.CharField(max_length=255)
     item     = models.CharField(max_length=255)
