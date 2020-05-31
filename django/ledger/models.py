@@ -28,6 +28,7 @@ class LedgerData(models.Model):
     def save(self, *args, **kwargs):
         if self.pcs_mtr:
             self.price = self.bill_ammount/self.pcs_mtr
+            self.price = round(self.price, 2)
             
         if self.reciept!=None and self.delivery!=None:
             self.status= True
