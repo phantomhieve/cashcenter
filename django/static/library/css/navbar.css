@@ -21,9 +21,6 @@
     color: white;
 }
 
-.navbar-heading:hover {
-    color: white;
-}
 
 .navbar-content {
     font-family: Ubuntu-Regular;
@@ -35,6 +32,8 @@
     padding-left: 15px;
 }
 
-.navbar-item:hover {
-    color: gray !important;
+@media screen and (max-width: 600px) {
+    .navbar-content{
+        font-size: large !important;
+    }
 }
