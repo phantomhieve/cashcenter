@@ -2,8 +2,12 @@ from djongo import models
 from django.contrib.auth.models import User
 
 class LedgerData(models.Model):
+
+    class Meta:
+        ordering = ['l_r_date', 'id']
+
     user         = models.ForeignKey(User, on_delete=models.CASCADE)
-    l_r_no       = models.CharField(max_length=255)
+    l_r_no       = models.CharField(max_length=255, unique=True)
     l_r_date     = models.DateField(blank=True, null=True)
     bale_no      = models.CharField(blank=True, null=True, max_length=255)
     supplier     = models.CharField(blank=True, null=True, max_length=255)
