@@ -26,7 +26,7 @@
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_bale_no">Bale No</label>
-                    {% render_field form.bale_no class+="form-control" type="number"%}
+                    {% render_field form.bale_no class+="form-control"%}
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_supplier">Supplier</label>
@@ -47,8 +47,8 @@
                     {% render_field form.pcs_mtr class+="form-control" type="number" %}
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="id_price">Price</label>
-                    {% render_field form.price class+="form-control" type="number" %}
+                    <label for="id_bill_ammount">Bill Amount</label>
+                    {% render_field form.bill_ammount class+="form-control" type="number" autocomplete="off"%}
                 </div>
             </div>
             <div class="form-row">
@@ -76,11 +76,11 @@
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_hsn_code">HSN Code</label>
-                    {% render_field form.hsn_code class+="form-control" type="text" autocomplete="off"%}
+                    {% render_field form.hsn_code class+="hsnAutoComplete form-control" type="text" autocomplete="off"%}
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="id_bill_ammount">Bill Amount</label>
-                    {% render_field form.bill_ammount class+="form-control" type="number" autocomplete="off"%}
+                    <label for="id_price">Price</label>
+                    {% render_field form.price class+="form-control" type="number" %}
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_no_of_bale">No Of Bale</label>
@@ -133,6 +133,12 @@
 {% endblock body %}
 {% block script %}
 <script>
+    $('.hsnAutoComplete').autoComplete({
+        minLength: 1,
+        resolverSettings: {
+            url: "{% url 'autocomplete'%}?field=hsn_code"
+        }
+    });
     $('.supplierAutoComplete').autoComplete({
         minLength: 1,
         resolverSettings: {

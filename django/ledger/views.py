@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from .models import LedgerData
 from .filters import LedgerDataFilter, DEFAULT
 from .forms import LedgerDataForm
+from .backend import getUsersFromGroup
 
 class LedgerListView(FilterView):
     model = LedgerData
@@ -54,10 +55,12 @@ def autoComplete(request):
     if request.GET.get('q') and request.GET['field']:
         field = request.GET['field']
         q = request.GET['q']
+        users = getUsersFromGroup(request.user)
         kwargs = {
-            '{0}__{1}'.format(field, 'startswith'): q,
+            '{0}__{1}'.format(field, 'istartswith'): q,
         }
-        data = LedgerData.objects.filter(**kwargs, user=request.user).values_list(field, flat=True)
+        data = LedgerData.objects.filter(**kwargs, user__in=users)\
+            .values_list(field, flat=True)
         json = list(set(data))
         return JsonResponse(json, safe=False)
     else:

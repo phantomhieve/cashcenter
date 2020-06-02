@@ -1,6 +1,8 @@
 from urllib.parse import urlencode
 from django import template
 
+from ledger.backend import getUserGroup
+
 register = template.Library()
 
 @register.simple_tag(takes_context=True)
@@ -12,10 +14,7 @@ def url_replace(context, **kwargs):
 @register.simple_tag(takes_context=True)
 def get_shop(context, **kwargs):
     user = context['request'].user
-    primary =  user.primary_user.filter().values('shop')
-    main    =  user.main_user.filter().values('shop')
-    if primary: return primary[0]['shop']
-    elif main: return f"{main[0]['shop']} - Admin"
-    elif context['request'].user.is_superuser:
-        return 'Super User'
+    user_group = getUserGroup(user)
+    if user_group:
+        return user_group.shop
     return context['request'].user.username
