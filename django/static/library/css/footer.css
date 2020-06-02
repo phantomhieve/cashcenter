@@ -8,28 +8,27 @@
     src: url('../fonts/ubuntu/Ubuntu-Bold.ttf'); 
 }
 
-@media screen and (max-width: 600px) {
-    .footer{
-        visibility: hidden !important;
-        display: none !important;
+.page-footer{
+    display: none !important;
+}
+@media screen and (min-width: 600px) {
+    .page-footer {
+        height:120px;
+        display: block !important;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #827ffe; 
     }
-}
-
-.page-footer {
-    height:120px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #827ffe; 
-}
-
-.page-footer-content {
-    font-family: Ubuntu-Regular;
-    color: white;
-}
-
-.page-footer-hr {
-    background-color: white;
-    height: 1px;
-    border: none;
+    
+    .page-footer-content {
+        font-family: Ubuntu-Regular;
+        color: white;
+    }
+    
+    .page-footer-hr {
+        background-color: white;
+        height: 1px;
+        border: none;
+    }
 }

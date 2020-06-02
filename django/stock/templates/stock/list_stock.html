@@ -16,22 +16,27 @@
 
 {% block body %}
 {% include 'stock/stock_navbar.html' %}
-    <!--Filter form-->
-    <form action="" method="get">
-        {% csrf_token %}
-        <div class="row form-item">
-            <div class="col-md-2 form-item"> Item</div>
-            <div class="col-md-2 form-item"> HSN</div>
-            <div class="col-md-2 form-item"> Category</div>
-        </div>
-        <div class="row form-item">
-            {% for field in filter.form.visible_fields %}
-                {% render_field field class+="form-control col-md-2 form-item"%}
-            {% endfor %}
-            <input type="Submit" class="form-control btn btn-primary submit-button col-md-2 form-item" value="Filter">
-        </div>
 
-    </form>
+    <!--Filter form-->
+    <p>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Filter Options
+        </button>
+    </p>
+    <div class="collapse" id="collapseExample">
+        <form action="" method="get">
+            {% csrf_token %}
+            <div class="form-row form-item">
+                {% for field in filter.form.visible_fields %}
+                    <div class="form-group col-md-2">
+                        <label>{{ field.name }}</label>
+                        {% render_field field class+="form-control"%}
+                    </div>
+                {% endfor %}
+                <input type="Submit" class="form-control btn btn-primary submit-button col-md-2 form-item" value="Filter">
+            </div>
+        </form>
+    </div>
     <!-- Filter form end-->
     <!--Table Bootstrap-->
     <div class="table-responsive text-nowrap">
@@ -77,7 +82,7 @@
     <nav>
         <ul class="pagination">
             <li class="page-item">
-                <a href="{% url 'stock_list' %}?page=1" class="page-link">
+                <a href="{% url 'stock_list' %}?{% url_replace page=1%}" class="page-link">
                     First
                 </a>
             </li>
@@ -104,7 +109,7 @@
             {% endif %}
 
             <li class="page-item">
-                <a href="{% url 'stock_list' %}?{% url_replace page=last %}" class="page-link">
+                <a href="{% url 'stock_list' %}?{% url_replace page=paginator.num_pages %}" class="page-link">
                     Last
                 </a>
             </li>
