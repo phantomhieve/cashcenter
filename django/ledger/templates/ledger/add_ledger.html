@@ -12,6 +12,16 @@
 
 {% block body %}
     {% include 'ledger/ledger_navbar.html' %}
+
+    <div class="container" id="alert">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Invalid-data</strong> / Dublicate L R No.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+
     <div class="container">
         <form action="" method="post">
             {% csrf_token %}
@@ -133,6 +143,17 @@
 {% endblock body %}
 {% block script %}
 <script>
+
+    // Alert for wrong submission
+    let url = new URL(window.location);
+    let params = new URLSearchParams(url.search);
+    let element = document.querySelector("#alert")
+    if(params.get('invalid'))
+        element.style.display = "block";
+    else
+        element.style.display = "none";
+
+    //------------Auto Complete -------------------
     $('.hsnAutoComplete').autoComplete({
         minLength: 1,
         resolverSettings: {
@@ -164,6 +185,7 @@
             url: "{% url 'autocomplete'%}?field=item"
         }
     });
+    //------------Auto Complete -------------------
 
     $('#myModal').on('shown.bs.modal', function () {
         $('#myInput').trigger('focus')

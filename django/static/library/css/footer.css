@@ -8,6 +8,13 @@
     src: url('../fonts/ubuntu/Ubuntu-Bold.ttf'); 
 }
 
+@media screen and (max-width: 600px) {
+    .footer{
+        visibility: hidden !important;
+        display: none !important;
+    }
+}
+
 .page-footer {
     height:120px;
     position: fixed;
