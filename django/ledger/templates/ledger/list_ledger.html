@@ -24,31 +24,54 @@
     <div class="collapse" id="collapseExample">
         <form action="" method="get">
             {% csrf_token %}
-            <div class="row form-item">
-                <div class="col-md-4 form-item"> L R Date</div>
-                <div class="col-md-1 form-item"> L R No</div>
-                <div class="col-md-2 form-item"> Delivery Date</div>
-                <div class="col-md-1 form-item"> Reciept</div>
-                <div class="col-md-1 form-item"> Bale No</div>
-                <div class="col-md-1 form-item"> Item</div>
-                <div class="col-md-1 form-item"> Status</div>
-            </div>
-            <div class="row form-item">
-                {% render_field filter.form.l_r_date class+="form-control"%}
-                {% render_field filter.form.l_r_no__contains class+="form-control col-md-1 form-item"%}
-                {% render_field filter.form.delivery class+="form-control col-md-2 form-item" type="date"%}
-                {% render_field filter.form.reciept class+="form-control col-md-1 form-item" type="text"%}
-                {% render_field filter.form.bale_no__contains class+="form-control col-md-1 form-item" type="text"%}
-                {% render_field filter.form.item__contains class+="form-control col-md-1 form-item" type="text"%}
-                {% render_field filter.form.status class+="form-control col-md-1 form-item"%}
-            </div>
-            <div class="row form-item" style="margin-top:10px;">
-                <div class="col-md-2 form-item"> Select Columns</div>
-            </div>
+            <div class="form-row form-item">
+               <div class="form-group col-md-2">
+                    <label for="id_l_r_date">L R Date from</label>
+                    <input type="date" name="l_r_date_min" class="form-control" id="id_l_r_date_0">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="id_l_r_date">L R Date to</label>
+                    <input type="date" name="l_r_date_max" class="form-control" id="id_l_r_date_1">
+                </div>
+                <div class="form-group col-md-1">
+                    <label for="id_l_r_no__contains">L R No</label>
+                    {% render_field filter.form.l_r_no__contains class+="form-control"%}
+                </div>
 
-            <div class="row form-item">
-                {% render_field filter.form.columns class+="selectpicker form-control col-md-3 form-item" data-live-search="true" size="3"%}
-                <div>
+                <div class="form-group col-md-2">
+                    <label for="id_delivery">Delivery Date</label>
+                    {% render_field filter.form.delivery class+="form-control" type="date"%}
+                </div>
+
+                <div class="form-group col-md-1">
+                    <label for="id_reciept">Reciept</label>
+                    {% render_field filter.form.reciept class+="form-control" type="text"%}
+                </div>
+
+                <div class="form-group col-md-1">
+                    <label for="id_bale_no__contains">Bale No</label>
+                    {% render_field filter.form.bale_no__contains class+="form-control" type="text"%}
+                </div>
+                
+                <div class="form-group col-md-1">
+                    <label for="id_item__contains">Item</label>
+                    {% render_field filter.form.item__contains class+="form-control" type="text"%}
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="id_status">Status</label>
+                    {% render_field filter.form.status class+="form-control"%}
+                </div>
+            </div>
+            <div class="form-row form-item">
+                <div class="form-group col-md-3">
+                    <label for="id_columns">Select Columns</label>
+                    {% render_field filter.form.columns class+="selectpicker form-control" data-live-search="true" size="3"%}
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="id_d_status">Delivery</label>
+                    {% render_field filter.form.d_status class+="form-control"%}
+                </div>
+                <div class="form-group col-md-2">
                     <input type="Submit" class=" form-control btn btn-primary submit-button col-md-12" value="Filter">
                 </div>
             </div>
@@ -74,9 +97,9 @@
                     {% for key, value in  ledger.items %}
                             {% if key == 'status' %}
                                 {% if value == True %}
-                                    <td>Recieved</td>
+                                    <td>Done</td>
                                 {% else%}
-                                    <td>Not-Recieved</td>
+                                    <td>Pending</td>
                                 {% endif %}
                             {% elif key != 'id'%}
                                 <td>{{value|default_if_none:"-"}}</td>
