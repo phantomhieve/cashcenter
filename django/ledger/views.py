@@ -24,8 +24,14 @@ def ledgerAddView(request, id=None):
         if form.is_valid():
             ledger = form.save(commit=False)
             ledger.user = request.user
-            ledger.save()
-            return HttpResponseRedirect(f'/ledger?sucessful={ledger.l_r_no}')
+            users = getUsersFromGroup(ledger.user)
+            data  = LedgerData.objects.filter(
+                l_r_no=ledger.l_r_no,
+                user__in=users
+            )
+            if not len(data):
+                ledger.save()
+                return HttpResponseRedirect(f'/ledger?sucessful={ledger.l_r_no}')
         return HttpResponseRedirect('/ledger/add/?invalid=true')
     args = {
         'form': LedgerDataForm(instance=instance),
