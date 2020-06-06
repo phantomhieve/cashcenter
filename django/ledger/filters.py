@@ -42,12 +42,12 @@ class LedgerDataFilter(django_filters.FilterSet):
     class Meta:
         model = LedgerData
         fields = {
-            'l_r_no':['contains'],
+            'l_r_no':['icontains'],
             'status':['exact'],
-            'delivery':['exact'],
-            'reciept':['exact'],
-            'bale_no':['contains'],
-            'item':['contains']
+            'delivery':['exact', 'gte'],
+            'reciept':['icontains'],
+            'bale_no':['icontains'],
+            'item':['icontains']
         }
 
     # Status 

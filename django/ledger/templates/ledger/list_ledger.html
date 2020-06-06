@@ -15,6 +15,29 @@
 
 {% block body %}
 {% include 'ledger/ledger_navbar.html' %}
+
+    <!-- Alert Delete-->
+    <div class="container" id="alert_delete">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            L R No - <strong id="alert_delete_content"></strong> deleted.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <!-- Alert Delete-->
+
+    <!-- Alert Add/Update-->
+    <div class="container" id="alert_add">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            L R No - <strong id="alert_add_content"></strong> added/updated.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <!-- Alert Add/Update-->
+
     <!--Filter form-->
     <p>
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -27,15 +50,15 @@
             <div class="form-row form-item">
                <div class="form-group col-md-2">
                     <label for="id_l_r_date">L R Date from</label>
-                    <input type="date" name="l_r_date_min" class="form-control" id="id_l_r_date_0">
+                    <input type="date" name="l_r_date_min" class="form-control" id="id_l_r_date_0" value="">
                 </div>
                 <div class="form-group col-md-2">
                     <label for="id_l_r_date">L R Date to</label>
-                    <input type="date" name="l_r_date_max" class="form-control" id="id_l_r_date_1">
+                    <input type="date" name="l_r_date_max" class="form-control" id="id_l_r_date_1" value="">
                 </div>
                 <div class="form-group col-md-1">
-                    <label for="id_l_r_no__contains">L R No</label>
-                    {% render_field filter.form.l_r_no__contains class+="form-control"%}
+                    <label for="id_l_r_no__icontains">L R No</label>
+                    {% render_field filter.form.l_r_no__icontains class+="form-control"%}
                 </div>
 
                 <div class="form-group col-md-2">
@@ -44,18 +67,18 @@
                 </div>
 
                 <div class="form-group col-md-1">
-                    <label for="id_reciept">Reciept</label>
-                    {% render_field filter.form.reciept class+="form-control" type="text"%}
+                    <label for="id_reciept__icontains">Reciept</label>
+                    {% render_field filter.form.reciept__icontains class+="form-control" type="text"%}
                 </div>
 
                 <div class="form-group col-md-1">
-                    <label for="id_bale_no__contains">Bale No</label>
-                    {% render_field filter.form.bale_no__contains class+="form-control" type="text"%}
+                    <label for="id_bale_no__icontains">Bale No</label>
+                    {% render_field filter.form.bale_no__icontains class+="form-control" type="text"%}
                 </div>
                 
                 <div class="form-group col-md-1">
-                    <label for="id_item__contains">Item</label>
-                    {% render_field filter.form.item__contains class+="form-control" type="text"%}
+                    <label for="id_item__icontains">Item</label>
+                    {% render_field filter.form.item__icontains class+="form-control" type="text"%}
                 </div>
                 <div class="form-group col-md-2">
                     <label for="id_status">Status</label>
@@ -70,6 +93,10 @@
                 <div class="form-group col-md-2">
                     <label for="id_d_status">Delivery</label>
                     {% render_field filter.form.d_status class+="form-control"%}
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="id_delivery__gte">Delivery After</label>
+                    {% render_field filter.form.delivery__gte class+="form-control" type="date"%}
                 </div>
                 <div class="form-group col-md-2">
                     <input type="Submit" class=" form-control btn btn-primary submit-button col-md-12" value="Filter">
@@ -101,6 +128,8 @@
                                 {% else%}
                                     <td>Pending</td>
                                 {% endif %}
+                            {% elif key == 'delivery'%}
+                                <td>{{value|default_if_none:"Not-Delivered"}}</td>
                             {% elif key != 'id'%}
                                 <td>{{value|default_if_none:"-"}}</td>
                             {% endif %}
@@ -151,11 +180,40 @@
     </nav>
     {% endif %}
     <!-- Pagination End-->
-
+    {% include 'footer.html' %}
 {% endblock body %}
 
 {% block script %}  
     <script>
+        let url = new URL(window.location);
+        let params = new URLSearchParams(url.search);
+        let element = document.querySelector("#alert")
+        document.querySelector('#id_l_r_date_0').value = params.get('l_r_date_min');
+        document.querySelector('#id_l_r_date_1').value = params.get('l_r_date_max');
+        
+        // Alert for deleting content
+        let element_delete = document.querySelector("#alert_delete");
+        let content_delete = document.querySelector('#alert_delete_content');
+        if(params.get('lr-no')){
+            element_delete.style.display = "block";
+            content_delete.innerHTML = `${params.get('lr-no')}`
+        }
+        else
+            element_delete.style.display = "none";
+        
+
+        // Alert for adding/updating content
+        let element_add = document.querySelector("#alert_add");
+        let content_add = document.querySelector('#alert_add_content');
+        if(params.get('sucessful')){
+            element_add.style.display = "block";
+            content_add.innerHTML = `${params.get('sucessful')}`
+        }
+        else
+            element_add.style.display = "none";
+        
+
+
         $(".clickable-row").click(function() {
             window.location = $(this).data("href");
         });

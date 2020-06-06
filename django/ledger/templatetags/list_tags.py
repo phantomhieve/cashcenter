@@ -9,6 +9,8 @@ register = template.Library()
 def url_replace(context, **kwargs):
     query = context['request'].GET.copy()
     query.pop('page', None)
+    query.pop('sucessful', None)
+    query.pop('lr-no', None)
     query.update(kwargs)
     return query.urlencode()
 
