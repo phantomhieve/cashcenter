@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '5te#^(dvkbnn648gwau4o%-%0n9ertkak54%!6j&-p7$&2a!+x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -85,8 +85,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'cash-center',
-        'HOST': 'localhost'
+        'NAME': 'django',
+        'CLIENT': {
+            'host': 'localhost'
+        }
     }
 }
 
