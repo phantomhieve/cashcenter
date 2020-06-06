@@ -36,7 +36,7 @@ class LedgerDataFilter(django_filters.FilterSet):
         ('remark', 'Remark'),
         ('status', 'Status'),
         ('hsn_code','HSN Code'),
-        ('bill_ammount', 'Bill Ammount'),
+        ('bill_ammount', 'Bill Amount'),
     )
 
     class Meta:
