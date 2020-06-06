@@ -5,9 +5,10 @@ class LedgerData(models.Model):
 
     class Meta:
         ordering = ['l_r_date', 'id']
+        unique_together = ('user', 'l_r_no')
 
     user         = models.ForeignKey(User, on_delete=models.CASCADE)
-    l_r_no       = models.CharField(max_length=255, unique=True)
+    l_r_no       = models.CharField(max_length=255)
     l_r_date     = models.DateField(blank=True, null=True)
     bale_no      = models.CharField(blank=True, null=True, max_length=255)
     supplier     = models.CharField(blank=True, null=True, max_length=255)
@@ -27,7 +28,7 @@ class LedgerData(models.Model):
     no_of_bale   = models.IntegerField(default=1, blank=True)
 
     def __str__(self):
-        return f'{self.l_r_no} - {self.supplier}'
+        return f'{self.user} - {self.l_r_no}'
     
     def save(self, *args, **kwargs):
         if self.pcs_mtr:
