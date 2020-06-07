@@ -44,7 +44,7 @@ class LedgerDataFilter(django_filters.FilterSet):
         fields = {
             'l_r_no':['icontains'],
             'status':['exact'],
-            'delivery':['exact', 'gte'],
+            'delivery':['exact'],
             'reciept':['icontains'],
             'bale_no':['icontains'],
             'item':['icontains']
@@ -73,7 +73,6 @@ class LedgerDataFilter(django_filters.FilterSet):
         method ='filter_by_delivery'
     )
     def filter_by_delivery(self, queryset, name, value):
-        print(value)
         users = getUsersFromGroup(self.request.user)
         queryset_ = queryset.filter(user__in=users)
         if value=='True':
@@ -93,6 +92,19 @@ class LedgerDataFilter(django_filters.FilterSet):
         self.values = value
         users = getUsersFromGroup(self.request.user)
         return queryset.filter(user__in=users).values(*self.values)
+    
+    # Extra Filed
+    delivery_after = django_filters.DateFilter(
+        label = 'delivery_after',
+        method= 'filter_delivery_after'
+    )
+    def filter_delivery_after(self, queryset, name, value):
+        users = getUsersFromGroup(self.request.user)
+        queryset_ = queryset.filter(user__in=users)
+        queryset.exclude(delivery__lt=value)
+        return queryset_.values(*self.values)
+
+
 
     # Extra Field
     l_r_date = django_filters.DateFromToRangeFilter(
