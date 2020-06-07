@@ -13,9 +13,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'stock/css/main.css'%}">
 {% endblock css %}
 
+{% block header %}
+    {% include 'stock/stock_navbar.html' %}
+{% endblock%}
 
 {% block body %}
-{% include 'stock/stock_navbar.html' %}
 
     <!--Filter form-->
     <p>
@@ -33,7 +35,9 @@
                         {% render_field field class+="form-control"%}
                     </div>
                 {% endfor %}
-                <input type="Submit" class="form-control btn btn-primary submit-button col-md-2 form-item" value="Filter">
+                <div class="form-group col-md-2">
+                    <input type="Submit" class="form-control btn btn-primary submit-button form-control" value="Filter">
+                </div>
             </div>
         </form>
     </div>
@@ -79,46 +83,51 @@
     <!--Table Bootstrap End-->
     <!-- Pagination -->
     {% if is_paginated %}
-    <nav>
-        <ul class="pagination">
-            <li class="page-item">
-                <a href="{% url 'stock_list' %}?{% url_replace page=1%}" class="page-link">
-                    First
-                </a>
-            </li>
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a href="{% url 'stock_list' %}?{% url_replace page=page_obj.previous_page_number%}" class="page-link">
-                    {{ page_obj.previous_page_number }}
-                </a>
-            </li>
-            {% endif %}
-
-            <li class="page-item active">
-                <a href="{% url 'stock_list' %}?{% url_replace page=page_obj.number%}" class="page-link">
-                    {{ page_obj.number }}
-                </a>
-            </li>
-
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a href="{% url 'stock_list' %}?{% url_replace page=page_obj.next_page_number%}" class="page-link">
-                    {{ page_obj.next_page_number }}
-                </a>
-            </li>
-            {% endif %}
-
-            <li class="page-item">
-                <a href="{% url 'stock_list' %}?{% url_replace page=paginator.num_pages %}" class="page-link">
-                    Last
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <div class="container-fluid">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item">
+                    <a href="{% url 'stock_list' %}?{% url_replace page=1%}" class="page-link">
+                        First
+                    </a>
+                </li>
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a href="{% url 'stock_list' %}?{% url_replace page=page_obj.previous_page_number%}" class="page-link">
+                        {{ page_obj.previous_page_number }}
+                    </a>
+                </li>
+                {% endif %}
+    
+                <li class="page-item active">
+                    <a href="{% url 'stock_list' %}?{% url_replace page=page_obj.number%}" class="page-link">
+                        {{ page_obj.number }}
+                    </a>
+                </li>
+    
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a href="{% url 'stock_list' %}?{% url_replace page=page_obj.next_page_number%}" class="page-link">
+                        {{ page_obj.next_page_number }}
+                    </a>
+                </li>
+                {% endif %}
+    
+                <li class="page-item">
+                    <a href="{% url 'stock_list' %}?{% url_replace page=paginator.num_pages %}" class="page-link">
+                        Last
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
     {% endif %}
     <!-- Pagination End-->
-    {% include 'footer.html' %}
 {% endblock body %}
+
+{% block footer %}
+    {% include 'footer.html' %}
+{% endblock %}
 
 {% block script %}  
     <script>
