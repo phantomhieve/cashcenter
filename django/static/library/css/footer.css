@@ -13,7 +13,7 @@
 }
 @media screen and (min-width: 600px) {
     .page-footer {
-        height:120px;
+        height: 100px;
         display: block !important;
         position: fixed;
         bottom: 0;

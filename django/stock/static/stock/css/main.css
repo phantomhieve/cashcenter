@@ -1,7 +1,3 @@
-/*//////////////////////////////////////////////////////////////////
-[ FONT ]*/
-
-
 @font-face {
   font-family: Lato-Regular;
   src: url('../../library/fonts/Lato/Lato-Regular.ttf'); 
@@ -12,18 +8,10 @@
   src: url('../../library/fonts/Lato/Lato-Bold.ttf'); 
 }
 
-/*//////////////////////////////////////////////////////////////////
-[ RESTYLE TAG ]*/
-
 body, html {
-	height: 100%;
-  margin-top: 50px;
-  margin-bottom: 300px;
   font-family: sans-serif;
 }
 
-/*//////////////////////////////////////////////////////////////////
-[ Table ]*/
 thead{
   font-family: Lato-Bold;
   font-size: 18px;
@@ -62,9 +50,6 @@ tr:nth-child(even) {
   background-color: #f8f6ff;;
 }
 
-
-/*//////////////////////////////////////////////////////////////////
-[ FORM ]*/
 form {
   font-family: Lato-Regular;
   padding-bottom: 20px;
@@ -80,4 +65,8 @@ form {
 }
 .form-button {
   margin-top: 31px;
+}
+
+.submit-button{
+  margin-top: 30px;
 }

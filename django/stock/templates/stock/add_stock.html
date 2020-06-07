@@ -10,8 +10,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'stock/css/main.css'%}">
 {% endblock css %}
 
+{% block header %}
+    {% include 'ledger/ledger_navbar.html' %}
+{% endblock%}
+
 {% block body %}
-    {% include 'stock/stock_navbar.html' %}
     <div class="container">
         <form action="" method="post">
             {% csrf_token %}
@@ -79,8 +82,12 @@
     </div>
     {% endif %}
     <!-- Modal -->
-    {% include 'footer.html' %}
 {% endblock body %}
+
+{% block footer %}
+    {% include 'footer.html' %}
+{% endblock %}
+
 {% block script %}
 <script>
     $('.categoryAutoComplete').autoComplete({

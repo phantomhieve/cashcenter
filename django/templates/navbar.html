@@ -1,7 +1,7 @@
 {% load list_tags %}
 <nav class="navbar navbar-expand-md sticky-top">
     <a class="navbar-brand scroll navbar-heading" href="{% url 'ledger_list' %}">
-        <h1>{% get_shop %}</h1>
+        <h2>{% get_shop %}</h2>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon">
@@ -11,11 +11,11 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item navbar-item">
-                <h4><a href="{% url 'ledger_list' %}" class="nav-link navbar-content">Ledger</a></h4>
+                <h5><a href="{% url 'ledger_list' %}" class="nav-link navbar-content">Ledger</a></h5>
             </li>
             {% if request.user.is_staff %}
             <li class="nav-item navbar-item">
-                <h4><a href="{% url 'stock_list' %}" class="nav-link navbar-content">Stock</a></h4>
+                <h5><a href="{% url 'stock_list' %}" class="nav-link navbar-content">Stock</a></h5>
             </li>
             {% endif %}
             {% block links %}
