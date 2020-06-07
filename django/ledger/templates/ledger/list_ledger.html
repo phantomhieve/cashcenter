@@ -12,10 +12,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'ledger/css/main.css'%}">
 {% endblock css %}
 
+{% block header %}
+    {% include 'ledger/ledger_navbar.html' %}
+{% endblock%}
 
 {% block body %}
-{% include 'ledger/ledger_navbar.html' %}
-
     <!-- Alert Delete-->
     <div class="container" id="alert_delete">
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -48,22 +49,14 @@
         <form action="" method="get">
             {% csrf_token %}
             <div class="form-row form-item">
-               <div class="form-group col-md-2">
-                    <label for="id_l_r_date">L R Date from</label>
-                    <input type="date" name="l_r_date_min" class="form-control" id="id_l_r_date_0" value="">
-                </div>
                 <div class="form-group col-md-2">
-                    <label for="id_l_r_date">L R Date to</label>
-                    <input type="date" name="l_r_date_max" class="form-control" id="id_l_r_date_1" value="">
-                </div>
-                <div class="form-group col-md-1">
                     <label for="id_l_r_no__icontains">L R No</label>
                     {% render_field filter.form.l_r_no__icontains class+="form-control"%}
                 </div>
 
                 <div class="form-group col-md-2">
-                    <label for="id_delivery">Delivery Date</label>
-                    {% render_field filter.form.delivery class+="form-control" type="date"%}
+                    <label for="id_delivery_after">Stock</label>
+                    {% render_field filter.form.delivery_after class+="form-control" type="date"%}
                 </div>
 
                 <div class="form-group col-md-1">
@@ -80,23 +73,36 @@
                     <label for="id_item__icontains">Item</label>
                     {% render_field filter.form.item__icontains class+="form-control" type="text"%}
                 </div>
+
                 <div class="form-group col-md-2">
+                    <label for="id_delivery">Delivery Date</label>
+                    {% render_field filter.form.delivery class+="form-control" type="date"%}
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="id_d_status">Delivery</label>
+                    {% render_field filter.form.d_status class+="form-control"%}
+                </div>
+
+                <div class="form-group col-md-1">
                     <label for="id_status">Status</label>
                     {% render_field filter.form.status class+="form-control"%}
                 </div>
+
             </div>
             <div class="form-row form-item">
                 <div class="form-group col-md-3">
                     <label for="id_columns">Select Columns</label>
                     {% render_field filter.form.columns class+="selectpicker form-control" data-live-search="true" size="3"%}
                 </div>
+                
                 <div class="form-group col-md-2">
-                    <label for="id_d_status">Delivery</label>
-                    {% render_field filter.form.d_status class+="form-control"%}
+                    <label for="id_l_r_date">L R Date from</label>
+                    <input type="date" name="l_r_date_min" class="form-control" id="id_l_r_date_0" value="">
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="id_delivery_after">Stock</label>
-                    {% render_field filter.form.delivery_after class+="form-control" type="date"%}
+                    <label for="id_l_r_date">L R Date to</label>
+                    <input type="date" name="l_r_date_max" class="form-control" id="id_l_r_date_1" value="">
                 </div>
                 <div class="form-group col-md-2">
                     <input type="Submit" class=" form-control btn btn-primary submit-button col-md-12" value="Filter">
@@ -153,80 +159,52 @@
 
     <!-- Pagination -->
     {% if is_paginated %}
-    <nav>
-        <ul class="pagination">
-            <li class="page-item">
-                <a href="{% url 'ledger_list' %}?{% url_replace page=1%}" class="page-link">
-                    First
-                </a>
-            </li>
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a href="{% url 'ledger_list' %}?{% url_replace page=page_obj.previous_page_number%}" class="page-link">
-                    {{ page_obj.previous_page_number }}
-                </a>
-            </li>
-            {% endif %}
-
-            <li class="page-item active">
-                <a href="{% url 'ledger_list' %}?{% url_replace page=page_obj.number%}" class="page-link">
-                    {{ page_obj.number }}
-                </a>
-            </li>
-
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a href="{% url 'ledger_list' %}?{% url_replace page=page_obj.next_page_number%}" class="page-link">
-                    {{ page_obj.next_page_number }}
-                </a>
-            </li>
-            {% endif %}
-
-            <li class="page-item">
-                <a href="{% url 'ledger_list' %}?{% url_replace page=paginator.num_pages %}" class="page-link">
-                    Last
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <div class="container-fluid">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item">
+                    <a href="{% url 'ledger_list' %}?{% url_replace page=1%}" class="page-link">
+                        First
+                    </a>
+                </li>
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a href="{% url 'ledger_list' %}?{% url_replace page=page_obj.previous_page_number%}" class="page-link">
+                        {{ page_obj.previous_page_number }}
+                    </a>
+                </li>
+                {% endif %}
+    
+                <li class="page-item active">
+                    <a href="{% url 'ledger_list' %}?{% url_replace page=page_obj.number%}" class="page-link">
+                        {{ page_obj.number }}
+                    </a>
+                </li>
+    
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a href="{% url 'ledger_list' %}?{% url_replace page=page_obj.next_page_number%}" class="page-link">
+                        {{ page_obj.next_page_number }}
+                    </a>
+                </li>
+                {% endif %}
+    
+                <li class="page-item">
+                    <a href="{% url 'ledger_list' %}?{% url_replace page=paginator.num_pages %}" class="page-link">
+                        Last
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
     {% endif %}
     <!-- Pagination End-->
-    {% include 'footer.html' %}
 {% endblock body %}
 
+{% block footer %}
+    {% include 'footer.html' %}
+{% endblock %}
+
 {% block script %}  
-    <script>
-        let url = new URL(window.location);
-        let params = new URLSearchParams(url.search);
-        let element = document.querySelector("#alert")
-        document.querySelector('#id_l_r_date_0').value = params.get('l_r_date_min');
-        document.querySelector('#id_l_r_date_1').value = params.get('l_r_date_max');
-        
-        // Alert for deleting content
-        let element_delete = document.querySelector("#alert_delete");
-        let content_delete = document.querySelector('#alert_delete_content');
-        if(params.get('lr-no')){
-            element_delete.style.display = "block";
-            content_delete.innerHTML = `${params.get('lr-no')}`
-        }
-        else
-            element_delete.style.display = "none";
-        
-
-        // Alert for adding/updating content
-        let element_add = document.querySelector("#alert_add");
-        let content_add = document.querySelector('#alert_add_content');
-        if(params.get('sucessful')){
-            element_add.style.display = "block";
-            content_add.innerHTML = `${params.get('sucessful')}`
-        }
-        else
-            element_add.style.display = "none";
-        
-
-
-        $(".clickable-row").click(function() {
-            window.location = $(this).data("href");
-        });
-    </script>
+    <script src="{% static 'ledger/js/list_ledger.js'%}"></script>
 {% endblock script %}
