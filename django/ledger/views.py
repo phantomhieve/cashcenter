@@ -15,6 +15,17 @@ class LedgerListView(FilterView):
     filterset_class  = LedgerDataFilter
     paginate_by=10
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if len(context['filter'].qs) and \
+            'bill_ammount' in context['filter'].qs[0]:
+            total = sum([
+                ledger['bill_ammount']
+                for ledger in context['filter'].qs
+            ])
+            context["total"] = total
+        return context
+
 def ledgerAddView(request, id=None):
     instance = None
     if id:
@@ -29,7 +40,7 @@ def ledgerAddView(request, id=None):
                 l_r_no=ledger.l_r_no,
                 user__in=users
             )
-            if not len(data):
+            if (not len(data)) or (id and instance.l_r_no==ledger.l_r_no):
                 ledger.save()
                 return HttpResponseRedirect(f'/ledger?sucessful={ledger.l_r_no}')
         return HttpResponseRedirect('/ledger/add/?invalid=true')

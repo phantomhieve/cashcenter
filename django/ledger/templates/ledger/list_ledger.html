@@ -95,8 +95,8 @@
                     {% render_field filter.form.d_status class+="form-control"%}
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="id_delivery__gte">Delivery After</label>
-                    {% render_field filter.form.delivery__gte class+="form-control" type="date"%}
+                    <label for="id_delivery_after">Stock</label>
+                    {% render_field filter.form.delivery_after class+="form-control" type="date"%}
                 </div>
                 <div class="form-group col-md-2">
                     <input type="Submit" class=" form-control btn btn-primary submit-button col-md-12" value="Filter">
@@ -139,6 +139,14 @@
         </table>
     </div>
     <!--Table Bootstrap End-->
+    <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+            <thead class="last">
+                <th> Total </th>
+                <th>{{ total|floatformat:2|intcomma }}</th>
+            </thead>
+        </table>
+    </div>
 
     <!-- Pagination -->
     {% if is_paginated %}
