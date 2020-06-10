@@ -60,6 +60,11 @@
                 </div>
 
                 <div class="form-group col-md-1">
+                    <label for="id_hsn_code__icontains">HSN Code</label>
+                    {% render_field filter.form.hsn_code__icontains class+="form-control" type="text"%}
+                </div>
+
+                <div class="form-group col-md-1">
                     <label for="id_reciept__icontains">Reciept</label>
                     {% render_field filter.form.reciept__icontains class+="form-control" type="text"%}
                 </div>
@@ -75,16 +80,11 @@
                 </div>
 
                 <div class="form-group col-md-2">
-                    <label for="id_delivery">Delivery Date</label>
-                    {% render_field filter.form.delivery class+="form-control" type="date"%}
-                </div>
-
-                <div class="form-group col-md-2">
                     <label for="id_d_status">Delivery</label>
                     {% render_field filter.form.d_status class+="form-control"%}
                 </div>
 
-                <div class="form-group col-md-1">
+                <div class="form-group col-md-2">
                     <label for="id_status">Status</label>
                     {% render_field filter.form.status class+="form-control"%}
                 </div>
@@ -95,7 +95,12 @@
                     <label for="id_columns">Select Columns</label>
                     {% render_field filter.form.columns class+="selectpicker form-control" data-live-search="true" size="3"%}
                 </div>
-                
+
+                <div class="form-group col-md-2">
+                    <label for="id_delivery">Delivery Date</label>
+                    {% render_field filter.form.delivery class+="form-control" type="date"%}
+                </div>
+
                 <div class="form-group col-md-2">
                     <label for="id_l_r_date">L R Date from</label>
                     <input type="date" name="l_r_date_min" class="form-control" id="id_l_r_date_0" value="">
@@ -137,7 +142,11 @@
                             {% elif key == 'delivery'%}
                                 <td>{{value|default_if_none:"Not-Delivered"}}</td>
                             {% elif key != 'id'%}
-                                <td>{{value|default_if_none:"-"}}</td>
+                                {% if key == 'pcs_mtr'%}
+                                    <td>{{ value|default_if_none:"-" }}</td>
+                                {% else %}
+                                    <td>{{ value|format_numeric|default_if_none:"-" }}</td>
+                                {% endif %}
                             {% endif %}
                     {% endfor %}
                 {% endfor %}
@@ -151,7 +160,7 @@
         <table class="table table-hover">
             <thead class="last">
                 <th> Total </th>
-                <th>{{ total|floatformat:2|intcomma }}</th>
+                <th>{{ total|format_numeric }}</th>
             </thead>
         </table>
     </div>

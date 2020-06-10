@@ -23,6 +23,7 @@ class LedgerDataFilter(django_filters.FilterSet):
         ('no_of_bale', 'No Of Bale'),
         ('l_r_date', 'L R Date'),
         ('bale_no', 'Bale No'),
+        ('hsn_code','HSN Code'),
         ('supplier', 'Supplier'),
         ('location', 'Location'),
         ('item', 'Item'),
@@ -33,10 +34,9 @@ class LedgerDataFilter(django_filters.FilterSet):
         ('transport', 'Transport'),
         ('delivery', 'Delivery date'),
         ('reciept', 'Reciept'),
+        ('bill_ammount', 'Bill Amount'),
         ('remark', 'Remark'),
         ('status', 'Status'),
-        ('hsn_code','HSN Code'),
-        ('bill_ammount', 'Bill Amount'),
     )
 
     class Meta:
@@ -47,7 +47,8 @@ class LedgerDataFilter(django_filters.FilterSet):
             'delivery':['exact'],
             'reciept':['icontains'],
             'bale_no':['icontains'],
-            'item':['icontains']
+            'item':['icontains'],
+            'hsn_code':['icontains']
         }
 
     # Status 
