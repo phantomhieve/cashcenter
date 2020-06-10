@@ -20,7 +20,7 @@ class LedgerListView(FilterView):
         if len(context['filter'].qs) and \
             'bill_ammount' in context['filter'].qs[0]:
             total = sum([
-                ledger['bill_ammount']
+                ledger['bill_ammount'] if ledger['bill_ammount'] else 0
                 for ledger in context['filter'].qs
             ])
             context["total"] = total
