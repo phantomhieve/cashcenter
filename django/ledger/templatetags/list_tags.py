@@ -1,5 +1,6 @@
 from urllib.parse import urlencode
 from django import template
+from babel.numbers import format_currency
 
 from ledger.backend import getUserGroup
 
@@ -21,3 +22,9 @@ def get_shop(context, **kwargs):
     if user_group:
         return user_group.shop
     return context['request'].user.username
+
+@register.filter
+def format_numeric(value):
+    if type(value)==float:
+        return format_currency(value, 'INR', locale='en_IN')
+    return value
