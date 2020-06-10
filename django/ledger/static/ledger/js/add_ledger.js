@@ -7,41 +7,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         element.style.display = "block";
     else
         element.style.display = "none";
-
-    //------------Auto Complete -------------------
-    $('.hsnAutoComplete').autoComplete({
-        minLength: 1,
-        resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=hsn_code"
-        }
-    });
-    $('.supplierAutoComplete').autoComplete({
-        minLength: 1,
-        resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=supplier"
-        }
-    });
-    $('.locationAutoComplete').autoComplete({
-        minLength: 1,
-        resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=location"
-        }
-    });
-    $('.transportAutoComplete').autoComplete({
-        minLength: 1,
-        resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=transport"
-        }
-    });
-
-    $('.itemAutoComplete').autoComplete({
-        minLength: 1,
-        resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=item"
-        }
-    });
-    //------------Auto Complete -------------------
-
     $('#myModal').on('shown.bs.modal', function () {
         $('#myInput').trigger('focus')
     })

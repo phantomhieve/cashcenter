@@ -56,7 +56,7 @@
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_hsn_code">HSN Code</label>
-                    {% render_field form.hsn_code class+="hsnAutoComplete form-control" type="text" autocomplete="off"%}
+                    {% render_field form.hsn_code class+="hsnAutoComplete form-control" type="text" autocomplete="off" %}
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_pcs/mtr">PCS/MTR</label>
@@ -146,4 +146,39 @@
 
 {% block script %}
     <script src="{% static 'ledger/js/add_ledger.js'%}"></script>
+    <script>
+        //------------Auto Complete -------------------
+    $('.hsnAutoComplete').autoComplete({
+        minLength: 1,
+        resolverSettings: {
+            url: "{% url 'autocomplete'%}?field=hsn_code"
+        }
+    });
+    $('.supplierAutoComplete').autoComplete({
+        minLength: 1,
+        resolverSettings: {
+            url: "{% url 'autocomplete'%}?field=supplier"
+        }
+    });
+    $('.locationAutoComplete').autoComplete({
+        minLength: 1,
+        resolverSettings: {
+            url: "{% url 'autocomplete'%}?field=location"
+        }
+    });
+    $('.transportAutoComplete').autoComplete({
+        minLength: 1,
+        resolverSettings: {
+            url: "{% url 'autocomplete'%}?field=transport"
+        }
+    });
+
+    $('.itemAutoComplete').autoComplete({
+        minLength: 1,
+        resolverSettings: {
+            url: "{% url 'autocomplete'%}?field=item"
+        }
+    });
+    //------------Auto Complete -------------------
+    </script>
 {% endblock script %}
