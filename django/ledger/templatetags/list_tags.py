@@ -25,6 +25,6 @@ def get_shop(context, **kwargs):
 
 @register.filter
 def format_numeric(value):
-    if type(value)==float:
+    if value!=None and type(value)==float:
         return format_currency(value, 'INR', locale='en_IN')
     return value
