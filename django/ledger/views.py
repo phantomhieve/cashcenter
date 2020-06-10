@@ -75,7 +75,7 @@ def autoComplete(request):
         }
         data = LedgerData.objects.filter(**kwargs, user__in=users)\
             .values_list(field, flat=True)
-        json = list(set(data))
+        json = list(set(data))[:10]
         return JsonResponse(json, safe=False)
     else:
         HttpResponse("No cookies")
