@@ -71,7 +71,7 @@ def autoComplete(request):
         q = request.GET['q']
         users = getUsersFromGroup(request.user)
         kwargs = {
-            '{0}__{1}'.format(field, 'istartswith'): q,
+            '{0}__{1}'.format(field, 'icontains'): q,
         }
         data = LedgerData.objects.filter(**kwargs, user__in=users)\
             .values_list(field, flat=True)

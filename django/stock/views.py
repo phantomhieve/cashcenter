@@ -73,7 +73,7 @@ def autoComplete(request):
         field = request.GET['field']
         q = request.GET['q']
         kwargs = {
-            '{0}__{1}'.format(field, 'startswith'): q,
+            '{0}__{1}'.format(field, 'icontains'): q,
         }
         data = StockData.objects.filter(**kwargs, user=request.user).values_list(field, flat=True)
         json = list(set(data))
