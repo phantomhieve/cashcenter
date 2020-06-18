@@ -27,4 +27,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
     document.getElementById('id_frieght').onchange = fixDecimalValue(event);
     document.getElementById('id_bill_ammount').onchange = fixDecimalValue(event);
+
+    // Change floating point
+    function fixDecimalValueInit(id){
+        element = document.getElementById(id);
+        if(element.value){
+            element.value = parseFloat(element.value).toFixed(2)
+        }
+    }
+
+    fixDecimalValueInit('id_frieght');
+    fixDecimalValueInit('id_bill_ammount');
+    
 });
