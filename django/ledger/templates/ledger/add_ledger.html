@@ -15,6 +15,8 @@
 {% endblock%}
 
 {% block body %}
+
+    <!-- Alert Invalid-->
     <div class="container" id="alert_lr">
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Invalid-data</strong> / Dublicate L R No.
@@ -23,6 +25,18 @@
             </button>
         </div>
     </div>
+    <!-- Alert Invalid-->
+
+    <!-- Alert Add/Update-->
+    <div class="container" id="alert_add">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            L R No - <strong id="alert_add_content"></strong> added/updated.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <!-- Alert Add/Update-->
 
     <div class="container">
         <form action="" method="post">
@@ -30,7 +44,7 @@
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="id_l_r_no">L R No</label>
-                    {% render_field form.l_r_no class+="form-control" type="text" autocomplete="off"%}
+                    {% render_field form.l_r_no class+="form-control" type="text" autocomplete="off" autofocus="true" %}
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_l_r_date">L R Date</label>
@@ -147,36 +161,34 @@
 {% block script %}
     <script src="{% static 'ledger/js/add_ledger.js'%}"></script>
     <script>
-        //------------Auto Complete -------------------
-    $('.hsnAutoComplete').autoComplete({
-        minLength: 1,
-        resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=hsn_code"
-        }
-    });
+    //------------Auto Complete -------------------
     $('.supplierAutoComplete').autoComplete({
         minLength: 1,
         resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=supplier"
-        }
+            url: "{% url 'autocomplete'%}?field=supplier",
+            requestThrottling: 700
+        },
     });
     $('.locationAutoComplete').autoComplete({
         minLength: 1,
         resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=location"
+            url: "{% url 'autocomplete'%}?field=location",
+            requestThrottling: 700
         }
     });
     $('.transportAutoComplete').autoComplete({
         minLength: 1,
         resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=transport"
+            url: "{% url 'autocomplete'%}?field=transport",
+            requestThrottling: 700
         }
     });
 
     $('.itemAutoComplete').autoComplete({
         minLength: 1,
         resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=item"
+            url: "{% url 'autocomplete'%}?field=item",
+            requestThrottling: 700
         }
     });
     //------------Auto Complete -------------------

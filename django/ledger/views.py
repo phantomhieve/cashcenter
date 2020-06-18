@@ -42,7 +42,7 @@ def ledgerAddView(request, id=None):
             )
             if (not len(data)) or (id and instance.l_r_no==ledger.l_r_no):
                 ledger.save()
-                return HttpResponseRedirect(f'/ledger?sucessful={ledger.l_r_no}')
+                return HttpResponseRedirect(f'/ledger/add/?sucessful={ledger.l_r_no}')
         return HttpResponseRedirect('/ledger/add/?invalid=true')
     args = {
         'form': LedgerDataForm(instance=instance),
@@ -74,8 +74,8 @@ def autoComplete(request):
             '{0}__{1}'.format(field, 'icontains'): q,
         }
         data = LedgerData.objects.filter(**kwargs, user__in=users)\
-            .values_list(field, flat=True)
-        json = list(set(data))[:10]
+            .values_list(field, flat=True).distinct().order_by()[:10]
+        json = list(data)
         return JsonResponse(json, safe=False)
     else:
         HttpResponse("No cookies")

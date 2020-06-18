@@ -11,11 +11,20 @@ document.addEventListener('DOMContentLoaded', ()=>{
         $('#myInput').trigger('focus')
     })
 
-    document.getElementById('id_frieght').onchange = function(event){
-        this.value = parseFloat(this.value).toFixed(2);
+    // Alert for adding/updating content
+    let element_add = document.querySelector("#alert_add");
+    let content_add = document.querySelector('#alert_add_content');
+    if(params.get('sucessful')){
+        element_add.style.display = "block";
+        content_add.innerHTML = `${params.get('sucessful')}`
     }
+    else
+        element_add.style.display = "none";
 
-    document.getElementById('id_price').onchange = function(event){
+    // Fixing decimal value
+    function fixDecimalValue(event){
         this.value = parseFloat(this.value).toFixed(2);
     }
+    document.getElementById('id_frieght').onchange = fixDecimalValue(event);
+    document.getElementById('id_bill_ammount').onchange = fixDecimalValue(event);
 });
