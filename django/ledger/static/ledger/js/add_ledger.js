@@ -38,5 +38,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     fixDecimalValueInit('id_frieght');
     fixDecimalValueInit('id_bill_ammount');
-    
+
+    // Change floating point pcs/mtr
+    element = document.getElementById('id_pcs_mtr');
+    if(element.value!="" && Number(element.value)==element.value){
+        element.value = Number(element.value);
+    }
 });

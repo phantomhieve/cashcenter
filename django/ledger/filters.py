@@ -5,6 +5,7 @@ from .backend import getUsersFromGroup
 
 DEFAULT = (
     'l_r_no',
+    'l_r_date',
     'no_of_bale',
     'bale_no',
     'item',

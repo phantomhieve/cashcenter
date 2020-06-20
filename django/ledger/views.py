@@ -3,6 +3,7 @@ from django_filters.views import FilterView
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.urls import reverse
 
 from .models import LedgerData
 from .filters import LedgerDataFilter, DEFAULT
@@ -32,6 +33,7 @@ def ledgerAddView(request, id=None):
         instance = get_object_or_404(LedgerData, id=id)
     if request.method == 'POST':
         form = LedgerDataForm(request.POST, instance=instance)
+        query = request.GET.copy()
         if form.is_valid():
             ledger = form.save(commit=False)
             ledger.user = request.user
@@ -42,7 +44,9 @@ def ledgerAddView(request, id=None):
             )
             if (not len(data)) or (id and instance.l_r_no==ledger.l_r_no):
                 ledger.save()
-                return HttpResponseRedirect(f'/ledger/add/?sucessful={ledger.l_r_no}')
+                if instance:
+                    return HttpResponseRedirect(f'/ledger/?update={ledger.l_r_no}&{query.urlencode()}')
+                return HttpResponseRedirect(f'/ledger/add/?sucessful={ledger.l_r_no}&{query.urlencode()}')
         return HttpResponseRedirect('/ledger/add/?invalid=true')
     args = {
         'form': LedgerDataForm(instance=instance),

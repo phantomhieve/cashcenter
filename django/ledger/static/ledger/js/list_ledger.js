@@ -13,7 +13,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
         content_delete.innerHTML = `${params.get('lr-no')}`
     }
     else
-        element_delete.style.display = "none";    
+        element_delete.style.display = "none";  
+    
+    // Alert for update content
+    let element_update = document.querySelector("#alert_update");
+    let content_update = document.querySelector('#alert_update_content');
+    if(params.get('update')){
+        element_update.style.display = "block";
+        content_update.innerHTML = `${params.get('update')}`
+    }
+    else
+        element_update.style.display = "none";    
 
 
     $(".clickable-row").click(function() {
