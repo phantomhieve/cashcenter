@@ -28,6 +28,17 @@
     </div>
     <!-- Alert Delete-->
 
+    <!-- Alert Update-->
+    <div class="container" id="alert_update">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            L R No - <strong id="alert_update_content"></strong> Updated.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <!-- Alert Update-->
+
     <!--Filter form-->
     <p>
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -120,7 +131,7 @@
             </thead>
             <tbody>
                 {% for ledger in object_list %}
-                <tr class ="clickable-row" data-href="{% url 'ledger_add' %}{{ ledger.id }}">
+                <tr class ="clickable-row" data-href="{% url 'ledger_add' %}{{ ledger.id }}/?{% url_replace %}">
                     {% for key, value in  ledger.items %}
                             {% if key == 'status' %}
                                 {% if value == True %}
@@ -129,10 +140,10 @@
                                     <td>Pending</td>
                                 {% endif %}
                             {% elif key == 'delivery'%}
-                                <td>{{value|default_if_none:"Not-Delivered"}}</td>
+                                <td>{{ value|default_if_none:"Not-Delivered"}}</td>
                             {% elif key != 'id'%}
                                 {% if key == 'pcs_mtr'%}
-                                    <td>{{ value|default_if_none:"-" }}</td>
+                                    <td>{{ value|format_numeric_if_possible|default_if_none:"-" }}</td>
                                 {% else %}
                                     <td>{{ value|format_numeric|default_if_none:"-" }}</td>
                                 {% endif %}
