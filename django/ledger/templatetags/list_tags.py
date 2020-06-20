@@ -12,6 +12,7 @@ def url_replace(context, **kwargs):
     query.pop('page', None)
     query.pop('sucessful', None)
     query.pop('lr-no', None)
+    query.pop('update', None)
     query.update(kwargs)
     return query.urlencode()
 
@@ -27,4 +28,10 @@ def get_shop(context, **kwargs):
 def format_numeric(value):
     if value!=None and type(value)==float:
         return format_currency(value, 'INR', locale='en_IN')
+    return value
+
+@register.filter
+def format_numeric_if_possible(value):
+    if value!=None and int(value)==value:
+        return int(value)
     return value

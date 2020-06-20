@@ -64,6 +64,6 @@ form {
   margin-top: 32px;
 }
 
-#alert_delete, #alert_add, #alert_lr{
+#alert_delete, #alert_add, #alert_lr, #alert_update{
   display: none;
 }
