@@ -91,9 +91,14 @@
 
             </div>
             <div class="form-row form-item">
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-2">
                     <label for="id_columns">Select Columns</label>
                     {% render_field filter.form.columns class+="selectpicker form-control" data-live-search="true" size="3"%}
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="id_supplier__icontains">Supplier</label>
+                    {% render_field filter.form.supplier__icontains class+="form-control" type="text"%}
                 </div>
 
                 <div class="form-group col-md-2">
