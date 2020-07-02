@@ -38,7 +38,7 @@
         </div>
     </div>
     <!-- Alert Update-->
-
+    
     <!--Filter form-->
     <p>
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -49,14 +49,9 @@
         <form action="" method="get">
             {% csrf_token %}
             <div class="form-row form-item">
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-1">
                     <label for="id_l_r_no__icontains">L R No</label>
                     {% render_field filter.form.l_r_no__icontains class+="form-control"%}
-                </div>
-
-                <div class="form-group col-md-2">
-                    <label for="id_delivery_after">Stock</label>
-                    {% render_field filter.form.delivery_after class+="form-control" type="date"%}
                 </div>
 
                 <div class="form-group col-md-1">
@@ -80,11 +75,21 @@
                 </div>
 
                 <div class="form-group col-md-2">
+                    <label for="id_transport__icontains">Transport</label>
+                    {% render_field filter.form.transport__icontains class+="form-control" type="text"%}
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="id_supplier__icontains">Supplier</label>
+                    {% render_field filter.form.supplier__icontains class+="form-control" type="text"%}
+                </div>
+
+                <div class="form-group col-md-2">
                     <label for="id_d_status">Delivery</label>
                     {% render_field filter.form.d_status class+="form-control"%}
                 </div>
 
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-1">
                     <label for="id_status">Status</label>
                     {% render_field filter.form.status class+="form-control"%}
                 </div>
@@ -97,8 +102,8 @@
                 </div>
 
                 <div class="form-group col-md-2">
-                    <label for="id_supplier__icontains">Supplier</label>
-                    {% render_field filter.form.supplier__icontains class+="form-control" type="text"%}
+                    <label for="id_delivery_after">Stock</label>
+                    {% render_field filter.form.delivery_after class+="form-control" type="date"%}
                 </div>
 
                 <div class="form-group col-md-2">
