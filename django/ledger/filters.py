@@ -103,7 +103,8 @@ class LedgerDataFilter(django_filters.FilterSet):
     )
     def filter_delivery_after(self, queryset, name, value):
         users = getUsersFromGroup(self.request.user)
-        queryset_ = queryset.filter(user__in=users, l_r_date__lt=value, delivery=None)
+        queryset_ = queryset.filter(user__in=users, l_r_date__lt=value, delivery=None)|\
+            queryset.filter(user__in=users, l_r_date__lt=value, delivery__gte=value)
         return queryset_.values(*self.values)
 
 
