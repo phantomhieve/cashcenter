@@ -50,7 +50,8 @@ class LedgerDataFilter(django_filters.FilterSet):
             'bale_no':['icontains'],
             'item':['icontains'],
             'hsn_code':['icontains'],
-            'supplier':['icontains']
+            'supplier':['icontains'],
+            'transport':['icontains']
         }
 
     # Status 
