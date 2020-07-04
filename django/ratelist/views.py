@@ -18,7 +18,7 @@ class RatelistListView(FilterView):
     def get(self, *args, **kwargs):
         if not self.request.user.is_staff:
             return redirect('/')
-        return super(StockListView, self).get(*args, **kwargs)
+        return super(RatelistListView, self).get(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
