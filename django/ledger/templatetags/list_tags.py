@@ -13,6 +13,7 @@ def url_replace(context, **kwargs):
     query.pop('sucessful', None)
     query.pop('lr-no', None)
     query.pop('update', None)
+    query.pop('invalid', None)
     query.update(kwargs)
     return query.urlencode()
 
