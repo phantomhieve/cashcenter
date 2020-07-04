@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Add Rate
+{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'ratelist/css/main.css'%}">
+{% endblock css %}
+
+{% block header %}
+    {% include 'ratelist/ratelist_navbar.html' %}
+{% endblock header%}
+
+{% block body %}
+
+    <!-- Alert Invalid-->
+    <div class="container" id="alert_invalid">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Invalid-data</strong> / Dublicate Entry.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <!-- Alert Invalid-->
+
+    <!-- Alert Add/Update-->
+    <div class="container" id="alert_add">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            HSN No - <strong id="alert_add_content"></strong> added/updated.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <!-- Alert Add/Update-->
+
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-row top-row">
+                {% for field in form %}
+                    {% if forloop.first %}
+                    <div class="form-group col-md-3">
+                    {% else %}
+                    <div class="form-group col-md-2">
+                    {% endif%}
+                        {% if field.name == 'hsn' %}
+                            <label for="id_{{field.name}}">{{field.name|upper}}</label>
+                        {% else %}
+                            <label for="id_{{field.name}}">{{field.name|capfirst}}</label>
+                        {% endif %}
+                        
+                        {% if field.name == 'quantity' %}
+                            {% render_field field class+="form-control" type="number" autocomplete="off" autofocus="true" %}
+                        {% else %}
+                            {% render_field field class+="form-control" type="text" autocomplete="off" autofocus="true" %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            {{ formset.management_form }}
+            <div class="container">
+                <h5>Rates</h5>
+                {% for form in formset %}
+                <div class="card">
+                    <div class="form-row">
+                    
+                        <!--Display fields-->
+                        {% for field in form %}
+                            {% if field.name != 'id' and field.name != 'ratelistdata' %}
+                                {% if field.name == 'p_price' or  field.name == 's_price' %}
+                                    <div class="form-group col-md-2">
+                                        {% render_field field class+="form-control" type="number" placeholder=field.name|capfirst %}
+                                    </div>
+                                {% elif field.name == 'DELETE' %}
+                                    <div class="form-group col-md-1">
+                                        <span style="color: red;padding-left: 1rem;">Delete</span>
+                                        {% render_field field class+="form-control" type="checkbox"%}
+                                    </div>
+                                    
+                                {% else %}
+                                    <div class="form-group col-md-3">
+                                        {% render_field field class+="form-control" type="date" %}
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        <!--Display fields-->
+
+                        <!--Hidden fields-->
+                        {% for hidden_field in form.hidden_fields %}
+                            {{ hidden_field }}
+                        {% endfor %}
+                        <!--Hidden fields-->
+                        
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="form-row">
+                {% if  instance %}
+                    <div class="form-group col-md-6">
+                        <input type="submit" value="Add/Update" class="form-control btn btn-primary form-button">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <button type="button" class="form-control btn btn-danger form-button" data-toggle="modal" data-target="#deleteConformation">
+                        Delete
+                        </button>
+                    </div>
+                    {% else %}
+                    <div class="form-group col-md-12">
+                        <input type="submit" value="Add/Update" class="form-control btn btn-primary form-button">
+                    </div>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    <!-- Modal -->
+    {% if instance %}
+    <div class="modal fade" id="deleteConformation" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="form-control btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="{% url 'ratelist_delete' id=instance %}" class="form-control btn btn-danger ">Delete</a>
+            </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <!-- Modal -->
+{% endblock body %}
+
+{% block footer %}
+    {% include 'footer.html' %}
+{% endblock %}
+
+{% block script%}
+    <script src="{% static 'ratelist/js/add_ratelist.js'%}"></script>
+{% endblock %}
+

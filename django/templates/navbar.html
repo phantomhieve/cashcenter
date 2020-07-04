@@ -15,7 +15,7 @@
             </li>
             {% if request.user.is_staff %}
             <li class="nav-item navbar-item">
-                <h5><a href="{% url 'stock_list' %}" class="nav-link navbar-content">Stock</a></h5>
+                <h5><a href="{% url 'ratelist_list' %}" class="nav-link navbar-content">Rate List</a></h5>
             </li>
             {% endif %}
             {% block links %}

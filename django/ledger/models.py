@@ -31,7 +31,7 @@ class LedgerData(models.Model):
         return f'{self.user} - {self.l_r_no}'
     
     def save(self, *args, **kwargs):
-        if self.pcs_mtr:
+        if self.pcs_mtr and self.bill_ammount and self.frieght:
             self.price = (self.bill_ammount+self.frieght)/self.pcs_mtr
             self.price = round(self.price, 2)
             
