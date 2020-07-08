@@ -1,4 +1,7 @@
 from django.contrib import admin
 from .models import LedgerData
 
-admin.site.register(LedgerData)
+class LedgerDataAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(LedgerData, LedgerDataAdmin)
