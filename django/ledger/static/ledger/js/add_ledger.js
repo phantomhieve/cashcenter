@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     document.getElementById('id_pcs_mtr').onchange = function (event){
         this.value = addSpace(this.value);
+        this.value = parseFloat(this.value).toFixed(2);
     }
 
 });
