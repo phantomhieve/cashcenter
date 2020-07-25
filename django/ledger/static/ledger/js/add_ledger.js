@@ -21,13 +21,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     else
         element_add.style.display = "none";
 
-    // Fixing decimal value
-    function fixDecimalValue(event){
-        this.value = parseFloat(this.value).toFixed(2);
-    }
-    document.getElementById('id_frieght').onchange = fixDecimalValue(event);
-    document.getElementById('id_bill_ammount').onchange = fixDecimalValue(event);
-
     // Change floating point
     function fixDecimalValueInit(id){
         element = document.getElementById(id);
@@ -44,4 +37,34 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if(element.value!="" && Number(element.value)==element.value){
         element.value = Number(element.value);
     }
+
+    document.getElementById('id_frieght').onchange = function (event){
+        this.value = parseFloat(this.value).toFixed(2);
+    }
+
+    // Adding numbers delimeter "+", " "
+    function addSpace(valueString){
+        let total = 0;
+        let splitArray = valueString.split(" ");
+        if(valueString.includes("+"))
+            splitArray = valueString.split("+");
+        else if(splitArray.length===1)
+            splitArray = [valueString];
+        splitArray.forEach((value)=>{
+            if(value!=="")
+                total+=parseFloat(value)
+        })
+        return total;
+    }
+
+    // Addable fields modify
+    document.getElementById('id_bill_ammount').onchange = function (event){
+        this.value = addSpace(this.value);
+        this.value = parseFloat(this.value).toFixed(2);
+    }
+
+    document.getElementById('id_pcs_mtr').onchange = function (event){
+        this.value = addSpace(this.value);
+    }
+
 });
