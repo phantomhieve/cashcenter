@@ -204,7 +204,7 @@
     });
 
     $('.lrAutoComplete').on('autocomplete.select', (evt, item)=>{
-        window.location.replace(`/ledger/view/${item}/?{% url_replace %}`);
+        window.location.replace(`{% url 'ledger_add'%}?l_r_view=${item}&{% url_replace %}`);
     });
     //-------------Search Field -------------------
     </script>
