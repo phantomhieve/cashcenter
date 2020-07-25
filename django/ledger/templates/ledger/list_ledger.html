@@ -226,5 +226,18 @@
 {% endblock %}
 
 {% block script %}  
+    <script>
+        $('.lrAutoComplete').autoComplete({
+            minLength: 1,
+            resolverSettings: {
+                url: "{% url 'autocomplete'%}?field=l_r_no",
+                requestThrottling: 700
+            },
+        });
+
+        $('.lrAutoComplete').on('autocomplete.select', (evt, item)=>{
+            window.location.replace(`/ledger/view/${item}/?{% url_replace %}`);
+        });
+    </script>
     <script src="{% static 'ledger/js/list_ledger.js'%}"></script>
 {% endblock script %}
