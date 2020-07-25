@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load widget_tweaks %}
+{% load list_tags %}
 
 {% block title %}
     Add Ledger
@@ -192,5 +193,19 @@
         }
     });
     //------------Auto Complete -------------------
+
+    //-------------Search Field -------------------
+    $('.lrAutoComplete').autoComplete({
+        minLength: 1,
+        resolverSettings: {
+            url: "{% url 'autocomplete'%}?field=l_r_no",
+            requestThrottling: 700
+        },
+    });
+
+    $('.lrAutoComplete').on('autocomplete.select', (evt, item)=>{
+        window.location.replace(`/ledger/view/${item}/?{% url_replace %}`);
+    });
+    //-------------Search Field -------------------
     </script>
 {% endblock script %}

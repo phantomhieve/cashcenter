@@ -10,6 +10,8 @@
     </button>    
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
+            {% block search %}
+            {% endblock search %}
             <li class="nav-item navbar-item">
                 <h5><a href="{% url 'ledger_list' %}?{% url_replace %}" class="nav-link navbar-content">Ledger</a></h5>
             </li>

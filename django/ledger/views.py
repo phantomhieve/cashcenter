@@ -27,6 +27,12 @@ class LedgerListView(FilterView):
             context["total"] = total
         return context
 
+def ledgerView(request, lr=None):
+    instance = get_object_or_404(LedgerData, l_r_no=lr)
+    id = instance.id
+    query = request.GET.copy()
+    return HttpResponseRedirect(f'/ledger/add/{id}/{query.urlencode()}')
+
 def ledgerAddView(request, id=None):
     instance = None
     if id:
