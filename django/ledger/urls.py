@@ -5,7 +5,6 @@ from .views import (
     ledgerAddView, 
     ledgerDeleteView, 
     autoComplete,
-    ledgerView,
 )
 
 urlpatterns = [
@@ -23,11 +22,6 @@ urlpatterns = [
         'add/<int:id>/',
         login_required(ledgerAddView, login_url='/user/login/'),
         name='ledger_update'
-    ),
-    path(
-        'view/<slug:lr>/',
-        login_required(ledgerView, login_url='/user/login/'),
-        name='ledger_view'
     ),
     path(
         'delete/<int:id>/',

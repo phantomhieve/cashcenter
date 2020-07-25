@@ -236,7 +236,7 @@
         });
 
         $('.lrAutoComplete').on('autocomplete.select', (evt, item)=>{
-            window.location.replace(`/ledger/view/${item}/?{% url_replace %}`);
+            window.location.replace(`{% url 'ledger_add'%}?l_r_view=${item}&{% url_replace %}`);
         });
     </script>
     <script src="{% static 'ledger/js/list_ledger.js'%}"></script>

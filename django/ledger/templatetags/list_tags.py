@@ -14,6 +14,7 @@ def url_replace(context, **kwargs):
     query.pop('lr-no', None)
     query.pop('update', None)
     query.pop('invalid', None)
+    query.pop('l_r_view', None)
     query.update(kwargs)
     return query.urlencode()
 
