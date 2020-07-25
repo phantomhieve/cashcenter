@@ -74,14 +74,14 @@
                     {% render_field form.hsn_code class+="hsnAutoComplete form-control" type="text" autocomplete="off" %}
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="id_pcs/mtr">PCS/MTR</label>
-                    {% render_field form.pcs_mtr class+="form-control" %}
+                    <label for="id_pcs_mtr">PCS/MTR</label>
+                    {% render_field form.pcs_mtr class+="form-control" type="text"%}
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="id_bill_ammount">Bill Amount</label>
-                    {% render_field form.bill_ammount class+="form-control" autocomplete="off"%}
+                    {% render_field form.bill_ammount class+="form-control" autocomplete="off" type="text"%}
                 </div>
                 <div class="form-group col-md-3">
                     <label for="id_weight">Weight</label>
