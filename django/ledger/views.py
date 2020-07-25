@@ -27,19 +27,19 @@ class LedgerListView(FilterView):
             context["total"] = total
         return context
 
-def ledgerView(request, lr=None):
-    instance = get_object_or_404(LedgerData, l_r_no=lr)
-    id = instance.id
-    query = request.GET.copy()
-    return HttpResponseRedirect(f'/ledger/add/{id}/{query.urlencode()}')
 
 def ledgerAddView(request, id=None):
     instance = None
+    query = request.GET.copy()
     if id:
         instance = get_object_or_404(LedgerData, id=id)
+    elif query.get('l_r_view', False):
+        instance = get_object_or_404(
+            LedgerData, 
+            l_r_no=query.pop('l_r_view')[0]
+        )
     if request.method == 'POST':
         form = LedgerDataForm(request.POST, instance=instance)
-        query = request.GET.copy()
         if form.is_valid():
             ledger = form.save(commit=False)
             ledger.user = request.user
