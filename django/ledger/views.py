@@ -32,12 +32,19 @@ def ledgerAddView(request, id=None):
     instance = None
     query = request.GET.copy()
     if id:
-        instance = get_object_or_404(LedgerData, id=id)
+        instance = get_object_or_404(
+            LedgerData, 
+            id=id,
+            user__in = getUsersFromGroup(request.user)
+        )
     elif query.get('l_r_view', False):
         instance = get_object_or_404(
             LedgerData, 
-            l_r_no=query.pop('l_r_view')[0]
+            l_r_no=query.pop('l_r_view')[0],
+            user__in = getUsersFromGroup(request.user)
         )
+        return HttpResponseRedirect(f'/ledger/add/{instance.id}/?{query.urlencode()}')
+
     if request.method == 'POST':
         form = LedgerDataForm(request.POST, instance=instance)
         if form.is_valid():
