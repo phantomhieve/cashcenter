@@ -25,6 +25,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('ledger/', include('ledger.urls')),
     path('user/', include('user.urls')),
-    path('stock/', include('stock.urls')),
+    path('ledger_base/', include('ledger_base.urls')),
     path('ratelist/', include('ratelist.urls'))
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
