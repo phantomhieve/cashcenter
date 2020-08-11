@@ -39,6 +39,19 @@
 </div>
 <!-- Alert Update-->
 
+<!-- Alert Approve-->
+<div class="container" id="alert_approve">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        L R No - <strong id="alert_approve_content"></strong> Approved.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</div>
+<!-- Alert Approve-->
+
+
+
 <!--Table Bootstrap-->
 <div class="table-responsive text-nowrap">
     <table class="table table-hover">
@@ -117,30 +130,8 @@
         $(".clickable-row").click(function() {
             window.location = $(this).data("href");
         });
-        let url = new URL(window.location);
-        let params = new URLSearchParams(url.search);
-
-        // Alert for deleting content
-        let element_delete = document.querySelector("#alert_delete");
-        let content_delete = document.querySelector('#alert_delete_content');
-        if(params.get('lr-no')){
-            element_delete.style.display = "block";
-            content_delete.innerHTML = `${params.get('lr-no')}`
-        }
-        else
-            element_delete.style.display = "none";  
-        
-        // Alert for update content
-        let element_update = document.querySelector("#alert_update");
-        let content_update = document.querySelector('#alert_update_content');
-        if(params.get('update')){
-            element_update.style.display = "block";
-            content_update.innerHTML = `${params.get('update')}`
-        }
-        else
-            element_update.style.display = "none";    
-
     </script>
+    <script src="{% static 'ledger_base/js/list_ledger.js'%}"></script>
 {% endblock script %}
 
     
