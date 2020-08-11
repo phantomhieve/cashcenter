@@ -9,7 +9,7 @@
 {% endblock title %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'ledger_base/css/main.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'ledger/css/main.css'%}">
 {% endblock css %}
 
 {% block header %}
@@ -17,6 +17,28 @@
 {% endblock%}
 
 {% block body %}
+<!-- Alert Delete-->
+<div class="container" id="alert_delete">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        L R No - <strong id="alert_delete_content"></strong> deleted.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</div>
+<!-- Alert Delete-->
+
+<!-- Alert Update-->
+<div class="container" id="alert_update">
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        L R No - <strong id="alert_update_content"></strong> Updated.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</div>
+<!-- Alert Update-->
+
 <!--Table Bootstrap-->
 <div class="table-responsive text-nowrap">
     <table class="table table-hover">
@@ -95,6 +117,29 @@
         $(".clickable-row").click(function() {
             window.location = $(this).data("href");
         });
+        let url = new URL(window.location);
+        let params = new URLSearchParams(url.search);
+
+        // Alert for deleting content
+        let element_delete = document.querySelector("#alert_delete");
+        let content_delete = document.querySelector('#alert_delete_content');
+        if(params.get('lr-no')){
+            element_delete.style.display = "block";
+            content_delete.innerHTML = `${params.get('lr-no')}`
+        }
+        else
+            element_delete.style.display = "none";  
+        
+        // Alert for update content
+        let element_update = document.querySelector("#alert_update");
+        let content_update = document.querySelector('#alert_update_content');
+        if(params.get('update')){
+            element_update.style.display = "block";
+            content_update.innerHTML = `${params.get('update')}`
+        }
+        else
+            element_update.style.display = "none";    
+
     </script>
 {% endblock script %}
 

@@ -8,7 +8,7 @@
 {% endblock title %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'ledger_base/css/main.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'ledger/css/main.css'%}">
 {% endblock css %}
 
 {% block header %}
@@ -146,7 +146,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="form-control btn btn-secondary" data-dismiss="modal">Close</button>
-                <a href="{% url 'ledger_delete' id=instance %}" class="form-control btn btn-danger ">Delete</a>
+                <a href="{% url 'ledger_base_delete' id=instance %}" class="form-control btn btn-danger ">Delete</a>
             </div>
             </div>
         </div>

@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.views import View
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
+from django.contrib.auth.decorators import user_passes_test
 
 
 from .models import LedgerDataBase
@@ -63,4 +64,16 @@ def ledgerAddView(request, id=None):
         request,
         'ledger_base/add_ledger_base.html',
         args
+    )
+
+@user_passes_test(lambda u: u.is_staff)
+def ledgerDeleteView(request, id=None):
+    instance = None
+    if id:
+        instance = get_object_or_404(LedgerDataBase, id=id)
+        instance.delete()
+        return HttpResponseRedirect(f'/ledger_base?lr-no={instance.l_r_no}')
+    return render(
+        request,
+        '404.html',
     )
