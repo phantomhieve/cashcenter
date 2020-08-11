@@ -6,7 +6,6 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import user_passes_test
 
-
 from .models import LedgerDataBase
 from .forms import LedgerDataForm
 from .backend import makeInstance
@@ -17,6 +16,11 @@ class LedgerBaseListView(ListView):
     model = LedgerDataBase
     template_name = 'ledger_base/list_ledger_base.html'
     paginate_by=25
+
+    def get_queryset(self):
+        return LedgerDataBase.objects.filter(
+            user__in=getUsersFromGroup(self.request.user)
+        )
 
 
 def ledgerAddView(request, id=None):
@@ -83,10 +87,11 @@ def approveView(request, id=None):
     instance = None
     if id:
         instance = get_object_or_404(LedgerDataBase, id=id)
-        new_instance = makeInstance(instance, request)
-        new_instance.save()
-        instance.delete()
-        return HttpResponseRedirect(f'/ledger_base?approve={instance.l_r_no}')
+        if instance.user in getUsersFromGroup(request.user):
+            new_instance = makeInstance(instance, request)
+            new_instance.save()
+            instance.delete()
+            return HttpResponseRedirect(f'/ledger_base?approve={instance.l_r_no}')
     return render(
         request,
         '404.html',
