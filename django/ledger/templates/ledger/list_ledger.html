@@ -40,11 +40,16 @@
     <!-- Alert Update-->
     
     <!--Filter form-->
-    <p>
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            Filter Options
-        </button>
-    </p>
+    <div class="row">
+        <div class="col col-md-6">
+            <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="collapseButton">
+                Filter Options
+            </button>
+        </div>
+        <div class="col col-md-6 float-right" style="align-self: right!important;">
+            {% include 'ledger/pagination.html' %}
+        </div>
+    </div>
     <div class="collapse" id="collapseExample">
         <form action="" method="get">
             {% csrf_token %}
@@ -182,49 +187,7 @@
         </table>
     </div>
     {% endif %}
-
-    <!-- Pagination -->
-    {% if is_paginated %}
-    <div class="container-fluid">
-        <nav>
-            <ul class="pagination">
-                <li class="page-item">
-                    <a href="{% url 'ledger_list' %}?{% url_replace page=1%}" class="page-link">
-                        First
-                    </a>
-                </li>
-                {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a href="{% url 'ledger_list' %}?{% url_replace page=page_obj.previous_page_number%}" class="page-link">
-                        {{ page_obj.previous_page_number }}
-                    </a>
-                </li>
-                {% endif %}
-    
-                <li class="page-item active">
-                    <a href="{% url 'ledger_list' %}?{% url_replace page=page_obj.number%}" class="page-link">
-                        {{ page_obj.number }}
-                    </a>
-                </li>
-    
-                {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a href="{% url 'ledger_list' %}?{% url_replace page=page_obj.next_page_number%}" class="page-link">
-                        {{ page_obj.next_page_number }}
-                    </a>
-                </li>
-                {% endif %}
-    
-                <li class="page-item">
-                    <a href="{% url 'ledger_list' %}?{% url_replace page=paginator.num_pages %}" class="page-link">
-                        Last
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-    {% endif %}
-    <!-- Pagination End-->
+    {% include 'ledger/pagination.html' %}
 {% endblock body %}
 
 {% block footer %}

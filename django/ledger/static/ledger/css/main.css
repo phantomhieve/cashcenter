@@ -67,3 +67,6 @@ form {
 #alert_delete, #alert_add, #alert_lr, #alert_update, #alert_approve{
   display: none;
 }
+#collapseButton{
+  margin-bottom: 15px;
+}
