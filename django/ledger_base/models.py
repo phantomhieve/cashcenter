@@ -38,4 +38,4 @@ class LedgerDataBase(models.Model):
             
         if self.reciept!=None and self.delivery!=None:
             self.status= True
-        super(LedgerData, self).save(*args, **kwargs)
+        super(LedgerDataBase, self).save(*args, **kwargs)
