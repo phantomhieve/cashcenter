@@ -1,7 +1,6 @@
 import django_filters
 
 from .models import LedgerData
-from .backend import getUsersFromGroup
 
 DEFAULT = (
     'l_r_no',
@@ -78,8 +77,7 @@ class LedgerDataFilter(django_filters.FilterSet):
         method ='filter_by_delivery'
     )
     def filter_by_delivery(self, queryset, name, value):
-        users = getUsersFromGroup(self.request.user)
-        queryset_ = queryset.filter(user__in=users)
+        queryset_ = queryset.filter(user=self.request.user)
         if value=='True':
             queryset_ = queryset_.exclude(delivery=None)
         elif value=='False':
@@ -95,8 +93,7 @@ class LedgerDataFilter(django_filters.FilterSet):
     def filter_by_column(self, queryset, name, value):
         value.append('id')
         self.values = value
-        users = getUsersFromGroup(self.request.user)
-        return queryset.filter(user__in=users).values(*self.values)
+        return queryset.filter(user=self.request.user).values(*self.values)
     
     # Extra Filed
     delivery_after = django_filters.DateFilter(
@@ -104,9 +101,9 @@ class LedgerDataFilter(django_filters.FilterSet):
         method= 'filter_delivery_after'
     )
     def filter_delivery_after(self, queryset, name, value):
-        users = getUsersFromGroup(self.request.user)
-        queryset_ = queryset.filter(user__in=users, l_r_date__lt=value, delivery=None)|\
-            queryset.filter(user__in=users, l_r_date__lt=value, delivery__gte=value)
+        
+        queryset_ = queryset.filter(user=self.request.user, l_r_date__lt=value, delivery=None)|\
+            queryset.filter(user=self.request.user, l_r_date__lt=value, delivery__gte=value)
         return queryset_.values(*self.values)
 
 
@@ -123,5 +120,4 @@ class LedgerDataFilter(django_filters.FilterSet):
     @property
     def qs(self):
         queryset = super(LedgerDataFilter, self).qs
-        users = getUsersFromGroup(self.request.user)
-        return queryset.filter(user__in=users).values(*self.values)
+        return queryset.filter(user=self.request.user).values(*self.values)
