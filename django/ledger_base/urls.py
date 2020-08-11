@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from .views import(
     LedgerBaseListView, 
     ledgerAddView, 
-    ledgerDeleteView
+    ledgerDeleteView,
+    approveView
 )
 
 urlpatterns = [
@@ -26,5 +27,10 @@ urlpatterns = [
         'delete/<int:id>/',
         login_required(ledgerDeleteView, login_url='/user/login/'),
         name='ledger_base_delete'
+    ),
+    path(
+        'approve/<int:id>/',
+        login_required(approveView, login_url='/user/login/'),
+        name='ledger_base_approve'
     ),
 ]

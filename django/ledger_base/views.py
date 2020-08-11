@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 from .models import LedgerDataBase
 from .forms import LedgerDataForm
+from .backend import makeInstance
 from ledger.backend import getUsersFromGroup
 from ledger.models import LedgerData
 
@@ -73,6 +74,19 @@ def ledgerDeleteView(request, id=None):
         instance = get_object_or_404(LedgerDataBase, id=id)
         instance.delete()
         return HttpResponseRedirect(f'/ledger_base?lr-no={instance.l_r_no}')
+    return render(
+        request,
+        '404.html',
+    )
+@user_passes_test(lambda u: u.is_staff)
+def approveView(request, id=None):
+    instance = None
+    if id:
+        instance = get_object_or_404(LedgerDataBase, id=id)
+        new_instance = makeInstance(instance, request)
+        new_instance.save()
+        instance.delete()
+        return HttpResponseRedirect(f'/ledger_base?approve={instance.l_r_no}')
     return render(
         request,
         '404.html',
