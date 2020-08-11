@@ -12,14 +12,17 @@
         <ul class="navbar-nav ml-auto">
             {% block search %}
             {% endblock search %}
+            {% if request.user.is_staff %}
             <li class="nav-item navbar-item">
                 <h5><a href="{% url 'ledger_list' %}?{% url_replace %}" class="nav-link navbar-content">Ledger</a></h5>
             </li>
-            {% if request.user.is_staff %}
             <li class="nav-item navbar-item">
                 <h5><a href="{% url 'ratelist_list' %}" class="nav-link navbar-content">Rate List</a></h5>
             </li>
             {% endif %}
+            <li class="nav-item navbar-item">
+                <h5><a href="{% url 'ledger_base_list' %}?{% url_replace %}" class="nav-link navbar-content">Ledger Staff</a></h5>
+            </li>
             {% block links %}
             {% endblock links %}
             <li class="nav-item navbar-item">
