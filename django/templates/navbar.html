@@ -27,7 +27,13 @@
             </li>
             {% endif %}
             <li class="nav-item navbar-item">
-                <h5><a href="{% url 'ledger_base_list' %}?{% url_replace %}" class="nav-link navbar-content">Ledger Staff</a></h5>
+                <h5><a href="{% url 'ledger_base_list' %}?{% url_replace %}" class="nav-link navbar-content">
+                    {% if request.user.is_staff %}
+                        Staff-l
+                    {% else %}
+                        Ledger
+                    {% endif %}
+                </a></h5>
             </li>
             {% block links %}
             {% endblock links %}
