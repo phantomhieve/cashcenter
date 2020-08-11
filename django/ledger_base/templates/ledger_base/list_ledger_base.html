@@ -1,1 +1,101 @@
-<h1>This Works</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% load list_tags %}
+
+{% block title %}
+    Ledger Staff
+{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'ledger_base/css/main.css'%}">
+{% endblock css %}
+
+{% block header %}
+    {% include 'ledger_base/ledger_base_navbar.html' %}
+{% endblock%}
+
+{% block body %}
+<!--Table Bootstrap-->
+<div class="table-responsive text-nowrap">
+    <table class="table table-hover">
+        <thead>
+            <tr> 
+                <th>L R No</th>
+                <th>Delivery Date</th>
+                <th>Approval</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ledger in object_list %}
+            <tr class ="clickable-row" data-href="{% url 'ledger_add' %}{{ ledger.id }}/?{% url_replace %}">
+                <td>{{ ledger.l_r_no }}</td>
+                <td>{{ ledger.delivery|default_if_none:"-" }}</td>
+                <td>
+                    {% if ledger.approved %}
+                    <div style="color: green;">Approved</div>
+                    {%else%}
+                    <div style="color: red;">Not Approved</div>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<div class="container-fluid">
+    <nav>
+        <ul class="pagination">
+            <li class="page-item">
+                <a href="{% url 'ledger_list' %}?{% url_replace page=1%}" class="page-link">
+                    First
+                </a>
+            </li>
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a href="{% url 'ledger_list' %}?{% url_replace page=page_obj.previous_page_number%}" class="page-link">
+                    {{ page_obj.previous_page_number }}
+                </a>
+            </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <a href="{% url 'ledger_list' %}?{% url_replace page=page_obj.number%}" class="page-link">
+                    {{ page_obj.number }}
+                </a>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a href="{% url 'ledger_list' %}?{% url_replace page=page_obj.next_page_number%}" class="page-link">
+                    {{ page_obj.next_page_number }}
+                </a>
+            </li>
+            {% endif %}
+
+            <li class="page-item">
+                <a href="{% url 'ledger_list' %}?{% url_replace page=paginator.num_pages %}" class="page-link">
+                    Last
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+{% endif %}
+
+{% endblock body %}
+
+{% include 'footer.html' %}
+{% block script %}  
+    <script>
+        $(".clickable-row").click(function() {
+            window.location = $(this).data("href");
+        });
+    </script>
+{% endblock script %}
+
+    
