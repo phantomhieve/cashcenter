@@ -29,7 +29,7 @@
         </thead>
         <tbody>
             {% for ledger in object_list %}
-            <tr class ="clickable-row" data-href="{% url 'ledger_add' %}{{ ledger.id }}/?{% url_replace %}">
+            <tr class ="clickable-row" data-href="{% url 'ledger_base_add' %}{{ ledger.id }}/?{% url_replace %}">
                 <td>{{ ledger.l_r_no }}</td>
                 <td>{{ ledger.delivery|default_if_none:"-" }}</td>
                 <td>
