@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.views import View
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
+from django.contrib.auth.decorators import user_passes_test
 
 from .models import LedgerData
 from .filters import LedgerDataFilter, DEFAULT
@@ -16,6 +17,11 @@ class LedgerListView(FilterView):
     filterset_class  = LedgerDataFilter
     paginate_by=25
 
+    def get(self, *args, **kwargs):
+        if not self.request.user.is_staff:
+            return redirect('/')
+        return super(LedgerListView, self).get(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if len(context['filter'].qs) and \
@@ -27,7 +33,7 @@ class LedgerListView(FilterView):
             context["total"] = total
         return context
 
-
+@user_passes_test(lambda u: u.is_staff)
 def ledgerAddView(request, id=None):
     instance = None
     query = request.GET.copy()
@@ -71,6 +77,7 @@ def ledgerAddView(request, id=None):
         args
     )
 
+@user_passes_test(lambda u: u.is_staff)
 def ledgerDeleteView(request, id=None):
     instance = None
     if id:
