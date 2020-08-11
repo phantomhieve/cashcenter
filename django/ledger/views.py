@@ -41,13 +41,13 @@ def ledgerAddView(request, id=None):
         instance = get_object_or_404(
             LedgerData, 
             id=id,
-            user__in = getUsersFromGroup(request.user)
+            user=request.user
         )
     elif query.get('l_r_view', False):
         instance = get_object_or_404(
             LedgerData, 
             l_r_no=query.pop('l_r_view')[0],
-            user__in = getUsersFromGroup(request.user)
+            user=request.user
         )
         return HttpResponseRedirect(f'/ledger/add/{instance.id}/?{query.urlencode()}')
 
@@ -56,10 +56,9 @@ def ledgerAddView(request, id=None):
         if form.is_valid():
             ledger = form.save(commit=False)
             ledger.user = request.user
-            users = getUsersFromGroup(ledger.user)
             data  = LedgerData.objects.filter(
                 l_r_no=ledger.l_r_no,
-                user__in=users
+                user=ledger.user
             )
             if (not len(data)) or (id and instance.l_r_no==ledger.l_r_no):
                 ledger.save()
