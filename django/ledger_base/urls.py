@@ -4,7 +4,8 @@ from .views import(
     LedgerBaseListView, 
     ledgerAddView, 
     ledgerDeleteView,
-    approveView
+    approveView,
+    autoComplete
 )
 
 urlpatterns = [
@@ -32,5 +33,10 @@ urlpatterns = [
         'approve/<int:id>/',
         login_required(approveView, login_url='/user/login/'),
         name='ledger_base_approve'
+    ),
+     path(
+        'autocomplete/',
+        login_required(autoComplete, login_url='/user/login/'),
+        name='autocomplete_base'
     ),
 ]

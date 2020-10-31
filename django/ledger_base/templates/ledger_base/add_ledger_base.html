@@ -197,21 +197,21 @@
     $('.supplierAutoComplete').autoComplete({
         minLength: 1,
         resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=supplier",
+            url: "{% url 'autocomplete_base'%}?field=supplier",
             requestThrottling: 700
         },
     });
     $('.locationAutoComplete').autoComplete({
         minLength: 1,
         resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=location",
+            url: "{% url 'autocomplete_base'%}?field=location",
             requestThrottling: 700
         }
     });
     $('.transportAutoComplete').autoComplete({
         minLength: 1,
         resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=transport",
+            url: "{% url 'autocomplete_base'%}?field=transport",
             requestThrottling: 700
         }
     });
@@ -219,7 +219,7 @@
     $('.itemAutoComplete').autoComplete({
         minLength: 1,
         resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=item",
+            url: "{% url 'autocomplete_base'%}?field=item",
             requestThrottling: 700
         }
     });
@@ -229,7 +229,7 @@
     $('.lrAutoComplete').autoComplete({
         minLength: 1,
         resolverSettings: {
-            url: "{% url 'autocomplete'%}?field=l_r_no",
+            url: "{% url 'autocomplete_base'%}?field=l_r_no",
             requestThrottling: 700
         },
     });
