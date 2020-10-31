@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django_filters.views import FilterView
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
@@ -9,23 +9,31 @@ from django.contrib.auth.decorators import user_passes_test
 from .models import LedgerDataBase
 from .forms import LedgerDataForm
 from .backend import makeInstance
+from .filters import LedgerDataBaseFilter
 from ledger.backend import getUsersFromGroup
 from ledger.models import LedgerData
 
-class LedgerBaseListView(ListView):
+class LedgerBaseListView(FilterView):
     model = LedgerDataBase
     template_name = 'ledger_base/list_ledger_base.html'
-    paginate_by=25
+    filterset_class = LedgerDataBaseFilter
+    paginate_by =3
 
-    def get_queryset(self):
-        return LedgerDataBase.objects.filter(
-            user__in=getUsersFromGroup(self.request.user)
-        )
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if len(context['filter'].qs) and \
+            'bill_ammount' in context['filter'].qs[0]:
+            total = sum([
+                ledger['bill_ammount'] if ledger['bill_ammount'] else 0
+                for ledger in context['filter'].qs
+            ])
+            context["total"] = total
+        return context
 
 def ledgerAddView(request, id=None):
     instance = None
     query = request.GET.copy()
+    query.pop('invalid', None)
     if id:
         instance = get_object_or_404(
             LedgerDataBase,
@@ -96,3 +104,28 @@ def approveView(request, id=None):
         request,
         '404.html',
     )
+
+
+def autoComplete(request):
+    if request.GET.get('q') and request.GET['field']:
+        field = request.GET['field']
+        q = request.GET['q']
+        users = getUsersFromGroup(request.user)
+        kwargs = {
+            '{0}__{1}'.format(field, 'icontains'): q,
+        }
+        data1 = LedgerData.objects.filter(**kwargs, user__in=users)\
+            .values_list(field, flat=True).distinct().order_by()[:10]
+        
+        data2 = LedgerDataBase.objects.filter(**kwargs, user__in=users)\
+            .values_list(field, flat=True).distinct().order_by()[:10]
+        
+        print('----------------------------')
+        print(data1)
+        print(data2)
+        print('----------------------------')
+        data = list(data1)+ list(data2)
+        json = list(data[:10])
+        return JsonResponse(json, safe=False)
+    else:
+        HttpResponse("No cookies")
