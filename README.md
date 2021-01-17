@@ -5,6 +5,7 @@
 #### Django
 #### HTML
 #### CSS
+#### Java Script
 
 - Special thanks to [nedis](https://github.com/nesdis) for this [mongo Db Controller](https://github.com/nesdis/djongo)
 - In case you find any bug please report [phantomhive](mailto:khetanatulz@gmail.com?subject=[GitHub]%20cashcenter%20Bug%20Report)
