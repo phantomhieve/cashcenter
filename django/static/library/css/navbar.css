@@ -1,0 +1,39 @@
+@font-face {
+    font-family: Ubuntu-Regular;
+    src: url('../fonts/ubuntu/Ubuntu-Regular.ttf'); 
+}
+  
+@font-face {
+    font-family: Ubuntu-Bold;
+    src: url('../fonts/ubuntu/Ubuntu-Bold.ttf'); 
+}
+
+.navbar {
+    padding: .3rem;
+    top: 0;
+    position: fixed;
+    width: 100%;
+    background-color: #827ffe;
+}
+
+.navbar-heading {
+    font-family: Ubuntu-Regular;
+    color: white;
+}
+
+
+.navbar-content {
+    font-family: Ubuntu-Regular;
+    color: white;
+}
+
+.navbar-item {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+@media screen and (max-width: 600px) {
+    .navbar-content{
+        font-size: large !important;
+    }
+}
