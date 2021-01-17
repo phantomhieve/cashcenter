@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% load list_tags %}
+
+{% block title %}
+    Rate List
+{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'ratelist/css/main.css'%}">
+{% endblock css %}
+
+{% block header %}
+    {% include 'ratelist/ratelist_navbar.html' %}
+{% endblock%}
+
+{% block body %}
+    <p>
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Filter Options
+        </button>
+    </p>
+
+    <!-- Filter Form -->
+    <div class="collapse" id="collapseExample">
+        <form action="" method="get">
+            {% csrf_token %}
+            <div class="form-row form-item">
+                {% for field in filter.form %}
+                    <div class="form-group col-md-2">
+                        <label for="{{field.name}}">{{field.name}}</label>
+                        {% render_field field class+="form-control"%}
+                    </div>
+                {% endfor %}
+                <div class="form-group col-md-2">
+                    <input type="Submit" class=" form-control btn btn-primary submit-button col-md-12" value="Filter">
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- Filter Form End -->
+
+    <!-- Table -->
+    <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">HSN</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Company</th>
+                    <th scope="col">S_Rate</th>
+                    <th scope="col">S_Date</th>
+                    <th scope="col">P_Rate</th>
+                    <th scope="col">P_Date</th>
+                    <th scope="col">Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ratelist in object_list %}
+                    <tr class ="clickable-row" data-href="{% url 'ratelist_add' %}{{ ratelist.id }}/?{% url_replace %}">
+                        <td>{{ratelist.hsn|default_if_none:"-"}}</td>
+                        <td>{{ratelist.category|default_if_none:"-"}}</td>
+                        <td>{{ratelist.item|default_if_none:"-"}}</td>
+                        <td>{{ratelist.company|default_if_none:"-"}}</td>
+                        <td>{{ratelist.rate.last.s_price|format_numeric|default_if_none:"-"}}</td>
+                        <td>{{ratelist.rate.last.s_date|default_if_none:"-"}}</td>
+                        <td>{{ratelist.rate.last.p_price|format_numeric|default_if_none:"-"}}</td>
+                        <td>{{ratelist.rate.last.p_date|default_if_none:"-"}}</td>
+                        <td>{{ratelist.quantity|default_if_none:"-"}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Table End -->
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="container-fluid">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item">
+                    <a href="{% url 'ratelist_list' %}?{% url_replace page=1%}" class="page-link">
+                        First
+                    </a>
+                </li>
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a href="{% url 'ratelist_list' %}?{% url_replace page=page_obj.previous_page_number%}" class="page-link">
+                        {{ page_obj.previous_page_number }}
+                    </a>
+                </li>
+                {% endif %}
+    
+                <li class="page-item active">
+                    <a href="{% url 'ratelist_list' %}?{% url_replace page=page_obj.number%}" class="page-link">
+                        {{ page_obj.number }}
+                    </a>
+                </li>
+    
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a href="{% url 'ratelist_list' %}?{% url_replace page=page_obj.next_page_number%}" class="page-link">
+                        {{ page_obj.next_page_number }}
+                    </a>
+                </li>
+                {% endif %}
+    
+                <li class="page-item">
+                    <a href="{% url 'ratelist_list' %}?{% url_replace page=paginator.num_pages %}" class="page-link">
+                        Last
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+    <!-- Pagination End-->
+{% endblock body %}
+
+{% block footer %}
+    {% include 'footer.html' %}
+{% endblock %}
+
+{% block script %}
+<script>
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+</script>
+{% endblock %}
