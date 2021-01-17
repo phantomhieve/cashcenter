@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    {% load static%}
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'library/vendor/bootstrap/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'library/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'library/fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'library/vendor/animate/animate.css' %}">	
+	<link rel="stylesheet" type="text/css" href="{% static 'library/vendor/css-hamburgers/hamburgers.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'library/vendor/animsition/css/animsition.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'library/vendor/select2/select2.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'library/css/util.css'%}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'library/css/main.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'library/css/navbar.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'library/css/footer.css'%}">
+    
+    {% block css %}
+    {% endblock css %}
+</head>
+<body>
+    {% block header %}{% endblock header %}
+    <div id="body">
+        {% block body %}{% endblock body %}
+    </div>
+    {% block footer %}{% endblock footer %}
+    <!--===============================================================================================-->
+	<script src="{% static 'library/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'library/vendor/animsition/js/animsition.min.js' %}"></script>
+	<script src="{% static 'library/vendor/bootstrap/js/popper.js' %}"></script>
+	<script src="{% static 'library/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'library/vendor/bootstrap/js/bootstrap-autocomplete.js' %}"></script>
+    <!--===============================================================================================-->
+    {% block script %}
+    {% endblock script %}
+</body>
+</html>
