@@ -1,6 +1,6 @@
 # cashcenter
 
-#### This project was created to help mantain data more securely and reilabley while having a little automation for the process, Its a very specific use case but if anyone finds it useful go ahead and use it.
+#### This project was created to help mantain data more securely and reilabley while having a little automation for the process for a small business supply, Its a very specific use case but if anyone finds it useful go ahead and use it.
 
 ##### Tools Used
 1. Django
