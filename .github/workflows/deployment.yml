@@ -27,7 +27,7 @@ jobs:
       - name: Deployment Script
         run: |
           echo "Hello World !"
-          export SECRET_KEY=${{ secrets.SECRET_KEY }}
+          export SECRET_KEY=hello
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
