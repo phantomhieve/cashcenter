@@ -32,4 +32,4 @@ jobs:
           echo "-----------------"
           echo ${{ env.django.HELLO }}
           echo "-----------------"
-          echo ${{ env.django }}
+          echo ${{ secrets.HELLO }}
