@@ -32,5 +32,5 @@ jobs:
           TEST: "my_test"
         run: |
           echo "Hello World !"
-          export TEST=${{ env.TEST }}
+          env
         
