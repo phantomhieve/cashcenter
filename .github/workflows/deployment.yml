@@ -27,9 +27,7 @@ jobs:
       - name: Deployment Script
         run: |
           echo "Hello World !"
-          echo "Setting Up Complete !"
-          echo ${{ env.HELLO }}
-          echo "-----------------"
-          echo ${{ env.django.HELLO }}
-          echo "-----------------"
-          echo ${{ secrets.HELLO }}
+      - env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
+        CLIENT: ${{ secrets.CLIENT }}
