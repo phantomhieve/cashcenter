@@ -28,6 +28,7 @@ jobs:
         run: |
           echo "Hello World !"
           export SECRET_KEY=hello
+          echo ${ DJANGO }
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
