@@ -29,12 +29,10 @@ jobs:
           SECRET_KEY: ${{ env.SECRET_KEY }}
           ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
           CLIENT: ${{ secrets.CLIENT }}
-          TEST: "my_test"
         run: |
           echo "Hello World !"
-          env
-          touch /home/phantomhive/test
-          echo ${{ secrets.CLIENT }} >> /home/phantomhive/test
-          export SECRET_KEY="${{ secrets.CLIENT }}"
+          export SECRET_KEY="$SECRET_KEY"
+          export ALLOWED_HOSTS="$ALLOWED_HOSTS"
+          export CLIENT="$CLIENT"
 
         
