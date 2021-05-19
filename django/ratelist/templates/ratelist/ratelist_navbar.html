@@ -1,7 +1,0 @@
-{% extends 'navbar.html' %}
-{% load list_tags %}
-{% block links %}
-    <li class="nav-item navbar-item">
-        <h5><a href="{% url 'ratelist_add' %}?{% url_replace %}" class="nav-link navbar-content">Add Item</a></h5>
-    </li>
-{% endblock links %}
