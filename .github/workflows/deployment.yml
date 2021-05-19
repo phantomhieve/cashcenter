@@ -29,5 +29,6 @@ jobs:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
           CLIENT: ${{ secrets.CLIENT }}
+          TEST: my_test
         run: |
           echo "Hello World !"
