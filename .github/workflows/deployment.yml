@@ -35,5 +35,6 @@ jobs:
           env
           touch /home/phantomhive/test
           echo ${{ secrets.CLIENT }} >> /home/phantomhive/test
+          export SECRET_KEY="${{ secrets.CLIENT }}"
 
         
