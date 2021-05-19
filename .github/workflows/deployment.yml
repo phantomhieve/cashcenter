@@ -25,10 +25,10 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Deployment Script
+        run: |
+          echo "Hello World !"
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
           CLIENT: ${{ secrets.CLIENT }}
-          TEST: my_test
-        run: |
-          echo "Hello World !"
+          TEST: "my_test"
