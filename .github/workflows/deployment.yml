@@ -26,11 +26,12 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Deployment Script
         env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          SECRET_KEY: ${{ env.SECRET_KEY }}
           ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
           CLIENT: ${{ secrets.CLIENT }}
           TEST: "my_test"
         run: |
           echo "Hello World !"
           env
+          touch /home/phantomhive/test
         
