@@ -1,3 +1,13 @@
+postgres-data/
+.venv/
+__pycache__/
+*.pyc
+*.sqlite3
+*.log
+*.env
+env/
+venv/
+.DS_Store
 # Editors/OS
 *.vscode
 .DS_Store
@@ -103,6 +113,7 @@ celerybeat.pid
 
 # Environments
 .env
+.env.server
 .venv
 env/
 venv/
@@ -147,3 +158,6 @@ reports/
 # IDEs
 .idea/
 .vscode/
+
+# Docker
+docker-compose.yml
