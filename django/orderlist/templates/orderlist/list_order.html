@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load humanize %}
+{% load list_tags %}
+{% load mathfilters %}
+
+{% block title %}
+	Order List
+{% endblock title %}
+
+{% block css %}
+	<link rel="stylesheet" type="text/css" href="{% static 'ledger/css/main.css'%}">
+	<style>
+		/* Table styling for new columns */
+		.table th:nth-child(4), .table td:nth-child(4) { text-align: center; } /* Pending column */
+		.table th:nth-child(5), .table td:nth-child(5) { text-align: center; } /* Mode column */
+		.table th:nth-child(6), .table td:nth-child(6) { max-width: 200px; } /* Remarks column */
+		.table th:nth-child(7), .table td:nth-child(7) { text-align: right; } /* Price column */
+		
+		/* Agent name styling */
+		.text-muted { font-size: 0.85em; }
+		
+		/* Remarks truncation */
+		.table td:nth-child(6) { 
+			white-space: nowrap; 
+			overflow: hidden; 
+			text-overflow: ellipsis; 
+		}
+	</style>
+{% endblock css %}
+
+{% block header %}
+	{% include 'navbar.html' %}
+{% endblock%}
+
+{% block body %}
+	<!-- Alert Delete-->
+	<div class="container" id="alert_delete">
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			Order # <strong id="alert_delete_content"></strong> deleted.
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+	<!-- Alert Delete-->
+
+	<!-- Alert Update-->
+	<div class="container" id="alert_update">
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+			Order # <strong id="alert_update_content"></strong> Updated.
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+	<!-- Alert Update-->
+
+	<!--Filter header row with pagination like ledger-->
+	<div class="row">
+		<div class="col col-md-6">
+			<button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="collapseButton">
+				Filter Options
+			</button>
+		</div>
+		<div class="col col-md-6 float-right" style="align-self: right!important;">
+			{% include 'orderlist/pagination.html' %}
+		</div>
+	</div>
+
+	<div class="collapse" id="collapseExample">
+		<form action="" method="get">
+			{% csrf_token %}
+			<div class="form-row form-item">
+				<div class="form-group col-md-2">
+					<label for="id_order_number__icontains">Order Number</label>
+					{% render_field filter.form.order_number__icontains class+="form-control"%}
+				</div>
+				<div class="form-group col-md-2">
+					<label for="id_company_name__icontains">Company</label>
+					{% render_field filter.form.company_name__icontains class+="form-control"%}
+				</div>
+				<div class="form-group col-md-2">
+					<label for="id_item__icontains">Item</label>
+					{% render_field filter.form.item__icontains class+="form-control"%}
+				</div>
+				<div class="form-group col-md-2">
+					<label for="id_status">Status</label>
+					{% render_field filter.form.status class+="form-control"%}
+				</div>
+				<div class="form-group col-md-2">
+					<label for="id_mode">Mode</label>
+					{% render_field filter.form.mode class+="form-control"%}
+				</div>
+				<div class="form-group col-md-2">
+					<label for="id_agent_name__icontains">Agent Name</label>
+					{% render_field filter.form.agent_name__icontains class+="form-control"%}
+				</div>
+			</div>
+			<div class="form-row form-item">
+				<div class="form-group col-md-2">
+					<label for="id_order_date">Order Date</label>
+					{% render_field filter.form.order_date class+="form-control" type="date"%}
+				</div>
+				<div class="form-group col-md-2">
+					<input type="Submit" class=" form-control btn btn-primary submit-button col-md-12" value="Filter">
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="table-responsive text-nowrap">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Order #</th>
+					<th>Company</th>
+					<th>Item</th>
+					<th>Pending</th>
+					<th>Mode</th>
+					<th>Remarks</th>
+					<th>Price</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for order in object_list %}
+				<tr class="clickable-row" data-href="{% url 'order_update' order.id %}">
+					<td>{{ order.order_number }}</td>
+					<td>{{ order.company_name }}</td>
+					<td>{{ order.item }}</td>
+					<td>{{ order.num_parcels|sub:order.fulfilled_parcels }}</td>
+					<td>
+						{{ order.get_mode_display }}
+						{% if order.mode == 'agent' and order.agent_name %}
+							<br><small class="text-muted">{{ order.agent_name }}</small>
+						{% endif %}
+					</td>
+					<td>{{ order.remark|truncatechars:30 }}</td>
+					<td>{{ order.order_price|floatformat:2 }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{% include 'orderlist/pagination.html' %}
+{% endblock body %}
+
+{% block footer %}
+	{% include 'footer.html' %}
+{% endblock %}
+
+{% block script %}
+	<script src="{% static 'orderlist/js/list_order.js' %}"></script>
+{% endblock script %}
