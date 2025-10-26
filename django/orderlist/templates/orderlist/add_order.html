@@ -21,15 +21,21 @@
 		.order-form .form-control { height: 38px; padding-top: 6px; padding-bottom: 6px; }
 
 		/* Tighter column layout for fulfillment table */
-		.order-form table.table thead th:nth-child(1) { width: 50%; }
-		.order-form table.table thead th:nth-child(2) { width: 25%; text-align: center; }
-		.order-form table.table thead th:nth-child(3) { width: 10%; text-align: center; }
+		.order-form table.table thead th:nth-child(1) { width: 35%; }
+		.order-form table.table thead th:nth-child(2) { width: 20%; text-align: center; }
+		.order-form table.table thead th:nth-child(3) { width: 25%; text-align: center; }
+		.order-form table.table thead th:nth-child(4) { width: 10%; text-align: center; }
 		.order-form table.table tbody td:nth-child(2),
-		.order-form table.table tbody td:nth-child(3) { text-align: center; }
+		.order-form table.table tbody td:nth-child(3),
+		.order-form table.table tbody td:nth-child(4) { text-align: center; }
 
 		/* Limit input widths so columns don't stretch too wide */
-		.order-form #fulfillment-rows input[type="date"] { max-width: 200px; }
-		.order-form #fulfillment-rows input[type="number"] { max-width: 110px; }
+		.order-form #fulfillment-rows input[type="date"],
+		.order-form #fulfillment-rows input[type="number"],
+		.order-form #fulfillment-rows input[type="text"] { 
+			width: 100%; 
+			max-width: 180px; 
+		}
 
 		/* Center delete icon, make it a bit crisper */
 		.order-form .delete-fulfillment { line-height: 1; }
@@ -66,10 +72,16 @@
 		/* Responsive adjustments */
 		@media (max-width: 768px) {
 			.order-form { max-width: 100%; }
-			.order-form table.table thead th:nth-child(1) { width: 55%; }
-			.order-form table.table thead th:nth-child(2) { width: 30%; }
+			.order-form table.table thead th:nth-child(1) { width: 40%; }
+			.order-form table.table thead th:nth-child(2) { width: 25%; }
+			.order-form table.table thead th:nth-child(3) { width: 25%; }
+			.order-form table.table thead th:nth-child(4) { width: 10%; }
 			.order-form #fulfillment-rows input[type="date"],
-			.order-form #fulfillment-rows input[type="number"] { max-width: 100%; width: 100%; }
+			.order-form #fulfillment-rows input[type="number"],
+			.order-form #fulfillment-rows input[type="text"] { 
+				width: 100%; 
+				max-width: 100%; 
+			}
 		}
 	</style>
 {% endblock css %}
@@ -176,7 +188,7 @@
 			<div class="table-responsive text-nowrap fulfillment-table">
 				<table class="table table-hover">
 					<thead>
-						<tr><th>Date</th><th>Quantity</th><th>Delete</th></tr>
+						<tr><th>Date</th><th>Quantity</th><th>Bill No</th><th>Delete</th></tr>
 					</thead>
 					<tbody id="fulfillment-rows">
 					{% for f in formset.forms %}
@@ -189,6 +201,10 @@
 							<td>
 								{% render_field f.quantity class+="form-control" type="number" %}
 								{% for e in f.quantity.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+							</td>
+							<td>
+								{% render_field f.bill_no class+="form-control" type="text" %}
+								{% for e in f.bill_no.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
 							</td>
 							<td class="text-center align-middle">
 								{# Hidden DELETE checkbox controlled by trash icon #}
@@ -208,7 +224,7 @@
 			<div class="form-row">
 				{% if  instance %}
 				<div class="form-group col-md-6">
-					<input type="submit" value="Add/Update" class="form-control btn btn-primary form-button">
+					<input type="submit" value="Add/Update" class="form-control btn btn-primary form-button" onclick="return validateFulfillmentQuantity();">
 				</div>
 				<div class="form-group col-md-6">
 					<button type="button" class="form-control btn btn-danger form-button" data-toggle="modal" data-target="#deleteOrderModal">
@@ -217,7 +233,7 @@
 				</div>
 				{% else %}
 				<div class="form-group col-md-12">
-					<input type="submit" value="Add/Update" class="form-control btn btn-primary form-button">
+					<input type="submit" value="Add/Update" class="form-control btn btn-primary form-button" onclick="return validateFulfillmentQuantity();">
 				</div>
 				{% endif %}
 			</div>
