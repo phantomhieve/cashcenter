@@ -62,7 +62,7 @@ def orderAddView(request, id=None):
 				if formset.is_valid():
 					formset.save()
 					if instance:
-						return HttpResponseRedirect(f'/orderlist/?update={order.order_number}')
+						return HttpResponseRedirect(f'/orderlist/add/{order.id}/?update={order.order_number}')
 					return HttpResponseRedirect(f'/orderlist/add/?sucessful={order.order_number}')
 				# If formset invalid, fall through to render with errors
 				return render(
