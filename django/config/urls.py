@@ -21,10 +21,11 @@ from django.contrib.auth.decorators import login_required
 from . import settings
 
 urlpatterns = [
-    path('', RedirectView.as_view(pattern_name='user_login', permanent=True)),
-    path('admin/', admin.site.urls),
-    path('ledger/', include('ledger.urls')),
-    path('user/', include('user.urls')),
-    path('ledger_base/', include('ledger_base.urls')),
-    path('ratelist/', include('ratelist.urls'))
+	path('', RedirectView.as_view(pattern_name='user_login', permanent=True)),
+	path('admin/', admin.site.urls),
+	path('ledger/', include('ledger.urls')),
+	path('user/', include('user.urls')),
+	path('ledger_base/', include('ledger_base.urls')),
+	path('ratelist/', include('ratelist.urls')),
+	path('orderlist/', include('orderlist.urls')),
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

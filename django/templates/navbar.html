@@ -25,8 +25,11 @@
             <li class="nav-item navbar-item">
                 <h5><a href="{% url 'ratelist_list' %}" class="nav-link navbar-content">Rate List</a></h5>
             </li>
-            {% endif %}
             <li class="nav-item navbar-item">
+                <h5><a href="{% url 'order_list' %}" class="nav-link navbar-content">Order List</a></h5>
+            </li>
+            {% endif %}
+            <!-- <li class="nav-item navbar-item">
                 <h5><a href="{% url 'ledger_base_list' %}?{% url_replace %}" class="nav-link navbar-content">
                     {% if request.user.is_staff %}
                         Staff-l
@@ -34,9 +37,14 @@
                         Ledger
                     {% endif %}
                 </a></h5>
-            </li>
+            </li> -->
             {% block links %}
             {% endblock links %}
+            {% if request.user.is_staff %}
+            <li class="nav-item navbar-item">
+                <h5><a href="{% url 'order_add' %}" class="nav-link navbar-content">Add Order</a></h5>
+            </li>
+            {% endif %}
             <li class="nav-item navbar-item">
                 <form method="post" action="{% url 'user_logout' %}" class="d-inline m-0 p-0">
                     {% csrf_token %}

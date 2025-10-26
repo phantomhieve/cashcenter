@@ -143,7 +143,8 @@ dmypy.json
 /staticfiles/
 django/staticfiles/
 django/staticfiles
-django/**/static
+django/static
+django/user/static
 
 # Media (if used)
 media/
@@ -161,3 +162,6 @@ reports/
 
 # Docker
 docker-compose.yml
+
+# Django management commands
+django/**/management
