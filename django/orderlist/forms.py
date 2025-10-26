@@ -33,7 +33,7 @@ class OrderForm(forms.ModelForm):
 FulfillmentFormSet = inlineformset_factory(
 	parent_model=Order,
 	model=Fulfillment,
-	fields=('date', 'quantity'),
+	fields=('date', 'quantity', 'bill_no'),
 	extra=1,
 	can_delete=True
 )

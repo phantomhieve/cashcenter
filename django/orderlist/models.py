@@ -77,6 +77,7 @@ class Fulfillment(models.Model):
 	)
 	date = models.DateField()
 	quantity = models.IntegerField()
+	bill_no = models.CharField(max_length=255, blank=True, null=True)
 
 	class Meta:
 		ordering = ['date', 'id']
