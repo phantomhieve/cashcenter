@@ -1,0 +1,8 @@
+{% extends 'navbar.html' %}
+{% load list_tags %}
+            
+{% block links %}
+    <li class="nav-item navbar-item">
+        <h5><a href="{% url 'order_add' %}" class="nav-link navbar-content">Add Order</a></h5>
+    </li>
+{% endblock links %}
