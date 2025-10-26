@@ -40,11 +40,6 @@
             </li> -->
             {% block links %}
             {% endblock links %}
-            {% if request.user.is_staff %}
-            <li class="nav-item navbar-item">
-                <h5><a href="{% url 'order_add' %}" class="nav-link navbar-content">Add Order</a></h5>
-            </li>
-            {% endif %}
             <li class="nav-item navbar-item">
                 <form method="post" action="{% url 'user_logout' %}" class="d-inline m-0 p-0">
                     {% csrf_token %}
