@@ -40,154 +40,265 @@
     <!-- Alert Update-->
     
     <!--Filter form-->
-    <div class="row">
-        <div class="col col-md-6">
-            <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="collapseButton">
-                Filter Options
-            </button>
+    <div class="filter-wrapper-modern">
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-6 col-12 mb-3 mb-md-0">
+                <button class="filter-toggle-seamless" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="collapseButton">
+                    <i class="fa fa-filter" aria-hidden="true"></i> 
+                    <span class="filter-text">Filters</span>
+                    <i class="fa fa-chevron-down ml-auto filter-icon" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="col-md-6 col-12 text-md-right">
+                {% include 'ledger/pagination.html' %}
+            </div>
         </div>
-        <div class="col col-md-6 float-right" style="align-self: right!important;">
-            {% include 'ledger/pagination.html' %}
-        </div>
-    </div>
-    <div class="collapse" id="collapseExample">
-        <form action="" method="get">
-            {% csrf_token %}
-            <div class="form-row form-item">
-                <div class="form-group col-md-1">
-                    <label for="id_l_r_no__icontains">L R No</label>
-                    {% render_field filter.form.l_r_no__icontains class+="form-control"%}
-                </div>
-
-                <div class="form-group col-md-1">
-                    <label for="id_hsn_code__icontains">HSN Code</label>
-                    {% render_field filter.form.hsn_code__icontains class+="form-control" type="text"%}
-                </div>
-
-                <div class="form-group col-md-1">
-                    <label for="id_reciept__icontains">Reciept</label>
-                    {% render_field filter.form.reciept__icontains class+="form-control" type="text"%}
-                </div>
-
-                <div class="form-group col-md-1">
-                    <label for="id_bale_no__icontains">Bale No</label>
-                    {% render_field filter.form.bale_no__icontains class+="form-control" type="text"%}
+        
+        <div class="collapse" id="collapseExample">
+            <form action="" method="get" id="filterForm">
+                {% csrf_token %}
+                
+                <!-- Basic Information Filters -->
+                <div class="filter-section-modern">
+                    <div class="filter-section-header">
+                        <i class="fa fa-list-ul" aria-hidden="true"></i>
+                        <span class="filter-section-title">Basic Information</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_l_r_no__icontains" class="filter-floating-label">
+                                <i class="fa fa-hashtag" aria-hidden="true"></i> L R No
+                            </label>
+                            {% render_field filter.form.l_r_no__icontains class+="form-control filter-input-chip" placeholder="Enter L R No" id="id_l_r_no__icontains"%}
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_item__icontains" class="filter-floating-label">
+                                <i class="fa fa-tag" aria-hidden="true"></i> Item
+                            </label>
+                            {% render_field filter.form.item__icontains class+="form-control filter-input-chip" placeholder="Enter Item" id="id_item__icontains"%}
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_supplier__icontains" class="filter-floating-label">
+                                <i class="fa fa-building" aria-hidden="true"></i> Supplier
+                            </label>
+                            {% render_field filter.form.supplier__icontains class+="form-control filter-input-chip" placeholder="Enter Supplier" id="id_supplier__icontains"%}
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_bale_no__icontains" class="filter-floating-label">
+                                <i class="fa fa-cube" aria-hidden="true"></i> Bale No
+                            </label>
+                            {% render_field filter.form.bale_no__icontains class+="form-control filter-input-chip" placeholder="Enter Bale No" id="id_bale_no__icontains"%}
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="form-group col-md-1">
-                    <label for="id_item__icontains">Item</label>
-                    {% render_field filter.form.item__icontains class+="form-control" type="text"%}
+                <!-- Status & Delivery Filters -->
+                <div class="filter-section-modern">
+                    <div class="filter-section-header">
+                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                        <span class="filter-section-title">Status & Delivery</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_status" class="filter-floating-label">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> Status
+                            </label>
+                            {% render_field filter.form.status class+="form-select filter-select-chip" data-section="status" id="id_status"%}
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_d_status" class="filter-floating-label">
+                                <i class="fa fa-truck" aria-hidden="true"></i> Delivery Status
+                            </label>
+                            {% render_field filter.form.d_status class+="form-select filter-select-chip" data-section="delivery" id="id_d_status"%}
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_transport__icontains" class="filter-floating-label">
+                                <i class="fa fa-truck" aria-hidden="true"></i> Transport
+                            </label>
+                            {% render_field filter.form.transport__icontains class+="form-control filter-input-chip" placeholder="Enter Transport" id="id_transport__icontains"%}
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_location__icontains" class="filter-floating-label">
+                                <i class="fa fa-map-marker" aria-hidden="true"></i> Location
+                            </label>
+                            {% render_field filter.form.location__icontains class+="form-control filter-input-chip" placeholder="Enter Location" id="id_location__icontains"%}
+                        </div>
+                    </div>
                 </div>
-
-                <div class="form-group col-md-1">
-                    <label for="id_transport__icontains">Transport</label>
-                    {% render_field filter.form.transport__icontains class+="form-control" type="text"%}
+                
+                <!-- Date Filters -->
+                <div class="filter-section-modern">
+                    <div class="filter-section-header">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        <span class="filter-section-title">Date Range</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_l_r_date_0" class="filter-floating-label">
+                                <i class="fa fa-calendar-o" aria-hidden="true"></i> L R Date From
+                            </label>
+                            <input type="date" name="l_r_date_min" class="form-control filter-input-chip" id="id_l_r_date_0" value="{{ request.GET.l_r_date_min }}">
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_l_r_date_1" class="filter-floating-label">
+                                <i class="fa fa-calendar-o" aria-hidden="true"></i> L R Date To
+                            </label>
+                            <input type="date" name="l_r_date_max" class="form-control filter-input-chip" id="id_l_r_date_1" value="{{ request.GET.l_r_date_max }}">
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_delivery" class="filter-floating-label">
+                                <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Delivery Date
+                            </label>
+                            {% render_field filter.form.delivery class+="form-control filter-input-chip" type="date" id="id_delivery"%}
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_delivery_after" class="filter-floating-label">
+                                <i class="fa fa-calendar" aria-hidden="true"></i> Stock Date
+                            </label>
+                            {% render_field filter.form.delivery_after class+="form-control filter-input-chip" type="date" id="id_delivery_after"%}
+                        </div>
+                    </div>
                 </div>
-
-                <div class="form-group col-md-1">
-                    <label for="id_location__icontains">Location</label>
-                    {% render_field filter.form.location__icontains class+="form-control" type="text"%}
+                
+                <!-- Advanced Filters -->
+                <div class="filter-section-modern">
+                    <div class="filter-section-header">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                        <span class="filter-section-title">Advanced Options</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_hsn_code__icontains" class="filter-floating-label">
+                                <i class="fa fa-barcode" aria-hidden="true"></i> HSN Code
+                            </label>
+                            {% render_field filter.form.hsn_code__icontains class+="form-control filter-input-chip" placeholder="Enter HSN Code" id="id_hsn_code__icontains"%}
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_reciept__icontains" class="filter-floating-label">
+                                <i class="fa fa-file-text" aria-hidden="true"></i> Receipt
+                            </label>
+                            {% render_field filter.form.reciept__icontains class+="form-control filter-input-chip" placeholder="Enter Receipt" id="id_reciept__icontains"%}
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <label for="id_columns" class="filter-floating-label">
+                                <i class="fa fa-columns" aria-hidden="true"></i> Select Columns
+                            </label>
+                            {% render_field filter.form.columns class+="form-select filter-select-chip selectpicker" data-live-search="true" size="3" data-section="columns" id="id_columns"%}
+                        </div>
+                    </div>
                 </div>
-
-
-                <div class="form-group col-md-2">
-                    <label for="id_supplier__icontains">Supplier</label>
-                    {% render_field filter.form.supplier__icontains class+="form-control" type="text"%}
+                
+                <!-- Action Buttons -->
+                <div class="filter-actions-bar">
+                    <button type="button" class="btn-filter-reset" onclick="window.location.href='{% url 'ledger_list' %}'">
+                        Reset
+                    </button>
+                    <button type="submit" class="btn-filter-apply">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> Apply Filters
+                    </button>
                 </div>
-
-                <div class="form-group col-md-2">
-                    <label for="id_d_status">Delivery</label>
-                    {% render_field filter.form.d_status class+="form-control"%}
-                </div>
-
-                <div class="form-group col-md-1">
-                    <label for="id_status">Status</label>
-                    {% render_field filter.form.status class+="form-control"%}
-                </div>
-
-            </div>
-            <div class="form-row form-item">
-                <div class="form-group col-md-2">
-                    <label for="id_columns">Select Columns</label>
-                    {% render_field filter.form.columns class+="selectpicker form-control" data-live-search="true" size="3"%}
-                </div>
-
-                <div class="form-group col-md-2">
-                    <label for="id_delivery_after">Stock</label>
-                    {% render_field filter.form.delivery_after class+="form-control" type="date"%}
-                </div>
-
-                <div class="form-group col-md-2">
-                    <label for="id_delivery">Delivery Date</label>
-                    {% render_field filter.form.delivery class+="form-control" type="date"%}
-                </div>
-
-                <div class="form-group col-md-2">
-                    <label for="id_l_r_date">L R Date from</label>
-                    <input type="date" name="l_r_date_min" class="form-control" id="id_l_r_date_0" value="">
-                </div>
-                <div class="form-group col-md-2">
-                    <label for="id_l_r_date">L R Date to</label>
-                    <input type="date" name="l_r_date_max" class="form-control" id="id_l_r_date_1" value="">
-                </div>
-                <div class="form-group col-md-2">
-                    <input type="Submit" class=" form-control btn btn-primary submit-button col-md-12" value="Filter">
-                </div>
-            </div>
-        </form>    
+            </form>    
+        </div>
     </div>
     <!-- Filter form end-->
 
     <!--Table Bootstrap-->
-    <div class="table-responsive text-nowrap">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    {% with object_list|first as first %}
-                        {% for key in first%}
-                            {% if key != 'id' %}<th scope="col">{{key}}</th>{% endif %}
+    <div class="table-wrapper">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        {% with object_list|first as first %}
+                            {% for key in first%}
+                                {% if key != 'id' %}
+                                <th scope="col" class="table-header">
+                                    <span class="table-header-content">
+                                        <i class="fa {{ key|get_column_icon }}" aria-hidden="true"></i> {{key|title}}
+                                    </span>
+                                </th>
+                                {% endif %}
+                            {% endfor %}
+                        {% endwith %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ledger in object_list %}
+                    <tr class="clickable-row table-row" data-href="{% url 'ledger_add' %}{{ ledger.id }}/?{% url_replace %}">
+                        {% for key, value in  ledger.items %}
+                                {% if key == 'status' %}
+                                    {% if value == True %}
+                                        <td>
+                                            <span class="badge badge-success">
+                                                <i class="fa fa-check-circle" aria-hidden="true"></i> Done
+                                            </span>
+                                        </td>
+                                    {% else%}
+                                        <td>
+                                            <span class="badge badge-warning">
+                                                <i class="fa fa-clock-o" aria-hidden="true"></i> Pending
+                                            </span>
+                                        </td>
+                                    {% endif %}
+                                {% elif key == 'delivery'%}
+                                    <td>
+                                        {% if value %}
+                                            <span class="badge badge-info">
+                                                <i class="fa fa-calendar-check-o" aria-hidden="true"></i> {{ value }}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge badge-secondary">
+                                                <i class="fa fa-calendar-times-o" aria-hidden="true"></i> Not Delivered
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                {% elif key != 'id'%}
+                                    {% if key == 'pcs_mtr'%}
+                                        <td class="numeric-cell">{{ value|format_numeric_if_possible|default_if_none:"-" }}</td>
+                                    {% else %}
+                                        <td class="numeric-cell">{{ value|format_numeric|default_if_none:"-" }}</td>
+                                    {% endif %}
+                                {% endif %}
                         {% endfor %}
-                    {% endwith %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for ledger in object_list %}
-                <tr class ="clickable-row" data-href="{% url 'ledger_add' %}{{ ledger.id }}/?{% url_replace %}">
-                    {% for key, value in  ledger.items %}
-                            {% if key == 'status' %}
-                                {% if value == True %}
-                                    <td>Done</td>
-                                {% else%}
-                                    <td>Pending</td>
-                                {% endif %}
-                            {% elif key == 'delivery'%}
-                                <td>{{ value|default_if_none:"Not-Delivered"}}</td>
-                            {% elif key != 'id'%}
-                                {% if key == 'pcs_mtr'%}
-                                    <td>{{ value|format_numeric_if_possible|default_if_none:"-" }}</td>
-                                {% else %}
-                                    <td>{{ value|format_numeric|default_if_none:"-" }}</td>
-                                {% endif %}
-                            {% endif %}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="100%" class="text-center py-5 empty-state">
+                            <i class="fa fa-inbox fa-3x text-muted mb-3" aria-hidden="true"></i>
+                            <p class="text-muted mb-0">No records found. Try adjusting your filters.</p>
+                        </td>
+                    </tr>
                     {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
     <!--Table Bootstrap End-->
 
-    {% if total %}
-    <div class="table-responsive text-nowrap">
-        <table class="table table-hover">
-            <thead class="last">
-                <th> Total </th>
-                <th>{{ total|format_numeric }}</th>
-            </thead>
-        </table>
+    {% if total and selected_columns %}
+        {% if 'bill_ammount' in selected_columns %}
+    <div class="table-total-wrapper">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-total">
+                <thead>
+                    <tr>
+                        <th class="total-label">
+                            <i class="fa fa-calculator" aria-hidden="true"></i> Total
+                        </th>
+                        <th class="total-value">
+                            {{ total|format_numeric }}
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
+        {% endif %}
     {% endif %}
-    {% include 'ledger/pagination.html' %}
+    
+    <!-- Pagination with extra bottom spacing when total is present -->
+    <div class="pagination-wrapper {% if total and selected_columns and 'bill_ammount' in selected_columns %}pagination-wrapper-with-total{% endif %}">
+        {% include 'ledger/pagination.html' %}
+    </div>
 {% endblock body %}
 
 {% block footer %}
@@ -196,6 +307,74 @@
 
 {% block script %}  
     <script>
+        // Filter toggle icon animation
+        $('#collapseButton').on('click', function() {
+            $(this).find('.filter-icon').toggleClass('fa-chevron-down fa-chevron-up');
+        });
+        
+        // Clear filter form function
+        function clearFilterForm() {
+            document.getElementById('filterForm').reset();
+            $('.filter-input-chip').val('');
+            $('.filter-select-chip').val('').trigger('change');
+            updateSelectColors();
+        }
+        
+        // Update select colors based on selection
+        function updateSelectColors() {
+            $('.filter-select-chip').each(function() {
+                const $select = $(this);
+                const section = $select.data('section');
+                const value = $select.val();
+                const $label = $select.siblings('.filter-floating-label');
+                
+                // Remove all color classes
+                $select.removeClass('filter-selected-status filter-selected-delivery filter-selected-columns');
+                
+                // Add appropriate color class based on section and value
+                if (value && value !== '') {
+                    if (section === 'status') {
+                        $select.addClass('filter-selected-status');
+                    } else if (section === 'delivery') {
+                        $select.addClass('filter-selected-delivery');
+                    } else if (section === 'columns') {
+                        $select.addClass('filter-selected-columns');
+                    }
+                    // Update label color when selected
+                    if ($label.length) {
+                        $label.addClass('label-active');
+                    }
+                } else {
+                    if ($label.length) {
+                        $label.removeClass('label-active');
+                    }
+                }
+            });
+        }
+        
+        // Initialize colors on page load
+        $(document).ready(function() {
+            updateSelectColors();
+            
+            // Update colors on change
+            $('.filter-select-chip').on('change', function() {
+                updateSelectColors();
+            });
+            
+            // Handle input focus/blur for labels
+            $('.filter-input-chip, .filter-select-chip').on('focus', function() {
+                $(this).siblings('.filter-floating-label').addClass('label-focused');
+            }).on('blur', function() {
+                $(this).siblings('.filter-floating-label').removeClass('label-focused');
+                if ($(this).val() && $(this).val() !== '') {
+                    $(this).siblings('.filter-floating-label').addClass('label-active');
+                } else {
+                    $(this).siblings('.filter-floating-label').removeClass('label-active');
+                }
+            });
+        });
+        
+        // AutoComplete
         $('.lrAutoComplete').autoComplete({
             minLength: 1,
             resolverSettings: {
@@ -206,6 +385,11 @@
 
         $('.lrAutoComplete').on('autocomplete.select', (evt, item)=>{
             window.location.replace(`{% url 'ledger_add'%}?l_r_view=${item}&{% url_replace %}`);
+        });
+        
+        // Table row click handler
+        $('.clickable-row').on('click', function() {
+            window.location.href = $(this).data('href');
         });
     </script>
     <script src="{% static 'ledger/js/list_ledger.js'%}"></script>
