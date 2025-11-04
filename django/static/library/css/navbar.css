@@ -1,0 +1,148 @@
+@font-face {
+    font-family: Ubuntu-Regular;
+    src: url('../fonts/ubuntu/Ubuntu-Regular.ttf'); 
+}
+  
+@font-face {
+    font-family: Ubuntu-Bold;
+    src: url('../fonts/ubuntu/Ubuntu-Bold.ttf'); 
+}
+
+.navbar {
+    padding: 0.3rem 1.5rem;
+    top: 0;
+    position: fixed;
+    width: 100%;
+    background: #827ffe;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    z-index: 1050;
+    transition: all 0.3s ease;
+}
+
+.navbar-heading {
+    font-family: Ubuntu-Bold;
+    background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.125rem; /* 18px */
+    margin: 0;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+    text-shadow: none;
+}
+
+.navbar-heading h1 {
+    font-family: Ubuntu-Bold;
+    background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.125rem; /* 18px */
+    margin: 0;
+    text-shadow: none;
+}
+
+.navbar-heading:hover {
+    background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+    transform: scale(1.05);
+}
+
+.navbar-heading:hover h1 {
+    background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.navbar-content {
+    font-family: Ubuntu-Regular;
+    color: white !important;
+    font-weight: 500;
+    font-size: 0.9375rem; /* 15px */
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.navbar-content:hover {
+    color: white !important;
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.navbar-item {
+    padding-right: 8px;
+    padding-left: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-toggler {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+}
+
+.navbar-nav {
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.navbar-nav .nav-item {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Mobile responsive improvements */
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+    
+    .navbar-heading {
+        font-size: 1.25rem; /* 20px */
+    }
+    
+    .navbar-heading h1 {
+        font-size: 1.25rem; /* 20px */
+    }
+    
+    .navbar-content {
+        font-size: 0.9375rem !important; /* 15px */
+        padding: 0.75rem 1rem !important;
+        width: 100%;
+        text-align: left;
+    }
+    
+    .navbar-item {
+        padding: 0.25rem 0;
+        width: 100%;
+    }
+    
+    .navbar-nav {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+}

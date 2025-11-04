@@ -143,7 +143,9 @@ dmypy.json
 /staticfiles/
 django/staticfiles/
 django/staticfiles
-django/static
+django/static/library/fonts
+django/static/library/vendor
+django/static/library/css/util.css
 django/user/static
 
 # Media (if used)
