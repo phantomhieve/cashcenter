@@ -12,7 +12,39 @@
 {% block css %}
 	<link rel="stylesheet" type="text/css" href="{% static 'ledger/css/main.css'%}">
 	<style>
-		/* Order list specific styling */
+		/* Order list specific styling - Match ledger list font styles */
+		/* Ensure table uses same font family as ledger */
+		.table th,
+		.table td {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif !important;
+		}
+		
+		/* Table headers match ledger */
+		.table th {
+			font-size: 0.875rem !important; /* 14px */
+			font-weight: 600 !important;
+		}
+		
+		/* Table body cells match ledger */
+		.table tbody td {
+			font-size: 0.9375rem !important; /* 15px */
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif !important;
+		}
+		
+		/* Numeric cells use monospace like ledger */
+		.table td.numeric-cell {
+			font-family: 'Courier New', monospace !important;
+			font-weight: 500 !important;
+			font-size: 0.9375rem !important; /* 15px */
+		}
+		
+		/* Table header content matches ledger */
+		.table-header .table-header-content {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif !important;
+			font-size: 0.875rem !important; /* 14px */
+			font-weight: 600 !important;
+		}
+		
 		/* Agent name styling */
 		.text-muted { font-size: 0.85em; }
 		
@@ -30,7 +62,9 @@
 		/* Price styling */
 		.price-value {
 			color: #155724;
-			font-size: 1.05rem;
+			font-size: 0.9375rem; /* Match ledger numeric cell size */
+			font-family: 'Courier New', monospace;
+			font-weight: 500;
 		}
 	</style>
 {% endblock css %}
