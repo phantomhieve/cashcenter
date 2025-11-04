@@ -9,6 +9,8 @@
             
 {% block links %}
     <li class="nav-item navbar-item">
-        <h5><a href="{% url 'ledger_add' %}?{% url_replace %}" class="nav-link navbar-content">Add ledger</a></h5>
+        <a href="{% url 'ledger_add' %}?{% url_replace %}" class="nav-link navbar-content">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Ledger
+        </a>
     </li>
 {% endblock links %}

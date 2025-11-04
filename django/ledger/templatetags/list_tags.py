@@ -38,3 +38,28 @@ def format_numeric_if_possible(value):
     if value!=None and int(value)==value:
         return int(value)
     return value
+
+@register.filter
+def get_column_icon(key):
+    """Return appropriate Font Awesome icon for ledger column name."""
+    icon_map = {
+        'l_r_no': 'fa-hashtag',
+        'l_r_date': 'fa-calendar',
+        'no_of_bale': 'fa-cube',
+        'bale_no': 'fa-cube',
+        'item': 'fa-tag',
+        'transport': 'fa-truck',
+        'status': 'fa-check-circle',
+        'supplier': 'fa-building',
+        'location': 'fa-map-marker',
+        'pcs_mtr': 'fa-ruler',
+        'price': 'fa-money',
+        'weight': 'fa-balance-scale',
+        'frieght': 'fa-shipping-fast',
+        'delivery': 'fa-calendar-check-o',
+        'reciept': 'fa-file-text',
+        'hsn_code': 'fa-barcode',
+        'bill_ammount': 'fa-money-bill',
+        'remark': 'fa-comment',
+    }
+    return icon_map.get(key, 'fa-sort')
