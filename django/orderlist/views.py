@@ -26,7 +26,7 @@ class OrderListView(FilterView):
 
     def get_queryset(self):
         """Filter queryset - default to pending if no filters applied."""
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().select_related('user')
         
         # Check if any filters are applied
         has_filters = any([
@@ -51,7 +51,11 @@ def orderAddView(request, id=None):
     """View for adding or updating orders."""
     instance = None
     if id:
-        instance = get_object_or_404(Order, id=id, user=request.user)
+        instance = get_object_or_404(
+            Order.objects.select_related('user').prefetch_related('fulfillments'),
+            id=id,
+            user=request.user
+        )
     
     if request.method == 'POST':
         form = OrderForm(request.POST, instance=instance)

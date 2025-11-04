@@ -3,6 +3,7 @@ from django_filters.views import FilterView
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models import Sum, Q
 
 from .models import LedgerData
 from .filters import LedgerDataFilter
@@ -25,15 +26,37 @@ class LedgerListView(FilterView):
         return super().get(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        """Add total bill amount to context."""
+        """Add total bill amount to context using database aggregation."""
         context = super().get_context_data(**kwargs)
-        queryset = context['filter'].qs
+        filterset = context['filter']
+        queryset = filterset.qs
         
-        if queryset and 'bill_ammount' in queryset[0]:
-            total = sum(
-                ledger.get('bill_ammount', 0) or 0
-                for ledger in queryset
+        # Use database aggregation instead of Python sum for better performance
+        # Check if column filter is applied (which returns values queryset)
+        if self.request.GET.get('columns'):
+            # Column filter was applied, so queryset is a values queryset
+            # Create a new queryset without column filter for aggregation
+            get_params = self.request.GET.copy()
+            get_params.pop('columns', None)  # Remove column filter
+            base_filterset = self.filterset_class(
+                get_params,
+                queryset=self.model.objects.filter(user=self.request.user),
+                request=self.request
             )
+            base_qs = base_filterset.qs
+            # Check if base_qs is still a values queryset (from other filters)
+            if hasattr(base_qs, 'model') and not hasattr(base_qs, '_fields'):
+                total = base_qs.aggregate(total=Sum('bill_ammount'))['total'] or 0
+            else:
+                # Fallback: calculate from values queryset in Python
+                total = sum(
+                    ledger.get('bill_ammount', 0) or 0
+                    for ledger in queryset
+                )
+            context['total'] = total
+        elif queryset and hasattr(queryset, 'model'):
+            # No column filter, use aggregation directly on model queryset
+            total = queryset.aggregate(total=Sum('bill_ammount'))['total'] or 0
             context['total'] = total
         return context
 
@@ -45,13 +68,13 @@ def ledgerAddView(request, id=None):
     
     if id:
         instance = get_object_or_404(
-            LedgerData,
+            LedgerData.objects.select_related('user'),
             id=id,
             user=request.user
         )
     elif query.get('l_r_view'):
         instance = get_object_or_404(
-            LedgerData,
+            LedgerData.objects.select_related('user'),
             l_r_no=query.pop('l_r_view')[0],
             user=request.user
         )
@@ -64,6 +87,7 @@ def ledgerAddView(request, id=None):
         if form.is_valid():
             ledger = form.save(commit=False)
             ledger.user = request.user
+            # Use exists() instead of len() for better performance
             existing_data = LedgerData.objects.filter(
                 l_r_no=ledger.l_r_no,
                 user=ledger.user
@@ -105,6 +129,7 @@ def autoComplete(request):
     if q and field:
         users = getUsersFromGroup(request.user)
         lookup = {f'{field}__icontains': q}
+        # Use distinct() at database level instead of set() in Python
         data = LedgerData.objects.filter(
             **lookup,
             user__in=users
