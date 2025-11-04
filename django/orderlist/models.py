@@ -33,11 +33,11 @@ class Order(models.Model):
 		default=Mode.PHONE,
 	)
 	agent_name = models.CharField(max_length=255, blank=True, null=True, help_text="Required only when mode is 'Agent'")
+	transport = models.CharField(max_length=255, blank=True, null=True)
 	remark = models.TextField(blank=True, null=True)
 
 	class Meta:
 		ordering = ['order_date', 'id']
-		unique_together = ('user', 'order_number')
 
 	def __str__(self) -> str:
 		return f"{self.user} - {self.order_number}"

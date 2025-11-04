@@ -8,7 +8,7 @@ class OrderForm(forms.ModelForm):
 		model = Order
 		fields = [
 			'order_number', 'company_name', 'item', 'num_parcels',
-			'order_date', 'fulfilment_status', 'order_price', 'mode', 'agent_name', 'remark'
+			'order_date', 'fulfilment_status', 'order_price', 'mode', 'agent_name', 'transport', 'remark'
 		]
 		widgets = {
 			'remark': forms.Textarea(attrs={'rows': 3, 'cols': 40}),
