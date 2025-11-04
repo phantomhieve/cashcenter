@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Sum
 
 
 class Order(models.Model):
@@ -45,6 +46,11 @@ class Order(models.Model):
 
     class Meta:
         ordering = ['order_date', 'id']
+        indexes = [
+            models.Index(fields=['order_date', '-id']),
+            models.Index(fields=['fulfilment_status', 'order_date']),
+            models.Index(fields=['user', 'order_date']),
+        ]
 
     def __str__(self) -> str:
         return f"{self.user} - {self.order_number}"
@@ -52,7 +58,8 @@ class Order(models.Model):
     @property
     def fulfilled_parcels(self) -> int:
         """Calculate total fulfilled parcels."""
-        return sum(f.quantity for f in self.fulfillments.all())
+        # Use aggregation instead of fetching all fulfillments
+        return self.fulfillments.aggregate(total=Sum('quantity'))['total'] or 0
 
     def update_status_from_fulfillments(self) -> None:
         """Update order status based on fulfillment data."""

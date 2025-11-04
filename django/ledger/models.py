@@ -8,6 +8,11 @@ class LedgerData(models.Model):
     class Meta:
         ordering = ['l_r_date', 'id']
         unique_together = ('user', 'l_r_no')
+        indexes = [
+            models.Index(fields=['user', 'l_r_date']),
+            models.Index(fields=['l_r_date', 'delivery']),
+            models.Index(fields=['status', 'user']),
+        ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     l_r_no = models.CharField(max_length=255, db_index=True)
