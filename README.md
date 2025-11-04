@@ -1,13 +1,19 @@
 # cashcenter
 
-#### This project was created to help mantain data more securely and reilabley while having a little automation for the process for a small business supply, Its a very specific use case but if anyone finds it useful go ahead and use it.
+#### This project was created to help maintain data more securely and reliably for my shop while having a little automation for the process. This piece of code is written specifically for shop data management purposes. It's a very specific use case, but if anyone finds it useful, go ahead and use it.
 
 ##### Tools Used
 1. Django
 2. HTML
 3. CSS
-4. Java Script
+4. JavaScript
+5. PostgreSQL
 
+##### Features
+- Order management with fulfillment tracking
+- Ledger data management
+- Rate list management
+- Stock management
+- User management with role-based access
 
-- Special thanks to [nedis](https://github.com/nesdis) for this [mongo Db Controller](https://github.com/nesdis/djongo)
-- In case you find any bug please report [phantomhive](mailto:khetanatulz@gmail.com?subject=[GitHub]%20cashcenter%20Bug%20Report)
+- In case you find any bug please report to [phantomhive](mailto:khetanatulz@gmail.com?subject=[GitHub]%20cashcenter%20Bug%20Report)
