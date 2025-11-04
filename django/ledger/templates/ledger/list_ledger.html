@@ -252,10 +252,14 @@
                                         {% endif %}
                                     </td>
                                 {% elif key != 'id'%}
-                                    {% if key == 'pcs_mtr'%}
-                                        <td class="numeric-cell">{{ value|format_numeric_if_possible|default_if_none:"-" }}</td>
+                                    {% if key == 'l_r_no' %}
+                                        <td class="numeric-cell">{{ value|default_if_none:"-" }}</td>
+                                    {% elif key == 'pcs_mtr'%}
+                                        <td>{{ value|format_numeric_if_possible|default_if_none:"-" }}</td>
+                                    {% elif key == 'price' or key == 'frieght' or key == 'bill_ammount' or key == 'no_of_bale' %}
+                                        <td>{{ value|format_numeric|default_if_none:"-" }}</td>
                                     {% else %}
-                                        <td class="numeric-cell">{{ value|format_numeric|default_if_none:"-" }}</td>
+                                        <td>{{ value|default_if_none:"-" }}</td>
                                     {% endif %}
                                 {% endif %}
                         {% endfor %}
