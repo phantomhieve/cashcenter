@@ -1,8 +1,8 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from .views import(
-    LedgerBaseListView, 
-    ledgerAddView, 
+from .views import (
+    LedgerBaseListView,
+    ledgerAddView,
     ledgerDeleteView,
     approveView,
     autoComplete
@@ -34,7 +34,7 @@ urlpatterns = [
         login_required(approveView, login_url='/user/login/'),
         name='ledger_base_approve'
     ),
-     path(
+    path(
         'autocomplete/',
         login_required(autoComplete, login_url='/user/login/'),
         name='autocomplete_base'
