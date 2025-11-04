@@ -12,20 +12,25 @@
 {% block css %}
 	<link rel="stylesheet" type="text/css" href="{% static 'ledger/css/main.css'%}">
 	<style>
-		/* Table styling for new columns */
-		.table th:nth-child(4), .table td:nth-child(4) { text-align: center; } /* Pending column */
-		.table th:nth-child(5), .table td:nth-child(5) { text-align: center; } /* Mode column */
-		.table th:nth-child(6), .table td:nth-child(6) { max-width: 200px; } /* Remarks column */
-		.table th:nth-child(7), .table td:nth-child(7) { text-align: right; } /* Price column */
-		
+		/* Order list specific styling */
 		/* Agent name styling */
 		.text-muted { font-size: 0.85em; }
 		
-		/* Remarks truncation */
-		.table td:nth-child(6) { 
-			white-space: nowrap; 
-			overflow: hidden; 
-			text-overflow: ellipsis; 
+		/* Price column right alignment */
+		.table td:nth-child(7) { 
+			text-align: right !important; 
+		}
+		
+		/* Badge styling for mode */
+		.badge-primary {
+			background: #827ffe;
+			color: white;
+		}
+		
+		/* Price styling */
+		.price-value {
+			color: #155724;
+			font-size: 1.05rem;
 		}
 	</style>
 {% endblock css %}
@@ -57,93 +62,213 @@
 	</div>
 	<!-- Alert Update-->
 
-	<!--Filter header row with pagination like ledger-->
-	<div class="row">
-		<div class="col col-md-6">
-			<button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="collapseButton">
-				Filter Options
-			</button>
+	<!--Filter header row with pagination-->
+	<div class="filter-wrapper-modern">
+		<div class="row mb-3 align-items-center">
+			<div class="col-md-6 col-12 mb-3 mb-md-0">
+				<button class="filter-toggle-seamless" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="collapseButton">
+					<i class="fa fa-filter" aria-hidden="true"></i> 
+					<span class="filter-text">Filters</span>
+					<i class="fa fa-chevron-down ml-auto filter-icon" aria-hidden="true"></i>
+				</button>
+			</div>
+			<div class="col-md-6 col-12 text-md-right">
+				{% include 'orderlist/pagination.html' %}
+			</div>
 		</div>
-		<div class="col col-md-6 float-right" style="align-self: right!important;">
-			{% include 'orderlist/pagination.html' %}
+
+		<div class="collapse" id="collapseExample">
+			<form action="" method="get" id="filterForm">
+				{% csrf_token %}
+				
+				<!-- Basic Information Filters -->
+				<div class="filter-section-modern">
+					<div class="filter-section-header">
+						<i class="fa fa-list-ul" aria-hidden="true"></i>
+						<span class="filter-section-title">Basic Information</span>
+					</div>
+					<div class="row">
+						<div class="col-md-3 col-sm-6 mb-3">
+							<label for="id_order_number__icontains" class="filter-floating-label">
+								<i class="fa fa-hashtag" aria-hidden="true"></i> Order Number
+							</label>
+							{% render_field filter.form.order_number__icontains class+="form-control filter-input-chip" placeholder="Enter Order Number" id="id_order_number__icontains"%}
+						</div>
+						<div class="col-md-3 col-sm-6 mb-4">
+							<label for="id_company_name__icontains" class="filter-floating-label">
+								<i class="fa fa-building" aria-hidden="true"></i> Company
+							</label>
+							{% render_field filter.form.company_name__icontains class+="form-control filter-input-chip" placeholder="Enter Company" id="id_company_name__icontains"%}
+						</div>
+						<div class="col-md-3 col-sm-6 mb-4">
+							<label for="id_item__icontains" class="filter-floating-label">
+								<i class="fa fa-tag" aria-hidden="true"></i> Item
+							</label>
+							{% render_field filter.form.item__icontains class+="form-control filter-input-chip" placeholder="Enter Item" id="id_item__icontains"%}
+						</div>
+						<div class="col-md-3 col-sm-6 mb-4">
+							<label for="id_agent_name__icontains" class="filter-floating-label">
+								<i class="fa fa-user" aria-hidden="true"></i> Agent Name
+							</label>
+							{% render_field filter.form.agent_name__icontains class+="form-control filter-input-chip" placeholder="Enter Agent Name" id="id_agent_name__icontains"%}
+						</div>
+					</div>
+				</div>
+				
+				<!-- Status & Mode Filters -->
+				<div class="filter-section-modern">
+					<div class="filter-section-header">
+						<i class="fa fa-check-circle" aria-hidden="true"></i>
+						<span class="filter-section-title">Status & Mode</span>
+					</div>
+					<div class="row">
+						<div class="col-md-3 col-sm-6 mb-3">
+							<label for="id_status" class="filter-floating-label">
+								<i class="fa fa-check-circle" aria-hidden="true"></i> Status
+							</label>
+							{% render_field filter.form.status class+="form-select filter-select-chip" data-section="status" id="id_status"%}
+						</div>
+						<div class="col-md-3 col-sm-6 mb-4">
+							<label for="id_mode" class="filter-floating-label">
+								<i class="fa fa-phone" aria-hidden="true"></i> Mode
+							</label>
+							{% render_field filter.form.mode class+="form-select filter-select-chip" data-section="mode" id="id_mode"%}
+						</div>
+						<div class="col-md-3 col-sm-6 mb-4">
+							<label for="id_order_date" class="filter-floating-label">
+								<i class="fa fa-calendar" aria-hidden="true"></i> Order Date
+							</label>
+							{% render_field filter.form.order_date class+="form-control filter-input-chip" type="date" id="id_order_date"%}
+						</div>
+					</div>
+				</div>
+				
+				<!-- Action Buttons -->
+				<div class="filter-actions-bar">
+					<button type="button" class="btn-filter-reset" onclick="window.location.href='{% url 'order_list' %}'">
+						Reset
+					</button>
+					<button type="submit" class="btn-filter-apply">
+						<i class="fa fa-arrow-left" aria-hidden="true"></i> Apply Filters
+					</button>
+				</div>
+			</form>
 		</div>
 	</div>
 
-	<div class="collapse" id="collapseExample">
-		<form action="" method="get">
-			{% csrf_token %}
-			<div class="form-row form-item">
-				<div class="form-group col-md-2">
-					<label for="id_order_number__icontains">Order Number</label>
-					{% render_field filter.form.order_number__icontains class+="form-control"%}
-				</div>
-				<div class="form-group col-md-2">
-					<label for="id_company_name__icontains">Company</label>
-					{% render_field filter.form.company_name__icontains class+="form-control"%}
-				</div>
-				<div class="form-group col-md-2">
-					<label for="id_item__icontains">Item</label>
-					{% render_field filter.form.item__icontains class+="form-control"%}
-				</div>
-				<div class="form-group col-md-2">
-					<label for="id_status">Status</label>
-					{% render_field filter.form.status class+="form-control"%}
-				</div>
-				<div class="form-group col-md-2">
-					<label for="id_mode">Mode</label>
-					{% render_field filter.form.mode class+="form-control"%}
-				</div>
-				<div class="form-group col-md-2">
-					<label for="id_agent_name__icontains">Agent Name</label>
-					{% render_field filter.form.agent_name__icontains class+="form-control"%}
-				</div>
-			</div>
-			<div class="form-row form-item">
-				<div class="form-group col-md-2">
-					<label for="id_order_date">Order Date</label>
-					{% render_field filter.form.order_date class+="form-control" type="date"%}
-				</div>
-				<div class="form-group col-md-2">
-					<input type="Submit" class=" form-control btn btn-primary submit-button col-md-12" value="Filter">
-				</div>
-			</div>
-		</form>
+	<!--Table Bootstrap-->
+	<div class="table-wrapper">
+		<div class="table-responsive text-nowrap">
+			<table class="table table-hover table-striped">
+				<thead>
+					<tr>
+						<th scope="col" class="table-header">
+							<span class="table-header-content">
+								<i class="fa fa-hashtag" aria-hidden="true"></i> Order #
+							</span>
+						</th>
+						<th scope="col" class="table-header">
+							<span class="table-header-content">
+								<i class="fa fa-building" aria-hidden="true"></i> Company
+							</span>
+						</th>
+						<th scope="col" class="table-header">
+							<span class="table-header-content">
+								<i class="fa fa-tag" aria-hidden="true"></i> Item
+							</span>
+						</th>
+						<th scope="col" class="table-header">
+							<span class="table-header-content">
+								<i class="fa fa-hourglass-half" aria-hidden="true"></i> Pending
+							</span>
+						</th>
+						<th scope="col" class="table-header">
+							<span class="table-header-content">
+								<i class="fa fa-phone" aria-hidden="true"></i> Mode
+							</span>
+						</th>
+						<th scope="col" class="table-header">
+							<span class="table-header-content">
+								<i class="fa fa-comment" aria-hidden="true"></i> Remarks
+							</span>
+						</th>
+						<th scope="col" class="table-header">
+							<span class="table-header-content">
+								<i class="fa fa-money" aria-hidden="true"></i> Price
+							</span>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for order in object_list %}
+					<tr class="clickable-row table-row" data-href="{% url 'order_update' order.id %}">
+						<td class="numeric-cell">{{ order.order_number }}</td>
+						<td>{{ order.company_name }}</td>
+						<td>{{ order.item }}</td>
+						<td>
+							{% with pending=order.num_parcels|sub:order.fulfilled_parcels %}
+								{% if pending > 0 %}
+									<span class="badge badge-warning">
+										<i class="fa fa-clock-o" aria-hidden="true"></i> {{ pending }}
+									</span>
+								{% else %}
+									<span class="badge badge-success">
+										<i class="fa fa-check-circle" aria-hidden="true"></i> 0
+									</span>
+								{% endif %}
+							{% endwith %}
+						</td>
+						<td>
+							{% if order.mode == 'phone' %}
+								<span class="badge badge-info">
+									<i class="fa fa-phone" aria-hidden="true"></i> Phone
+								</span>
+							{% elif order.mode == 'whatsapp' %}
+								<span class="badge badge-success">
+									<i class="fa fa-whatsapp" aria-hidden="true"></i> WhatsApp
+								</span>
+							{% elif order.mode == 'physical' %}
+								<span class="badge badge-secondary">
+									<i class="fa fa-store" aria-hidden="true"></i> Physical
+								</span>
+							{% elif order.mode == 'agent' %}
+								<span class="badge badge-primary">
+									<i class="fa fa-user" aria-hidden="true"></i> Agent
+								</span>
+							{% endif %}
+							{% if order.mode == 'agent' and order.agent_name %}
+								<br><small class="text-muted d-block mt-1">{{ order.agent_name }}</small>
+							{% endif %}
+						</td>
+						<td>
+							{% if order.remark %}
+								<span class="text-truncate d-inline-block" style="max-width: 200px;" title="{{ order.remark }}">
+									<i class="fa fa-comment-o" aria-hidden="true"></i> {{ order.remark|truncatechars:30 }}
+								</span>
+							{% else %}
+								<span class="text-muted">-</span>
+							{% endif %}
+						</td>
+						<td class="numeric-cell text-right">
+							<strong class="price-value">₹{{ order.order_price|floatformat:2 }}</strong>
+						</td>
+					</tr>
+					{% empty %}
+					<tr>
+						<td colspan="7" class="text-center py-5 empty-state">
+							<i class="fa fa-inbox fa-3x text-muted mb-3" aria-hidden="true"></i>
+							<p class="text-muted mb-0">No orders found. Try adjusting your filters.</p>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
 	</div>
-
-	<div class="table-responsive text-nowrap">
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					<th>Order #</th>
-					<th>Company</th>
-					<th>Item</th>
-					<th>Pending</th>
-					<th>Mode</th>
-					<th>Remarks</th>
-					<th>Price</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for order in object_list %}
-				<tr class="clickable-row" data-href="{% url 'order_update' order.id %}">
-					<td>{{ order.order_number }}</td>
-					<td>{{ order.company_name }}</td>
-					<td>{{ order.item }}</td>
-					<td>{{ order.num_parcels|sub:order.fulfilled_parcels }}</td>
-					<td>
-						{{ order.get_mode_display }}
-						{% if order.mode == 'agent' and order.agent_name %}
-							<br><small class="text-muted">{{ order.agent_name }}</small>
-						{% endif %}
-					</td>
-					<td>{{ order.remark|truncatechars:30 }}</td>
-					<td>{{ order.order_price|floatformat:2 }}</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+	<!--Table Bootstrap End-->
+	<div class="pagination-wrapper">
+		{% include 'orderlist/pagination.html' %}
 	</div>
-	{% include 'orderlist/pagination.html' %}
 {% endblock body %}
 
 {% block footer %}
@@ -151,5 +276,80 @@
 {% endblock %}
 
 {% block script %}
+	<script>
+		// Filter toggle icon animation
+		$('#collapseButton').on('click', function() {
+			$(this).find('.filter-icon').toggleClass('fa-chevron-down fa-chevron-up');
+		});
+		
+		// Clear filter form function
+		function clearFilterForm() {
+			document.getElementById('filterForm').reset();
+			$('.filter-input-chip').val('');
+			$('.filter-select-chip').val('').trigger('change');
+			updateSelectColors();
+		}
+		
+		// Update select colors based on selection
+		function updateSelectColors() {
+			$('.filter-select-chip').each(function() {
+				const $select = $(this);
+				const section = $select.data('section');
+				const value = $select.val();
+				const $label = $select.siblings('.filter-floating-label');
+				
+				// Remove all color classes
+				$select.removeClass('filter-selected-status filter-selected-delivery filter-selected-columns filter-selected-mode');
+				
+				// Add appropriate color class based on section and value
+				if (value && value !== '') {
+					if (section === 'status') {
+						$select.addClass('filter-selected-status');
+					} else if (section === 'delivery') {
+						$select.addClass('filter-selected-delivery');
+					} else if (section === 'columns') {
+						$select.addClass('filter-selected-columns');
+					} else if (section === 'mode') {
+						$select.addClass('filter-selected-mode');
+					}
+					// Update label color when selected
+					if ($label.length) {
+						$label.addClass('label-active');
+					}
+				} else {
+					if ($label.length) {
+						$label.removeClass('label-active');
+					}
+				}
+			});
+		}
+		
+		// Initialize colors on page load
+		$(document).ready(function() {
+			updateSelectColors();
+			
+			// Update colors on change
+			$('.filter-select-chip').on('change', function() {
+				updateSelectColors();
+			});
+			
+			// Handle input focus/blur for labels
+			$('.filter-input-chip, .filter-select-chip').on('focus', function() {
+				$(this).siblings('.filter-floating-label').addClass('label-focused');
+			}).on('blur', function() {
+				$(this).siblings('.filter-floating-label').removeClass('label-focused');
+				if ($(this).val() && $(this).val() !== '') {
+					$(this).siblings('.filter-floating-label').addClass('label-active');
+				} else {
+					$(this).siblings('.filter-floating-label').removeClass('label-active');
+				}
+			});
+		});
+		
+		// Table row click handler
+		$('.clickable-row').on('click', function() {
+			window.location.href = $(this).data('href');
+		});
+	</script>
 	<script src="{% static 'orderlist/js/list_order.js' %}"></script>
 {% endblock script %}
