@@ -156,6 +156,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Performance optimizations
 if not DEBUG:
     # Enable template caching in production
+    # When loaders is defined, APP_DIRS must be False
+    TEMPLATES[0]['APP_DIRS'] = False
     TEMPLATES[0]['OPTIONS']['loaders'] = [
         ('django.template.loaders.cached.Loader', [
             'django.template.loaders.filesystem.Loader',
