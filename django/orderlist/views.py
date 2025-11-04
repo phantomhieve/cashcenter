@@ -53,25 +53,20 @@ def orderAddView(request, id=None):
 		if form.is_valid():
 			order = form.save(commit=False)
 			order.user = request.user
-			# prevent duplicate order_number per user
-			exists = Order.objects.filter(order_number=order.order_number, user=order.user)
-			if (not len(exists)) or (instance and instance.order_number == order.order_number):
-				# Save first to ensure PK exists before binding inline formset
-				order.save()
-				formset = FulfillmentFormSet(request.POST, instance=order)
-				if formset.is_valid():
-					formset.save()
-					if instance:
-						return HttpResponseRedirect(f'/orderlist/add/{order.id}/?update={order.order_number}')
-					return HttpResponseRedirect(f'/orderlist/add/?sucessful={order.order_number}')
-				# If formset invalid, fall through to render with errors
-				return render(
-					request,
-					'orderlist/add_order.html',
-					{'form': form, 'formset': formset, 'instance': order.id}
-				)
-			# Duplicate/invalid business rule
-			return HttpResponseRedirect('/orderlist/add/?invalid=true')
+			# Save first to ensure PK exists before binding inline formset
+			order.save()
+			formset = FulfillmentFormSet(request.POST, instance=order)
+			if formset.is_valid():
+				formset.save()
+				if instance:
+					return HttpResponseRedirect(f'/orderlist/add/{order.id}/?update={order.order_number}')
+				return HttpResponseRedirect(f'/orderlist/add/?sucessful={order.order_number}')
+			# If formset invalid, fall through to render with errors
+			return render(
+				request,
+				'orderlist/add_order.html',
+				{'form': form, 'formset': formset, 'instance': order.id}
+			)
 		# Form invalid: render with an empty inline formset
 		formset = FulfillmentFormSet(instance=instance) if instance else FulfillmentFormSet(instance=Order())
 		return render(
