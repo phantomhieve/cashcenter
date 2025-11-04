@@ -31,33 +31,43 @@ class LedgerListView(FilterView):
         filterset = context['filter']
         queryset = filterset.qs
         
-        # Use database aggregation instead of Python sum for better performance
-        # Check if column filter is applied (which returns values queryset)
-        if self.request.GET.get('columns'):
-            # Column filter was applied, so queryset is a values queryset
-            # Create a new queryset without column filter for aggregation
-            get_params = self.request.GET.copy()
-            get_params.pop('columns', None)  # Remove column filter
-            base_filterset = self.filterset_class(
-                get_params,
-                queryset=self.model.objects.filter(user=self.request.user),
-                request=self.request
-            )
-            base_qs = base_filterset.qs
-            # Check if base_qs is still a values queryset (from other filters)
-            if hasattr(base_qs, 'model') and not hasattr(base_qs, '_fields'):
-                total = base_qs.aggregate(total=Sum('bill_ammount'))['total'] or 0
-            else:
-                # Fallback: calculate from values queryset in Python
-                total = sum(
-                    ledger.get('bill_ammount', 0) or 0
-                    for ledger in queryset
+        # Check if 'bill_ammount' is in the selected columns
+        selected_columns = self.request.GET.getlist('columns')
+        context['selected_columns'] = selected_columns  # Pass to template
+        
+        if 'bill_ammount' in selected_columns:
+            # Use database aggregation instead of Python sum for better performance
+            # Check if column filter is applied (which returns values queryset)
+            if self.request.GET.get('columns'):
+                # Column filter was applied, so queryset is a values queryset
+                # Create a new queryset without column filter for aggregation
+                # This ensures we get all filtered records but calculate total correctly
+                get_params = self.request.GET.copy()
+                get_params.pop('columns', None)  # Remove column filter
+                base_filterset = self.filterset_class(
+                    get_params,
+                    queryset=self.model.objects.filter(user=self.request.user),
+                    request=self.request
                 )
-            context['total'] = total
-        elif queryset and hasattr(queryset, 'model'):
-            # No column filter, use aggregation directly on model queryset
-            total = queryset.aggregate(total=Sum('bill_ammount'))['total'] or 0
-            context['total'] = total
+                base_qs = base_filterset.qs
+                # Check if base_qs is a regular queryset (not values queryset)
+                # A values queryset has '_fields' attribute, regular queryset doesn't
+                if hasattr(base_qs, 'model') and not hasattr(base_qs, '_fields'):
+                    # Regular queryset - use aggregation
+                    total = base_qs.aggregate(total=Sum('bill_ammount'))['total'] or 0
+                else:
+                    # Values queryset - calculate from the filtered queryset
+                    # But we need to get bill_ammount from the original queryset
+                    # Since queryset is already filtered, we can sum from it
+                    total = sum(
+                        ledger.get('bill_ammount', 0) or 0
+                        for ledger in queryset
+                    )
+                context['total'] = total
+            elif queryset and hasattr(queryset, 'model'):
+                # No column filter, use aggregation directly on model queryset
+                total = queryset.aggregate(total=Sum('bill_ammount'))['total'] or 0
+                context['total'] = total
         return context
 
 @user_passes_test(lambda u: u.is_staff)

@@ -3,6 +3,8 @@
             
 {% block links %}
     <li class="nav-item navbar-item">
-        <h5><a href="{% url 'order_add' %}" class="nav-link navbar-content">Add Order</a></h5>
+        <a href="{% url 'order_add' %}" class="nav-link navbar-content">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Order
+        </a>
     </li>
 {% endblock links %}

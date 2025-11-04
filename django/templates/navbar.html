@@ -20,13 +20,19 @@
             {% endblock search %}
             {% if request.user.is_staff %}
             <li class="nav-item navbar-item">
-                <h5><a href="{% url 'ledger_list' %}?{% url_replace %}" class="nav-link navbar-content">Ledger</a></h5>
+                <a href="{% url 'ledger_list' %}?{% url_replace %}" class="nav-link navbar-content">
+                    <i class="fa fa-book" aria-hidden="true"></i> Ledger
+                </a>
             </li>
             <li class="nav-item navbar-item">
-                <h5><a href="{% url 'ratelist_list' %}" class="nav-link navbar-content">Rate List</a></h5>
+                <a href="{% url 'ratelist_list' %}" class="nav-link navbar-content">
+                    <i class="fa fa-list-alt" aria-hidden="true"></i> Rate List
+                </a>
             </li>
             <li class="nav-item navbar-item">
-                <h5><a href="{% url 'order_list' %}" class="nav-link navbar-content">Order List</a></h5>
+                <a href="{% url 'order_list' %}" class="nav-link navbar-content">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> Order List
+                </a>
             </li>
             {% endif %}
             <!-- <li class="nav-item navbar-item">
@@ -43,7 +49,9 @@
             <li class="nav-item navbar-item">
                 <form method="post" action="{% url 'user_logout' %}" class="d-inline m-0 p-0">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Logout</button>
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fa fa-sign-out" aria-hidden="true"></i> Logout
+                    </button>
                 </form>
             </li>
         </ul>
