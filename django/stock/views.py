@@ -3,6 +3,7 @@ from django_filters.views import FilterView
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import user_passes_test
 from django.urls import reverse
+from django.db.models import Sum, F
 
 from .models import StockData
 from .filters import StockDataFilter
@@ -24,12 +25,13 @@ class StockListView(FilterView):
         return super().get(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        """Add total stock value to context."""
+        """Add total stock value to context using database aggregation."""
         context = super().get_context_data(**kwargs)
-        total = sum(
-            stock.pcs_mtr * stock.rate
-            for stock in context["filter"].qs
-        )
+        # Use database aggregation instead of Python sum for better performance
+        queryset = self.filterset_class(self.request.GET, queryset=self.model.objects.filter(user=self.request.user)).qs
+        total = queryset.aggregate(
+            total=Sum(F('pcs_mtr') * F('rate'))
+        )['total'] or 0
         context["total"] = total
         return context
 
@@ -75,11 +77,12 @@ def autoComplete(request):
     
     if q and field:
         lookup = {f'{field}__icontains': q}
+        # Use distinct() at database level instead of set() in Python
         data = StockData.objects.filter(
             **lookup,
             user=request.user
-        ).values_list(field, flat=True)
+        ).values_list(field, flat=True).distinct()[:10]
         
-        return JsonResponse(list(set(data)), safe=False)
+        return JsonResponse(list(data), safe=False)
     
     return JsonResponse([], safe=False)
