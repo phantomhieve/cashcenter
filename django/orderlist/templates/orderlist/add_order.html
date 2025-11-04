@@ -166,6 +166,13 @@
 				</div>
 			</div>
 			<div class="form-row">
+				<div class="form-group col-md-3">
+					<label for="id_transport">Transport</label>
+					{% render_field form.transport class+="form-control" %}
+					{% for e in form.transport.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+				</div>
+			</div>
+			<div class="form-row">
 				<div class="form-group col-md-6" id="agent-name-group" style="display: none;">
 					<label for="id_agent_name">Agent Name <span class="text-danger">*</span></label>
 					{% render_field form.agent_name class+="form-control" %}
