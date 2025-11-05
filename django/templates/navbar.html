@@ -46,8 +46,8 @@
             </li> -->
             {% block links %}
             {% endblock links %}
-            <li class="nav-item navbar-item">
-                <form method="post" action="{% url 'user_logout' %}" class="d-inline m-0 p-0">
+            <li class="nav-item navbar-item navbar-logout">
+                <form method="post" action="{% url 'user_logout' %}" class="navbar-logout-form">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger btn-sm">
                         <i class="fa fa-sign-out" aria-hidden="true"></i> Logout

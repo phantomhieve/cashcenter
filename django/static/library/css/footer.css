@@ -15,22 +15,22 @@
 @media screen and (min-width: 600px) {
     .page-footer {
         height: auto;
-        min-height: 50px;
+        min-height: 36px;
         display: block !important;
         position: fixed;
         bottom: 0;
         width: 100%;
         background: #827ffe;
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-        padding: 0.75rem 0;
+        padding: 0.4rem 0;
         z-index: 1040;
     }
     
     .page-footer-content {
         font-family: Ubuntu-Regular;
         color: white;
-        margin: 0.5rem 0;
-        font-size: 0.9375rem; /* 15px */
+        margin: 0.2rem 0;
+        font-size: 0.875rem; /* 14px */
     }
     
     .page-footer-content a {
@@ -50,7 +50,7 @@
         background: rgba(255, 255, 255, 0.3);
         height: 1px;
         border: none;
-        margin: 0.75rem 0;
+        margin: 0.35rem 0;
     }
     
     .page-footer .container-fluid {
@@ -64,15 +64,15 @@
         position: relative;
         display: block !important;
         background: #827ffe;
-        padding: 1.5rem 0;
-        margin-top: 2rem;
+        padding: 0.75rem 0;
+        margin-top: 1.5rem;
     }
     
     .page-footer-content {
         font-family: Ubuntu-Regular;
         color: white;
-        margin: 0.5rem 0;
-        font-size: 0.875rem; /* 14px */
+        margin: 0.3rem 0;
+        font-size: 0.8125rem; /* 13px */
     }
     
     .page-footer-content a {
@@ -84,6 +84,6 @@
         background: rgba(255, 255, 255, 0.3);
         height: 1px;
         border: none;
-        margin: 1rem 0;
+        margin: 0.6rem 0;
     }
 }

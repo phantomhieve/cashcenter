@@ -45,6 +45,7 @@
 		/* Fulfillment table theming to match ledger */
 		.order-form .fulfillment-table { border-radius: 6px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
 		.order-form .fulfillment-table .table { margin-bottom: 0; }
+		.order-form .fulfillment-table .table { min-width: 0; }
 		.order-form .fulfillment-table thead th {
 			font-family: Lato-Bold; font-size: 16px; background-color: #827ffe; color: #fff;
 			text-transform: uppercase; line-height: 1.4; padding: 10px 16px; border: 0;
@@ -99,6 +100,73 @@
 			.order-form #fulfillment-rows input[type="text"] { 
 				width: 100%; 
 				max-width: 100%; 
+			}
+			.order-form .fulfillment-table {
+				margin: 0 -15px;
+				border-radius: 0;
+			}
+			.order-form .fulfillment-table .table {
+				width: 100%;
+				min-width: 0;
+			}
+			.order-form .fulfillment-table thead th,
+			.order-form .fulfillment-table tbody td {
+				padding: 10px;
+				font-size: 14px;
+			}
+		}
+
+		@media (max-width: 576px) {
+			.order-form .fulfillment-table {
+				margin: 0;
+				border-radius: 12px;
+				background: linear-gradient(135deg, rgba(130, 127, 254, 0.25) 0%, rgba(167, 139, 250, 0.15) 100%);
+			}
+			.order-form .fulfillment-table .table,
+			.order-form .fulfillment-table thead,
+			.order-form .fulfillment-table tbody,
+			.order-form .fulfillment-table th,
+			.order-form .fulfillment-table td,
+			.order-form .fulfillment-table tr {
+				display: block;
+				width: 100%;
+			}
+			.order-form .fulfillment-table thead {
+				display: none;
+			}
+			.order-form .fulfillment-table tbody {
+				padding: 0;
+			}
+			.order-form .fulfillment-table tbody tr {
+				background: #ffffff;
+				border-radius: 12px;
+				box-shadow: 0 2px 6px rgba(130, 127, 254, 0.16);
+				margin-bottom: 12px;
+				padding: 12px;
+			}
+			.order-form .fulfillment-table tbody td {
+				padding: 8px 12px;
+				text-align: left;
+				position: relative;
+				font-size: 15px;
+			}
+			.order-form .fulfillment-table tbody td::before {
+				content: attr(data-label);
+				display: block;
+				font-size: 12px;
+				font-weight: 700;
+				text-transform: uppercase;
+				color: #5b59d6;
+				margin-bottom: 4px;
+				letter-spacing: 0.04em;
+			}
+			.order-form .fulfillment-table tbody td[data-label="Delete"] {
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+			}
+			.order-form .fulfillment-table tbody tr:last-child {
+				margin-bottom: 0;
 			}
 		}
 	</style>
@@ -219,19 +287,19 @@
 					{% for f in formset.forms %}
 						<tr class="fulfillment-row">
 							{{ f.id }}
-							<td>
+						<td data-label="Date">
 								{% render_field f.date class+="form-control" type="date" %}
 								{% for e in f.date.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
 							</td>
-							<td>
+						<td data-label="Quantity">
 								{% render_field f.quantity class+="form-control" type="number" %}
 								{% for e in f.quantity.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
 							</td>
-							<td>
+						<td data-label="Bill No">
 								{% render_field f.bill_no class+="form-control" type="text" %}
 								{% for e in f.bill_no.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
 							</td>
-							<td class="text-center align-middle">
+						<td class="text-center align-middle" data-label="Delete">
 								{# Hidden DELETE checkbox controlled by trash icon #}
 								{% render_field f.DELETE class+="d-none fulfillment-delete-input" %}
 								<button type="button" class="btn btn-link text-danger p-0 delete-fulfillment" title="Delete fulfillment">
