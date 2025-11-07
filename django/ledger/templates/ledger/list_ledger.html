@@ -213,7 +213,7 @@
                                 {% if key != 'id' %}
                                 <th scope="col" class="table-header">
                                     <span class="table-header-content">
-                                        <i class="fa {{ key|get_column_icon }}" aria-hidden="true"></i> {{key|title}}
+                                        <i class="fa {{ key|get_column_icon }}" aria-hidden="true"></i> {{ key|underscore_to_space|title }}
                                     </span>
                                 </th>
                                 {% endif %}
