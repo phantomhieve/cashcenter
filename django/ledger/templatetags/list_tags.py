@@ -63,3 +63,11 @@ def get_column_icon(key):
         'remark': 'fa-comment',
     }
     return icon_map.get(key, 'fa-sort')
+
+
+@register.filter
+def underscore_to_space(value):
+    """Replace underscores in a string with spaces."""
+    if value is None:
+        return ''
+    return str(value).replace('_', ' ')
