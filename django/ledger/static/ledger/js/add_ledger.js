@@ -1,9 +1,9 @@
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener('DOMContentLoaded', () => {
     // Alert for wrong submission
     let url = new URL(window.location);
     let params = new URLSearchParams(url.search);
     let element = document.querySelector("#alert_lr")
-    if(params.get('invalid'))
+    if (params.get('invalid'))
         element.style.display = "block";
     else
         element.style.display = "none";
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     // Alert for adding/updating content
     let element_add = document.querySelector("#alert_add");
     let content_add = document.querySelector('#alert_add_content');
-    if(params.get('sucessful')){
+    if (params.get('sucessful')) {
         element_add.style.display = "block";
         content_add.innerHTML = `${params.get('sucessful')}`
     }
@@ -22,9 +22,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
         element_add.style.display = "none";
 
     // Change floating point
-    function fixDecimalValueInit(id){
+    function fixDecimalValueInit(id) {
         element = document.getElementById(id);
-        if(element.value){
+        if (element.value) {
             element.value = parseFloat(element.value).toFixed(2)
         }
     }
@@ -34,38 +34,55 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     // Change floating point pcs/mtr
     element = document.getElementById('id_pcs_mtr');
-    if(element.value!="" && Number(element.value)==element.value){
+    if (element.value != "" && Number(element.value) == element.value) {
         element.value = Number(element.value);
     }
 
-    document.getElementById('id_frieght').onchange = function (event){
+    document.getElementById('id_frieght').onchange = function (event) {
         this.value = parseFloat(this.value).toFixed(2);
     }
 
     // Adding numbers delimeter "+", " "
-    function addSpace(valueString){
+    function addSpace(valueString) {
         let total = 0;
         let splitArray = valueString.split(" ");
-        if(valueString.includes("+"))
+        if (valueString.includes("+"))
             splitArray = valueString.split("+");
-        else if(splitArray.length===1)
+        else if (splitArray.length === 1)
             splitArray = [valueString];
-        splitArray.forEach((value)=>{
-            if(value!=="")
-                total+=parseFloat(value)
+        splitArray.forEach((value) => {
+            if (value !== "")
+                total += parseFloat(value)
         })
         return total;
     }
 
     // Addable fields modify
-    document.getElementById('id_bill_ammount').onchange = function (event){
+    document.getElementById('id_bill_ammount').onchange = function (event) {
         this.value = addSpace(this.value);
         this.value = parseFloat(this.value).toFixed(2);
     }
 
-    document.getElementById('id_pcs_mtr').onchange = function (event){
+    document.getElementById('id_pcs_mtr').onchange = function (event) {
         this.value = addSpace(this.value);
         this.value = parseFloat(this.value).toFixed(2);
     }
+
+    // ============================================
+    // AUTOCOMPLETE POSITIONING FIX
+    // ============================================
+    // Fix for bootstrap-autocomplete dropdown positioning issue
+    // After selecting an item, the dropdown's position gets cached incorrectly
+    // This resets the positioning so it recalculates on next open
+    $(document).on('autocomplete.select', function () {
+        setTimeout(function () {
+            $('.dropdown-menu').css({
+                'position': '',
+                'top': '',
+                'left': '',
+                'transform': ''
+            }).removeClass('show');
+        }, 100);
+    });
 
 });
