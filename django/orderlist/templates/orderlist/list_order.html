@@ -98,8 +98,8 @@
 
 	<!--Filter header row with pagination-->
 	<div class="filter-wrapper-modern">
-		<div class="row mb-3 align-items-center">
-			<div class="col-md-6 col-12 mb-3 mb-md-0">
+		<div class="row align-items-center">
+			<div class="col-md-6 col-12 mb-2 mb-md-0">
 				<button class="filter-toggle-seamless" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="collapseButton">
 					<i class="fa fa-filter" aria-hidden="true"></i> 
 					<span class="filter-text">Filters</span>
@@ -122,29 +122,29 @@
 						<span class="filter-section-title">Basic Information</span>
 					</div>
 					<div class="row">
-						<div class="col-md-3 col-sm-6 mb-3">
+						<div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
 							<label for="id_order_number__icontains" class="filter-floating-label">
-								<i class="fa fa-hashtag" aria-hidden="true"></i> Order Number
+								<i class="fa fa-hashtag" aria-hidden="true"></i> <span>Order Number</span>
 							</label>
-							{% render_field filter.form.order_number__icontains class+="form-control filter-input-chip" placeholder="Enter Order Number" id="id_order_number__icontains"%}
+							{% render_field filter.form.order_number__icontains class+="form-control filter-input-chip" placeholder="Order Number" id="id_order_number__icontains"%}
 						</div>
-						<div class="col-md-3 col-sm-6 mb-4">
+						<div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
 							<label for="id_company_name__icontains" class="filter-floating-label">
-								<i class="fa fa-building" aria-hidden="true"></i> Company
+								<i class="fa fa-building" aria-hidden="true"></i> <span>Company</span>
 							</label>
-							{% render_field filter.form.company_name__icontains class+="form-control filter-input-chip" placeholder="Enter Company" id="id_company_name__icontains"%}
+							{% render_field filter.form.company_name__icontains class+="form-control filter-input-chip" placeholder="Company" id="id_company_name__icontains"%}
 						</div>
-						<div class="col-md-3 col-sm-6 mb-4">
+						<div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
 							<label for="id_item__icontains" class="filter-floating-label">
-								<i class="fa fa-tag" aria-hidden="true"></i> Item
+								<i class="fa fa-tag" aria-hidden="true"></i> <span>Item</span>
 							</label>
-							{% render_field filter.form.item__icontains class+="form-control filter-input-chip" placeholder="Enter Item" id="id_item__icontains"%}
+							{% render_field filter.form.item__icontains class+="form-control filter-input-chip" placeholder="Item" id="id_item__icontains"%}
 						</div>
-						<div class="col-md-3 col-sm-6 mb-4">
+						<div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
 							<label for="id_agent_name__icontains" class="filter-floating-label">
-								<i class="fa fa-user" aria-hidden="true"></i> Agent Name
+								<i class="fa fa-user" aria-hidden="true"></i> <span>Agent Name</span>
 							</label>
-							{% render_field filter.form.agent_name__icontains class+="form-control filter-input-chip" placeholder="Enter Agent Name" id="id_agent_name__icontains"%}
+							{% render_field filter.form.agent_name__icontains class+="form-control filter-input-chip" placeholder="Agent Name" id="id_agent_name__icontains"%}
 						</div>
 					</div>
 				</div>
@@ -156,23 +156,23 @@
 						<span class="filter-section-title">Status & Mode</span>
 					</div>
 					<div class="row">
-						<div class="col-md-3 col-sm-6 mb-3">
-							<label for="id_status" class="filter-floating-label">
+						<div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+							<label for="id_status" class="filter-field-label">
 								<i class="fa fa-check-circle" aria-hidden="true"></i> Status
 							</label>
 							{% render_field filter.form.status class+="form-select filter-select-chip" data-section="status" id="id_status"%}
 						</div>
-						<div class="col-md-3 col-sm-6 mb-4">
-							<label for="id_mode" class="filter-floating-label">
+						<div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+							<label for="id_mode" class="filter-field-label">
 								<i class="fa fa-phone" aria-hidden="true"></i> Mode
 							</label>
 							{% render_field filter.form.mode class+="form-select filter-select-chip" data-section="mode" id="id_mode"%}
 						</div>
-						<div class="col-md-3 col-sm-6 mb-4">
-							<label for="id_order_date" class="filter-floating-label">
-								<i class="fa fa-calendar" aria-hidden="true"></i> Order Date
+						<div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+							<label for="id_order_date" class="filter-field-label">
+								<i class="fa fa-calendar-o" aria-hidden="true"></i> Order Date
 							</label>
-							{% render_field filter.form.order_date class+="form-control filter-input-chip" type="date" id="id_order_date"%}
+							{% render_field filter.form.order_date class+="form-control filter-input-chip" type="date" id="id_order_date" placeholder="Order Date"%}
 						</div>
 					</div>
 				</div>
@@ -300,7 +300,7 @@
 		</div>
 	</div>
 	<!--Table Bootstrap End-->
-	<div class="pagination-wrapper">
+	<div class="pagination-wrapper-bottom">
 		{% include 'orderlist/pagination.html' %}
 	</div>
 {% endblock body %}
@@ -330,7 +330,6 @@
 				const $select = $(this);
 				const section = $select.data('section');
 				const value = $select.val();
-				const $label = $select.siblings('.filter-floating-label');
 				
 				// Remove all color classes
 				$select.removeClass('filter-selected-status filter-selected-delivery filter-selected-columns filter-selected-mode');
@@ -339,20 +338,8 @@
 				if (value && value !== '') {
 					if (section === 'status') {
 						$select.addClass('filter-selected-status');
-					} else if (section === 'delivery') {
-						$select.addClass('filter-selected-delivery');
-					} else if (section === 'columns') {
-						$select.addClass('filter-selected-columns');
 					} else if (section === 'mode') {
 						$select.addClass('filter-selected-mode');
-					}
-					// Update label color when selected
-					if ($label.length) {
-						$label.addClass('label-active');
-					}
-				} else {
-					if ($label.length) {
-						$label.removeClass('label-active');
 					}
 				}
 			});
@@ -368,7 +355,7 @@
 			});
 			
 			// Handle input focus/blur for labels
-			$('.filter-input-chip, .filter-select-chip').on('focus', function() {
+			$('.filter-input-chip').on('focus', function() {
 				$(this).siblings('.filter-floating-label').addClass('label-focused');
 			}).on('blur', function() {
 				$(this).siblings('.filter-floating-label').removeClass('label-focused');
