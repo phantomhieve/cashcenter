@@ -1,14 +1,16 @@
 @font-face {
   font-family: Lato-Regular;
-  src: url('../../library/fonts/Lato/Lato-Regular.ttf'); 
+  src: url('../../library/fonts/Lato/Lato-Regular.ttf');
 }
 
 @font-face {
   font-family: Lato-Bold;
-  src: url('../../library/fonts/Lato/Lato-Bold.ttf'); 
+  src: url('../../library/fonts/Lato/Lato-Bold.ttf');
 }
 
-/* Enhanced Table Styling - Modern Design */
+/* ============================================
+   TABLE STYLING
+   ============================================ */
 .table-wrapper {
   margin: 0;
   background: white;
@@ -75,22 +77,21 @@
 }
 
 /* ============================================
-   TYPOGRAPHY SYSTEM - Consistent Font Sizes
+   TYPOGRAPHY SYSTEM
    ============================================ */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  font-size: 1rem; /* 16px base */
+  font-size: 1rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Table Typography */
 .table th,
 .table td {
   padding: 1rem 0.875rem;
   vertical-align: middle;
   border: none;
-  font-size: 0.9375rem; /* 15px */
+  font-size: 0.9375rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
@@ -98,10 +99,9 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
 }
 
-/* Increase font weight for order number and LR number columns - first column */
 .table tbody td:first-child {
   font-weight: 600;
   color: #1f2937;
@@ -118,41 +118,42 @@ thead {
 thead th {
   padding: 1rem 0.875rem;
   border: none;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.5px;
   position: relative;
-  text-align: left;
+  text-align: center;
 }
 
 thead th.table-header {
-  text-align: left;
+  text-align: center;
   padding: 1rem 0.875rem;
 }
 
 thead th.table-header .table-header-content {
   display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 0.5rem;
   white-space: nowrap;
   font-weight: 600;
   letter-spacing: 0.025em;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   width: 100%;
 }
 
 thead th.table-header i {
   opacity: 0.85;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
   margin-right: 0.375rem;
 }
 
 tbody {
-  font-size: 0.9375rem; /* 15px */
+  font-size: 0.9375rem;
   color: #4a5568;
   line-height: 1.6;
+  text-align: center;
 }
 
 .first {
@@ -165,15 +166,17 @@ td.numeric-cell {
   font-family: 'Courier New', monospace;
   font-weight: 500;
   color: #2d3748;
-  font-size: 0.9375rem; /* 15px */
+  font-size: 0.9375rem;
 }
 
-/* Badge styling */
+/* ============================================
+   BADGES
+   ============================================ */
 .badge {
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   font-weight: 500;
-  font-size: 0.8125rem; /* 13px */
+  font-size: 0.8125rem;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -181,7 +184,7 @@ td.numeric-cell {
 }
 
 .badge i {
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
 }
 
 .badge-success {
@@ -208,7 +211,9 @@ td.numeric-cell {
   border: 1px solid #e5e7eb;
 }
 
-/* Empty state */
+/* ============================================
+   EMPTY STATE & CLICKABLE ROWS
+   ============================================ */
 .empty-state {
   padding: 3rem 1rem;
 }
@@ -218,10 +223,9 @@ td.numeric-cell {
 }
 
 .empty-state p {
-  font-size: 1rem; /* 16px */
+  font-size: 1rem;
 }
 
-/* Clickable row styling */
 .clickable-row {
   cursor: pointer;
   transition: all 0.2s ease;
@@ -235,9 +239,10 @@ td.numeric-cell {
   transform: scale(0.998);
 }
 
-/* Modern form styling */
+/* ============================================
+   FORM STYLING
+   ============================================ */
 form {
-  padding-bottom: 20px;
   background: white;
   border-radius: 12px;
   padding: 2rem;
@@ -253,7 +258,7 @@ form {
   border-radius: 8px;
   border: 2px solid #e2e8f0;
   padding: 0.5rem 0.875rem;
-  font-size: 0.9375rem; /* 15px */
+  font-size: 0.9375rem;
   transition: all 0.2s ease;
   background-color: #ffffff;
   height: auto;
@@ -274,7 +279,7 @@ label {
   font-weight: 600;
   color: #2d3748;
   margin-bottom: 0.5rem;
-  font-size: 0.8125rem; /* 13px */
+  font-size: 0.8125rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -293,7 +298,6 @@ label {
   margin-bottom: 0;
 }
 
-/* Ensure form buttons use blue shade for add/update */
 .form-button.btn-primary {
   background: linear-gradient(135deg, #827ffe 0%, #a78bfa 100%) !important;
   color: white !important;
@@ -309,14 +313,16 @@ label {
   margin-top: 32px;
 }
 
-/* Alert styling */
+/* ============================================
+   ALERTS
+   ============================================ */
 .alert {
   border-radius: 10px;
   border: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   padding: 1rem 1.5rem;
   margin-bottom: 1.5rem;
-  font-size: 0.9375rem; /* 15px */
+  font-size: 0.9375rem;
   border-left: 4px solid;
 }
 
@@ -344,29 +350,62 @@ label {
   border-left-color: #6366f1;
 }
 
-#alert_delete, #alert_add, #alert_lr, #alert_update, #alert_approve {
+#alert_delete,
+#alert_add,
+#alert_lr,
+#alert_update,
+#alert_approve {
   display: none;
 }
 
+.alert-danger .close {
+  color: #991b1b;
+}
+
+.alert-warning .close {
+  color: #78350f;
+}
+
+.alert-success .close {
+  color: #065f46;
+}
+
+.alert-info .close {
+  color: #3730a3;
+}
+
+.close {
+  opacity: 0.7;
+  font-size: 1.5rem;
+  transition: all 0.2s ease;
+  font-weight: 400;
+}
+
+.close:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
 /* ============================================
-   MODERN FILTER DESIGN - Image Inspired
+   FILTER DESIGN
    ============================================ */
 
-/* Seamless Filter Toggle Button */
+/* Filter Toggle Button */
 .filter-toggle-seamless {
-  width: 100%;
-  display: flex;
+  width: auto;
+  display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
   background: linear-gradient(135deg, #827ffe 0%, #a78bfa 100%);
   border: none;
-  border-radius: 10px;
-  font-size: 0.875rem; /* 14px */
+  border-radius: 8px;
+  font-size: 1rem;
   font-weight: 500;
   color: #ffffff;
   cursor: pointer;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  height: 42px;
 }
 
 .filter-toggle-seamless:hover {
@@ -376,62 +415,84 @@ label {
 
 .filter-toggle-seamless .filter-icon {
   margin-left: auto;
-  transition: transform 0.2s ease;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .filter-toggle-seamless i {
   color: #ffffff;
 }
 
-/* Filter Wrapper - Single Container */
+/* Filter Wrapper */
 .filter-wrapper-modern {
   background: #ffffff;
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1rem;
   margin-top: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   overflow-anchor: none;
 }
 
 .filter-wrapper-modern .row {
   margin-bottom: 0;
+  align-items: center;
+  display: flex;
 }
 
-.filter-wrapper-modern .collapse {
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #e5e7eb;
-  transition: height 0.2s ease, opacity 0.2s ease;
-  opacity: 0;
+.filter-wrapper-modern .row>[class*="col-"] {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
 }
 
-.filter-wrapper-modern .collapse.show {
+.filter-wrapper-modern .row>[class*="col-"].mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+.filter-wrapper-modern .row>[class*="col-"].mb-3[style*="position: relative"] {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.filter-wrapper-modern .collapse,
+.filter-wrapper-modern .collapsing {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+  transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+}
+
+.filter-wrapper-modern .collapse.show,
+.filter-wrapper-modern .collapsing {
   opacity: 1;
 }
 
-.filter-wrapper-modern .collapsing {
-  transition: height 0.2s ease, opacity 0.2s ease;
+.filter-wrapper-modern .collapse:not(.show) {
   opacity: 0;
 }
 
-/* Filter Container - Remove separate styling */
-.filter-container-modern {
-  background: transparent;
-  border-radius: 0;
-  padding: 0;
-  margin-bottom: 0;
-  margin-top: 0;
-  box-shadow: none;
+/* Add spacing to the form inside the collapse instead */
+.filter-wrapper-modern form {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  /* Override global form styles */
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 1.25rem 2.5rem 0 2.5rem !important;
+  margin: 0.75rem 0 0 0 !important;
 }
 
 /* Filter Section */
 .filter-section-modern {
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
   padding-bottom: 0;
 }
 
-/* Filter Section Header - Force inline layout */
+.filter-section-modern:last-child {
+  margin-bottom: 0;
+}
+
 .filter-section-header {
   display: flex !important;
   align-items: center !important;
@@ -442,7 +503,7 @@ label {
   width: 100%;
 }
 
-.filter-section-header > i {
+.filter-section-header>i {
   color: #a78bfa !important;
   font-size: 1.125rem !important;
   flex-shrink: 0;
@@ -455,10 +516,10 @@ label {
   vertical-align: middle;
 }
 
-.filter-section-header > span,
+.filter-section-header>span,
 .filter-section-header .filter-section-title,
 .filter-section-title {
-  font-size: 0.9375rem !important; /* 15px */
+  font-size: 0.9375rem !important;
   font-weight: 700 !important;
   color: #374151 !important;
   margin: 0 !important;
@@ -490,7 +551,7 @@ label {
 }
 
 .filter-option-label {
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
   font-weight: 700;
   color: #1f2937;
   display: flex;
@@ -507,145 +568,268 @@ label {
   flex-shrink: 0;
 }
 
-/* Floating Label Above Input - Material Design Style */
+/* Filter Labels */
 .filter-floating-label {
-  display: block;
-  font-size: 0.8125rem; /* 13px */
-  font-weight: 600;
-  color: #a78bfa;
-  margin-bottom: 0.375rem;
+  position: absolute;
+  left: 1.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.875rem;
+  color: #9ca3af;
+  pointer-events: none;
+  z-index: 1;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  transition: color 0.2s ease;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  transition: opacity 0.2s ease;
+  width: 16px;
 }
 
 .filter-floating-label i {
   font-size: 0.875rem;
-  width: 16px;
-  flex-shrink: 0;
-}
-
-.filter-input-chip:focus ~ .filter-floating-label,
-.filter-select-chip:focus ~ .filter-floating-label,
-.filter-input-chip:not(:placeholder-shown) ~ .filter-floating-label,
-.filter-select-chip:not([value=""]) ~ .filter-floating-label,
-.filter-floating-label.label-focused,
-.filter-floating-label.label-active {
-  color: #a78bfa;
-  font-weight: 700;
-}
-
-/* Rounded Input Chips */
-.filter-input-chip {
+  color: #9ca3af;
   width: 100%;
-  padding: 0.5625rem 0.75rem;
-  font-size: 0.9375rem; /* 15px */
+  text-align: center;
+  line-height: 1;
+}
+
+.filter-floating-label span {
+  display: none;
+}
+
+.filter-input-chip:focus~.filter-floating-label,
+.filter-input-chip:not(:placeholder-shown)~.filter-floating-label {
+  opacity: 0;
+}
+
+input[type="date"]~.filter-floating-label,
+.filter-input-chip[type="date"]~.filter-floating-label {
+  display: none;
+}
+
+.filter-field-label {
+  position: absolute;
+  top: 0.5rem;
+  left: 1.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.filter-field-label i {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin-right: 0.375rem;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* Filter Inputs - Standardized */
+.filter-input-chip,
+.form-select.filter-select-chip,
+select.filter-select-chip {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  padding-left: 2.75rem;
+  font-size: 0.9375rem;
   line-height: 1.5;
   color: #1f2937;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
+  /* Standard dark color */
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 6px !important;
   transition: all 0.2s ease;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  min-height: 40px;
+  min-height: 44px;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
+/* Date Inputs */
+input[type="date"].filter-input-chip,
+.filter-input-chip[type="date"] {
+  padding: 1.75rem 1rem 0.75rem 1rem;
+  padding-left: 1rem;
+}
+
+input[type="date"].filter-input-chip::-webkit-datetime-edit,
+input[type="date"].filter-input-chip::-webkit-datetime-edit-text,
+input[type="date"].filter-input-chip::-webkit-datetime-edit-month-field,
+input[type="date"].filter-input-chip::-webkit-datetime-edit-day-field,
+input[type="date"].filter-input-chip::-webkit-datetime-edit-year-field {
+  color: inherit;
+  padding: 0;
+}
+
+/* Filter Input States */
 .filter-input-chip:focus {
   outline: none;
   border-color: #a78bfa;
   box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+  background-color: #ffffff;
+  color: #1f2937;
 }
 
 .filter-input-chip:hover {
   border-color: #d1d5db;
+  background-color: #ffffff;
+  color: #1f2937;
 }
 
 .filter-input-chip::placeholder {
   color: #9ca3af;
+  opacity: 1;
 }
 
-/* Select Wrapper for Styling */
-.filter-select-wrapper {
-  position: relative;
+.filter-input-chip:not(:placeholder-shown) {
+  background-color: #ffffff;
+  border-color: #9ca3af;
+  color: #1f2937;
 }
 
-/* Ensure select inputs match regular inputs exactly */
+/* Select Inputs */
 .form-select.filter-select-chip,
 select.filter-select-chip {
-  width: 100%;
-  padding: 0.5625rem 0.75rem;
-  font-size: 0.9375rem; /* 15px */
-  line-height: 1.5;
-  color: #1f2937;
-  background-color: #ffffff !important;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231f2937' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 12px;
-  padding-right: 2rem;
-  cursor: pointer;
-  min-height: 40px;
+  padding: 0.625rem 1rem !important;
+  padding-left: 2.75rem !important;
+  padding-right: 2.5rem !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231f2937' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 1rem center !important;
+  background-size: 12px !important;
+  cursor: pointer !important;
+  height: auto !important;
+  box-sizing: border-box !important;
 }
 
+.form-select.filter-select-chip option,
+select.filter-select-chip option {
+  color: #1f2937 !important;
+  background-color: #ffffff !important;
+}
+
+.filter-wrapper-modern .row>[class*="col-"] select.filter-select-chip {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Multi-select with size attribute */
+select.filter-select-chip[size],
+select.filter-select-chip[multiple] {
+  height: auto !important;
+  min-height: 44px !important;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+  border: 1px solid #e5e7eb !important;
+  background-color: #ffffff !important;
+}
+
+/* Columns Select */
+#id_columns.filter-select-chip {
+  min-height: 100px !important;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+  padding-left: 2.75rem !important;
+  padding-right: 2.5rem !important;
+  line-height: 1.5 !important;
+}
+
+#id_columns.filter-select-chip option {
+  padding: 0.25rem 0.75rem !important;
+  line-height: 1.2 !important;
+}
+
+/* Status, Delivery Status, and Mode Selects */
+#id_status.filter-select-chip,
+#id_d_status.filter-select-chip,
+#id_mode.filter-select-chip,
+select.filter-select-chip[data-section="status"],
+select.filter-select-chip[data-section="delivery"],
+select.filter-select-chip[data-section="mode"] {
+  /* Keep layout specific overrides if needed, but reset colors */
+  padding-top: 1.75rem !important;
+  padding-bottom: 0.75rem !important;
+  padding-left: 1rem !important;
+  padding-right: 2.5rem !important;
+  min-height: 72px !important;
+  border: 1px solid #e5e7eb !important;
+  background-color: #ffffff !important;
+}
+
+/* Make "All" or Empty values look like placeholders (Gray) */
+#id_status.filter-select-chip:has(option[value=""]:checked),
+#id_status.filter-select-chip:has(option[value="all"]:checked),
+#id_d_status.filter-select-chip:has(option[value=""]:checked),
+#id_d_status.filter-select-chip:has(option[value="all"]:checked),
+select.filter-select-chip:has(option[value=""]:checked),
+select.filter-select-chip:has(option[value="all"]:checked) {
+  color: #9ca3af !important;
+  -webkit-text-fill-color: #9ca3af !important;
+}
+
+#id_status.filter-select-chip option,
+#id_d_status.filter-select-chip option,
+#id_mode.filter-select-chip option,
+select.filter-select-chip[data-section="status"] option,
+select.filter-select-chip[data-section="delivery"] option,
+select.filter-select-chip[data-section="mode"] option {
+  padding: 0.5rem !important;
+}
+
+/* Select Focus/Hover States */
+/* Select Focus/Hover States */
 .form-select.filter-select-chip:focus,
 select.filter-select-chip:focus {
   outline: none;
-  border-color: #a78bfa;
+  border-color: #a78bfa !important;
   box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
   background-color: #ffffff !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231f2937' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+  color: #1f2937;
 }
 
 .form-select.filter-select-chip:hover,
 select.filter-select-chip:hover {
-  border-color: #d1d5db;
+  border-color: #d1d5db !important;
   background-color: #ffffff !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231f2937' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
 }
 
-/* Selected States - Color Coding (Enhanced) */
+/* Selected States - Consistent White Background for All Filter Selects */
+/* All filter selects use the same white background regardless of selection state */
 .filter-select-chip.filter-selected-status,
-.filter-select-chip[data-section="status"]:not([value=""]) {
-  background-color: #ede9fe;
-  border-color: #a78bfa;
-  color: #6d28d9;
-}
-
 .filter-select-chip.filter-selected-delivery,
-.filter-select-chip[data-section="delivery"]:not([value=""]) {
-  background-color: #fce7f3;
-  border-color: #ec4899;
-  color: #9f1239;
-}
-
 .filter-select-chip.filter-selected-mode,
-.filter-select-chip[data-section="mode"]:not([value=""]) {
-  background-color: #dbeafe;
-  border-color: #60a5fa;
-  color: #1e40af;
-}
-
 .filter-select-chip.filter-selected-columns,
-.filter-select-chip[data-section="columns"]:not([value=""]) {
-  background-color: #fef3c7;
-  border-color: #f59e0b;
-  color: #78350f;
+.filter-select-chip[data-section="status"],
+.filter-select-chip[data-section="delivery"],
+.filter-select-chip[data-section="mode"],
+.filter-select-chip[data-section="columns"],
+#id_status.filter-select-chip,
+#id_d_status.filter-select-chip,
+#id_mode.filter-select-chip,
+#id_columns.filter-select-chip {
+  background-color: #ffffff !important;
+  border-color: #e5e7eb !important;
+  color: #1f2937 !important;
 }
 
-/* Input with value gets highlight */
-.filter-input-chip:not(:placeholder-shown) {
-  background-color: #ffffff;
-  border-color: #9ca3af;
-}
 
-/* Action Buttons */
+
+/* Filter Action Buttons */
 .filter-actions-bar {
   display: flex;
   align-items: center;
@@ -659,7 +843,7 @@ select.filter-select-chip:hover {
 
 .btn-filter-reset {
   padding: 0.5rem 1.25rem;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
   font-weight: 600;
   border-radius: 8px;
   border: 2px solid #d1d5db;
@@ -680,7 +864,7 @@ select.filter-select-chip:hover {
 
 .btn-filter-apply {
   padding: 0.5rem 1.25rem;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
   font-weight: 600;
   border-radius: 8px;
   border: none;
@@ -701,12 +885,11 @@ select.filter-select-chip:hover {
   color: #ffffff;
 }
 
-/* Collapse button styling */
+/* Collapse */
 #collapseButton {
   margin-bottom: 0;
 }
 
-/* Collapse panel styling */
 #collapseExample {
   margin-top: 0;
   padding: 0;
@@ -720,20 +903,11 @@ select.filter-select-chip:hover {
   transition: height 0.2s ease;
 }
 
-.collapse.show {
-  animation: collapseFade 0.2s ease;
-}
 
-@keyframes collapseFade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 
-/* Modal styling */
+/* ============================================
+   MODAL STYLING
+   ============================================ */
 .modal-content {
   border-radius: 12px;
   border: none;
@@ -757,68 +931,12 @@ select.filter-select-chip:hover {
   padding: 1rem 1.5rem;
 }
 
-.close {
-  opacity: 0.7;
-  font-size: 1.5rem;
-  transition: all 0.2s ease;
-  font-weight: 400;
-}
-
-.alert-danger .close {
-  color: #991b1b;
-}
-
-.alert-warning .close {
-  color: #78350f;
-}
-
-.alert-success .close {
-  color: #065f46;
-}
-
-.alert-info .close {
-  color: #3730a3;
-}
-
-.close:hover {
-  opacity: 1;
-  transform: scale(1.1);
-}
-
-/* Total table styling */
+/* ============================================
+   TABLE TOTAL & PAGINATION
+   ============================================ */
 .table-total-wrapper {
   margin: 2rem 0;
   margin-bottom: 2rem;
-}
-
-/* Pagination wrapper - ensure proper spacing */
-.pagination-wrapper {
-  margin-bottom: 5rem !important;
-  padding-bottom: 1rem;
-}
-
-.pagination-wrapper-with-total {
-  margin-bottom: 6rem !important; /* Extra bottom margin when total is present to prevent footer cutoff */
-  padding-bottom: 2rem;
-}
-
-/* Pagination spacing to prevent footer overlap */
-.container-fluid {
-  margin-bottom: 0;
-}
-
-/* Target pagination containers directly */
-.container-fluid:has(nav.pagination),
-.container-fluid:has(.pagination) {
-  margin-bottom: 0 !important;
-  padding-bottom: 0;
-}
-
-/* Direct pagination nav elements */
-nav.pagination {
-  margin-top: 2rem;
-  margin-bottom: 0 !important;
-  padding-bottom: 0;
 }
 
 .table-total {
@@ -836,94 +954,225 @@ nav.pagination {
 .table-total th {
   color: white;
   padding: 1.25rem 1.5rem;
-  font-size: 1rem; /* 16px */
+  font-size: 1rem;
   font-weight: 600;
+  text-align: left;
+  border: none;
 }
 
 .table-total th.total-label {
   text-align: left;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.table-total th.total-label i {
+  margin-right: 0.5rem;
 }
 
 .table-total th.total-value {
   text-align: right;
   font-family: 'Courier New', monospace;
-  font-size: 1.25rem; /* 20px */
+  font-size: 1.25rem;
 }
 
-/* Mobile responsive improvements */
+.pagination-wrapper {
+  margin-bottom: 5rem !important;
+  padding-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination-wrapper-with-total {
+  margin-bottom: 2rem !important;
+  padding-bottom: 1rem;
+}
+
+.pagination-wrapper-bottom {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 0.875rem 1rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60px;
+}
+
+.pagination-wrapper-bottom .container-fluid {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.pagination-wrapper-bottom nav {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.container-fluid {
+  margin-bottom: 0;
+}
+
+.container-fluid:has(nav.pagination),
+.container-fluid:has(.pagination) {
+  margin-bottom: 0 !important;
+  padding-bottom: 0;
+}
+
+nav.pagination {
+  margin-top: 0;
+  margin-bottom: 0 !important;
+  padding-bottom: 0;
+}
+
+.filter-wrapper-modern .pagination {
+  margin-top: 0;
+  margin-bottom: 0;
+  justify-content: flex-end;
+  align-items: center;
+  display: flex;
+}
+
+.filter-wrapper-modern .pagination .page-item,
+.pagination-wrapper-bottom .pagination .page-item {
+  display: flex;
+  align-items: center;
+  height: 42px;
+}
+
+.filter-wrapper-modern .pagination .page-link,
+.pagination-wrapper-bottom .pagination .page-link {
+  padding: 0.625rem 1rem;
+  font-size: 1rem;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+.pagination-wrapper-bottom .pagination {
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
 @media screen and (max-width: 768px) {
   .filter-toggle-seamless {
-    padding: 0.75rem 1rem;
-    font-size: 0.875rem;
+    width: 100%;
+    padding: 0.625rem 1rem;
+    font-size: 1rem;
+    height: 42px;
+    justify-content: center;
   }
-  
-  .filter-container-modern {
-    padding: 1.5rem;
+
+  .filter-wrapper-modern {
+    padding: 0.75rem 0.875rem;
   }
-  
+
+  .pagination-wrapper-bottom {
+    padding: 0.75rem 0.875rem;
+    min-height: 56px;
+  }
+
+  .filter-wrapper-modern .row .col-12.mb-2 {
+    margin-bottom: 0.5rem !important;
+  }
+
+  .filter-wrapper-modern .text-md-right {
+    text-align: center !important;
+  }
+
+  .filter-wrapper-modern .pagination {
+    justify-content: center !important;
+  }
+
+  .pagination-wrapper-bottom {
+    padding: 0.5rem 0.75rem;
+  }
+
   .filter-section-modern {
     margin-bottom: 2rem;
   }
-  
+
+  .filter-wrapper-modern form {
+    padding: 1rem 1rem 0 1rem !important;
+  }
+
   .filter-actions-bar {
     flex-direction: column-reverse;
     gap: 0.75rem;
   }
-  
+
   .btn-filter-reset,
   .btn-filter-apply {
     width: 100%;
     justify-content: center;
   }
-  
+
   .table-wrapper {
     margin: 1rem 0;
     border-radius: 8px;
   }
-  
+
   .table-responsive {
     margin: 0;
   }
-  
+
   thead th {
-    font-size: 0.8125rem; /* 13px */
+    font-size: 0.8125rem;
     padding: 0.75rem 0.5rem;
   }
-  
+
   tbody td {
-    font-size: 0.875rem; /* 14px */
+    font-size: 0.875rem;
     padding: 0.75rem 0.5rem;
   }
-  
+
   form {
     padding: 1.5rem 1rem;
   }
-  
+
   .form-control {
-    font-size: 1rem; /* 16px - Prevents zoom on iOS */
+    font-size: 1rem;
   }
-  
+
   .badge {
-    font-size: 0.75rem; /* 12px */
+    font-size: 0.75rem;
     padding: 0.35rem 0.5rem;
   }
-  
+
   .table-total th {
-    font-size: 0.9375rem; /* 15px */
+    font-size: 0.9375rem;
     padding: 1rem;
   }
-  
+
   .table-total th.total-value {
-    font-size: 1.125rem; /* 18px */
+    font-size: 1.125rem;
   }
-  
+
   .table-total-wrapper {
     margin-bottom: 1.5rem;
   }
-  
+
   .pagination-wrapper-with-total {
     margin-bottom: 3rem;
     padding-bottom: 1.5rem;
