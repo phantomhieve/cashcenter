@@ -139,12 +139,30 @@ def autoComplete(request):
     if q and field:
         users = getUsersFromGroup(request.user)
         lookup = {f'{field}__icontains': q}
-        # Use distinct() at database level instead of set() in Python
-        data = LedgerData.objects.filter(
-            **lookup,
-            user__in=users
-        ).values_list(field, flat=True).distinct()[:10]
-        
-        return JsonResponse(list(data), safe=False)
+        queryset = (
+            LedgerData.objects.filter(
+                **lookup,
+                user__in=users
+            )
+            .order_by(field)
+            .values_list(field, flat=True)
+        )
+
+        unique_results = []
+        seen = set()
+
+        for value in queryset:
+            if value is None:
+                continue
+            # Normalize to string for comparison but keep original text for display
+            normalized = str(value).strip().lower()
+            if not normalized or normalized in seen:
+                continue
+            seen.add(normalized)
+            unique_results.append(str(value).strip())
+            if len(unique_results) >= 10:
+                break
+
+        return JsonResponse(unique_results, safe=False)
     
     return JsonResponse([], safe=False)
