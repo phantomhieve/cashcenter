@@ -252,6 +252,7 @@ form {
 
 .form-group {
   margin-bottom: 1.5rem;
+  position: relative;
 }
 
 .form-control {
@@ -1173,8 +1174,81 @@ nav.pagination {
     margin-bottom: 1.5rem;
   }
 
+
   .pagination-wrapper-with-total {
     margin-bottom: 3rem;
     padding-bottom: 1.5rem;
   }
+}
+
+/* ============================================
+   AUTOCOMPLETE STYLING
+   ============================================ */
+
+/* Dropdown Container */
+.dropdown-menu.show,
+.dropdown-menu[style*="display: block"] {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  margin-top: 0.25rem !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  padding: 0 !important;
+  min-width: 200px !important;
+  z-index: 1050 !important;
+  position: absolute !important;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+/* Dropdown Items */
+.dropdown-menu .dropdown-item,
+.dropdown-menu a {
+  padding: 0.75rem 1rem !important;
+  cursor: pointer !important;
+  font-size: 0.9375rem !important;
+  color: #374151 !important;
+  border-bottom: 1px solid #f3f4f6 !important;
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+  background-color: transparent !important;
+  text-decoration: none !important;
+  display: block !important;
+}
+
+/* Remove border from last item */
+.dropdown-menu .dropdown-item:last-child,
+.dropdown-menu a:last-child {
+  border-bottom: none !important;
+}
+
+/* Hover & Focus States */
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus,
+.dropdown-menu .dropdown-item.active,
+.dropdown-menu a:hover,
+.dropdown-menu a:focus {
+  background: linear-gradient(135deg, #827ffe 0%, #a78bfa 100%) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  text-decoration: none !important;
+}
+
+/* Custom Scrollbar */
+.dropdown-menu.show::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-menu.show::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 0 8px 8px 0;
+}
+
+.dropdown-menu.show::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.dropdown-menu.show::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
