@@ -1,11 +1,11 @@
 @font-face {
     font-family: Ubuntu-Regular;
-    src: url('../fonts/ubuntu/Ubuntu-Regular.ttf'); 
+    src: url('../fonts/ubuntu/Ubuntu-Regular.ttf');
 }
-  
+
 @font-face {
     font-family: Ubuntu-Bold;
-    src: url('../fonts/ubuntu/Ubuntu-Bold.ttf'); 
+    src: url('../fonts/ubuntu/Ubuntu-Bold.ttf');
 }
 
 .navbar {
@@ -25,7 +25,8 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    font-size: 1.125rem; /* 18px */
+    font-size: 1.125rem;
+    /* 18px */
     margin: 0;
     text-decoration: none;
     transition: transform 0.2s ease;
@@ -38,7 +39,8 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    font-size: 1.125rem; /* 18px */
+    font-size: 1.125rem;
+    /* 18px */
     margin: 0;
     text-shadow: none;
 }
@@ -63,7 +65,8 @@
     font-family: Ubuntu-Regular;
     color: white !important;
     font-weight: 500;
-    font-size: 0.9375rem; /* 15px */
+    font-size: 0.9375rem;
+    /* 15px */
     padding: 0.35rem 0.9rem !important;
     border-radius: 8px;
     transition: all 0.2s ease;
@@ -138,6 +141,29 @@
     box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
 }
 
+.navbar-toggler-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.navbar-toggler-icon i {
+    transition: transform 0.3s ease, opacity 0.2s ease;
+    font-size: 28px;
+    color: #fff;
+}
+
+/* Make the cross look less bold/heavy */
+.navbar-toggler-icon i.fa-times {
+    font-weight: 300;
+    /* Try to make it lighter if font supports it, or scale it down slightly */
+    transform: rotate(90deg);
+    font-size: 24px;
+    /* Slightly smaller to match visual weight of bars */
+}
+
 .navbar-nav {
     gap: 0.5rem;
     align-items: center;
@@ -175,7 +201,7 @@
     outline: none;
 }
 
-@media screen and (max-width: 1023.98px) {
+@media screen and (max-width: 1199.98px) {
     .navbar {
         padding: 0.5rem 1rem;
         flex-wrap: wrap;
@@ -211,7 +237,7 @@
         justify-content: flex-start;
     }
 
-    .navbar-expand-md .navbar-toggler {
+    .navbar-expand-xl .navbar-toggler {
         display: block;
         border: 2px solid rgba(255, 255, 255, 0.3);
         border-radius: 8px;
@@ -220,8 +246,8 @@
         margin-bottom: 0;
     }
 
-    .navbar-expand-md .navbar-collapse {
-        display: flex !important;
+    .navbar-expand-xl .navbar-collapse {
+        display: none;
         flex-direction: column;
         flex-basis: 100%;
         flex-grow: 1;
@@ -233,8 +259,15 @@
         box-shadow: none;
     }
 
-    .navbar-expand-md .navbar-collapse.collapsing {
-        height: auto !important;
+    .navbar-expand-xl .navbar-collapse.show {
+        display: flex;
+    }
+
+    .navbar-expand-xl .navbar-collapse.collapsing {
+        display: block;
+        height: 0;
+        overflow: hidden;
+        transition: height 0.35s ease;
     }
 
     .navbar-item,
@@ -265,16 +298,19 @@
     .navbar .form-inline .form-control {
         width: 100%;
         height: 40px;
-        font-size: 1rem; /* prevent iOS zoom */
+        font-size: 1rem;
+        /* prevent iOS zoom */
     }
 
     .navbar .btn-danger {
         width: 100%;
         padding: 0.55rem 0.95rem;
         font-size: 0.95rem;
-        margin: 0.35rem 0 0;
+        margin: 0;
         align-self: stretch;
         box-shadow: 0 7px 16px rgba(244, 63, 94, 0.25);
+        justify-content: flex-start;
+        text-align: left;
     }
 
     .navbar .btn-danger:hover,
@@ -282,77 +318,7 @@
         box-shadow: 0 9px 18px rgba(244, 63, 94, 0.25);
     }
 
-    .navbar-expand-md .navbar-collapse:not(.show) .navbar-nav {
-        width: 100%;
-    }
-
-    .navbar-expand-md .navbar-collapse:not(.show) .navbar-nav > li,
-    .navbar-expand-md .navbar-collapse:not(.show) .navbar-nav > .navbar-item,
-    .navbar-expand-md .navbar-collapse:not(.show) .navbar-nav > .navbar-logout {
-        display: none;
-    }
-
-    .navbar-expand-md .navbar-collapse:not(.show) .navbar-nav > .form-inline {
-        display: flex !important;
-        width: 100%;
-        margin-bottom: 0;
-    }
-
-    .navbar-expand-md .navbar-collapse.show .navbar-nav > li,
-    .navbar-expand-md .navbar-collapse.show .navbar-nav > .navbar-item,
-    .navbar-expand-md .navbar-collapse.show .navbar-nav > .navbar-logout {
-        display: flex;
-    }
-
-    .navbar-expand-md .navbar-collapse.show .navbar-nav > .form-inline {
-        display: flex !important;
-        width: 100%;
-        margin-bottom: 0.65rem;
-    }
+    /* Removed manual child toggling to allow bootstrap transition */
 }
 
-@media screen and (min-width: 1024px) and (max-width: 1199.98px) {
-    .navbar {
-        padding: 0.45rem 1.25rem;
-    }
-
-    .navbar-heading,
-    .navbar-heading h1 {
-        font-size: 1.1rem;
-    }
-
-    .navbar-nav {
-        flex-wrap: nowrap;
-        gap: 0.35rem;
-        row-gap: 0;
-        align-items: center;
-        padding-bottom: 0;
-    }
-
-    .navbar .form-inline {
-        gap: 0.45rem;
-        margin-right: 0.75rem;
-    }
-
-    .navbar .form-inline .form-control {
-        width: 240px;
-        max-width: 45vw;
-        height: 38px;
-        font-size: 0.95rem;
-    }
-
-    .navbar-content {
-        padding: 0.45rem 0.85rem !important;
-        font-size: 0.92rem;
-        border-radius: 8px;
-        background-color: transparent;
-    }
-
-    .navbar .btn-danger {
-        width: auto;
-        padding: 0.45rem 1rem;
-        font-size: 0.9rem;
-        margin-top: 0;
-        box-shadow: 0 4px 12px rgba(244, 63, 94, 0.18);
-    }
-}
+/* Removed 1024-1199 block as it is now covered by mobile styles */
