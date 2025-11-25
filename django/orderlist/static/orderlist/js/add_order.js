@@ -1,10 +1,10 @@
-document.addEventListener('DOMContentLoaded', ()=>{
-	
+document.addEventListener('DOMContentLoaded', () => {
+
 	// Alert for wrong submission
 	let url = new URL(window.location);
 	let params = new URLSearchParams(url.search);
 	let element = document.querySelector("#alert_lr")
-	if(params.get('invalid'))
+	if (params.get('invalid'))
 		element.style.display = "block";
 	else
 		element.style.display = "none";
@@ -12,11 +12,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	// Alert for adding/updating content
 	let element_add = document.querySelector("#alert_add");
 	let content_add = document.querySelector('#alert_add_content');
-	if(params.get('sucessful')){
+	if (params.get('sucessful')) {
 		element_add.style.display = "block";
 		content_add.innerHTML = `${params.get('sucessful')}`
 	}
-	else if(params.get('update')){
+	else if (params.get('update')) {
 		element_add.style.display = "block";
 		content_add.innerHTML = `${params.get('update')}`
 	}
@@ -26,22 +26,22 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	// Dynamic inline formset row add
 	// Deletion via trash icon with confirm modal
 	const fulfillmentTableBody = document.getElementById('fulfillment-rows');
-	function attachImmediateDelete(container){
-		container.querySelectorAll('button.delete-fulfillment').forEach((btn)=>{
-			btn.addEventListener('click', (e)=>{
+	function attachImmediateDelete(container) {
+		container.querySelectorAll('button.delete-fulfillment').forEach((btn) => {
+			btn.addEventListener('click', (e) => {
 				e.preventDefault();
 				const row = btn.closest('tr.fulfillment-row');
 				const checkbox = row.querySelector('input.fulfillment-delete-input');
-				if(checkbox){
+				if (checkbox) {
 					checkbox.checked = true;
 					const form = checkbox.closest('form');
-					if(form){ form.submit(); }
+					if (form) { form.submit(); }
 				}
 			});
 		});
 	}
 
-	if(fulfillmentTableBody){
+	if (fulfillmentTableBody) {
 		attachImmediateDelete(fulfillmentTableBody);
 	}
 
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 		// Add event listener
 		modeField.addEventListener('change', toggleAgentNameField);
-		
+
 		// Initial check
 		toggleAgentNameField();
 	}
@@ -82,10 +82,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	// Initialize the agent name toggle immediately
 	initAgentNameToggle();
 
+	// Autocomplete initialization moved to template
+
 	// Validation: Check if total fulfillment quantity exceeds number of parcels
 	function validateFulfillmentQuantity() {
 		const numParcelsField = document.getElementById('id_num_parcels');
-		
+
 		if (!numParcelsField) {
 			return true;
 		}
@@ -105,11 +107,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
 			// Check if this row is marked for deletion
 			const row = input.closest('tr.fulfillment-row');
 			const deleteCheckbox = row ? row.querySelector('input[name$="-DELETE"]') : null;
-			
+
 			if (deleteCheckbox && deleteCheckbox.checked) {
 				return; // Skip deleted rows
 			}
-			
+
 			if (input.value && !isNaN(parseInt(input.value))) {
 				const quantity = parseInt(input.value);
 				totalQuantity += quantity;
@@ -154,16 +156,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 	// Make validation function globally available
 	window.validateFulfillmentQuantity = validateFulfillmentQuantity;
-	
+
 	// Add form submission validation with delay to ensure DOM is ready
-	setTimeout(function() {
+	setTimeout(function () {
 		const form = document.querySelector('form');
-		
+
 		if (form) {
-			form.addEventListener('submit', function(e) {
+			form.addEventListener('submit', function (e) {
 				// Force validation before any submission
 				const isValid = validateFulfillmentQuantity();
-				
+
 				if (!isValid) {
 					e.preventDefault();
 					e.stopPropagation();
@@ -178,10 +180,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	function addRealTimeValidation() {
 		const fulfillmentRows = document.querySelectorAll('tr.fulfillment-row');
 		fulfillmentRows.forEach(row => {
-			const quantityField = row.querySelector('input[name*="quantity"]') || 
-								 row.querySelector('input[type="number"]');
+			const quantityField = row.querySelector('input[name*="quantity"]') ||
+				row.querySelector('input[type="number"]');
 			if (quantityField) {
-				quantityField.addEventListener('input', function() {
+				quantityField.addEventListener('input', function () {
 					// Remove any existing validation error when user starts typing
 					const existingError = document.getElementById('validation-error');
 					if (existingError) {

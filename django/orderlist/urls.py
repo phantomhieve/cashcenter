@@ -4,6 +4,7 @@ from .views import (
     OrderListView,
     orderAddView,
     orderDeleteView,
+    autocompleteView,
 )
 
 
@@ -27,5 +28,10 @@ urlpatterns = [
         'delete/<int:id>/',
         login_required(orderDeleteView, login_url='/user/login/'),
         name='order_delete'
+    ),
+    path(
+        'autocomplete/',
+        login_required(autocompleteView, login_url='/user/login/'),
+        name='order_autocomplete'
     ),
 ]
