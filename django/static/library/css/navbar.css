@@ -117,7 +117,10 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    width: auto;
+    /* Fix desktop width */
 }
+
 
 .navbar .form-inline .form-control {
     height: 36px;
@@ -201,6 +204,11 @@
     outline: none;
 }
 
+.navbar-brand {
+    margin-right: auto !important;
+    /* Push search and links to the right on desktop */
+}
+
 @media screen and (max-width: 1199.98px) {
     .navbar {
         padding: 0.5rem 1rem;
@@ -235,6 +243,8 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
+        margin-right: auto;
+        /* Push search and links to the right */
     }
 
     .navbar-expand-xl .navbar-toggler {
@@ -289,10 +299,21 @@
 
     .navbar .form-inline {
         width: 100%;
-        margin: 0 0 0.65rem 0 !important;
+        margin: 0.5rem 0 !important;
         padding: 0 !important;
         gap: 0.5rem;
         align-items: stretch;
+        display: flex !important;
+        /* Ensure it's displayed */
+        order: 3;
+        /* Force to bottom on mobile */
+        margin-bottom: 0 !important;
+    }
+
+    /* Add spacing to body to prevent navbar overlap on mobile */
+    body {
+        padding-top: 60px !important;
+        /* Standard spacing, Ledger page will need more */
     }
 
     .navbar .form-inline .form-control {
