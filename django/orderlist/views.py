@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView
 from django_filters.views import FilterView
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
+from ledger.backend import getUsersFromGroup
 
 from .models import Order
 from .filters import OrderFilter
@@ -106,3 +107,40 @@ def orderDeleteView(request, id=None):
         instance.delete()
         return HttpResponseRedirect(reverse('order_list') + f'?order-no={order_number}')
     return render(request, '404.html')
+
+@user_passes_test(lambda u: u.is_staff)
+def autocompleteView(request):
+    """View for autocomplete suggestions."""
+    if 'field' not in request.GET or 'q' not in request.GET:
+        return JsonResponse([], safe=False)
+
+    field = request.GET['field']
+    query = request.GET['q']
+    
+    allowed_fields = ['company_name', 'item', 'agent_name', 'transport', 'order_number']
+    if field not in allowed_fields:
+        return JsonResponse([], safe=False)
+
+    # Filter for values containing the query and belonging to the user's group
+    users = getUsersFromGroup(request.user)
+    results = Order.objects.filter(
+        **{f"{field}__icontains": query},
+        user__in=users
+    ).order_by(field).values_list(field, flat=True)
+
+    unique_results = []
+    seen = set()
+
+    for value in results:
+        if value is None:
+            continue
+        # Normalize to string for comparison but keep original text for display
+        normalized = str(value).strip().lower()
+        if not normalized or normalized in seen:
+            continue
+        seen.add(normalized)
+        unique_results.append(str(value).strip())
+        if len(unique_results) >= 10:
+            break
+
+    return JsonResponse(unique_results, safe=False)
