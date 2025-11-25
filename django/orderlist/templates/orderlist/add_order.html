@@ -3,361 +3,514 @@
 {% load widget_tweaks %}
 
 {% block title %}
-	Add Order
+Add Order
 {% endblock title %}
 
 {% block css %}
-	<link rel="stylesheet" type="text/css" href="{% static 'ledger/css/main.css'%}">
-	<style>
-		/* Scoped tweaks for Add Order page (match Ledger look & feel) */
-		.order-form { max-width: 960px; }
-		.order-form table.table th,
-		.order-form table.table td { vertical-align: middle; }
-		.order-form h5 { font-family: Lato-Bold; text-transform: uppercase; color: #5b59d6; margin-top: 10px; }
+<link rel="stylesheet" type="text/css" href="{% static 'ledger/css/main.css'%}">
+<style>
+	/* Scoped tweaks for Add Order page (match Ledger look & feel) */
+	.order-form {
+		max-width: 960px;
+	}
 
-		/* Compact form spacing */
-		.order-form .form-row { margin-left: -8px; margin-right: -8px; }
-		.order-form .form-row > .form-group { padding-left: 8px; padding-right: 8px; margin-bottom: 12px; }
-		.order-form .form-control { height: 38px; padding-top: 6px; padding-bottom: 6px; }
+	.order-form table.table th,
+	.order-form table.table td {
+		vertical-align: middle;
+	}
 
-		/* Tighter column layout for fulfillment table */
-		.order-form table.table thead th:nth-child(1) { width: 35%; }
-		.order-form table.table thead th:nth-child(2) { width: 20%; text-align: center; }
-		.order-form table.table thead th:nth-child(3) { width: 25%; text-align: center; }
-		.order-form table.table thead th:nth-child(4) { width: 10%; text-align: center; }
-		.order-form table.table tbody td:nth-child(2),
-		.order-form table.table tbody td:nth-child(3),
-		.order-form table.table tbody td:nth-child(4) { text-align: center; }
+	.order-form h5 {
+		font-family: Lato-Bold;
+		text-transform: uppercase;
+		color: #5b59d6;
+		margin-top: 10px;
+	}
 
-		/* Limit input widths so columns don't stretch too wide */
+	/* Compact form spacing */
+	.order-form .form-row {
+		margin-left: -8px;
+		margin-right: -8px;
+	}
+
+	.order-form .form-row>.form-group {
+		padding-left: 8px;
+		padding-right: 8px;
+		margin-bottom: 12px;
+	}
+
+	.order-form .form-control {
+		height: 38px;
+		padding-top: 6px;
+		padding-bottom: 6px;
+	}
+
+	/* Tighter column layout for fulfillment table */
+	.order-form table.table thead th:nth-child(1) {
+		width: 35%;
+	}
+
+	.order-form table.table thead th:nth-child(2) {
+		width: 20%;
+		text-align: center;
+	}
+
+	.order-form table.table thead th:nth-child(3) {
+		width: 25%;
+		text-align: center;
+	}
+
+	.order-form table.table thead th:nth-child(4) {
+		width: 10%;
+		text-align: center;
+	}
+
+	.order-form table.table tbody td:nth-child(2),
+	.order-form table.table tbody td:nth-child(3),
+	.order-form table.table tbody td:nth-child(4) {
+		text-align: center;
+	}
+
+	/* Limit input widths so columns don't stretch too wide */
+	.order-form #fulfillment-rows input[type="date"],
+	.order-form #fulfillment-rows input[type="number"],
+	.order-form #fulfillment-rows input[type="text"] {
+		width: 100%;
+		max-width: 180px;
+	}
+
+	/* Center delete icon, make it a bit crisper */
+	.order-form .delete-fulfillment {
+		line-height: 1;
+	}
+
+	.order-form .delete-fulfillment i {
+		font-size: 18px;
+		transition: color .15s ease-in-out;
+	}
+
+	.order-form .delete-fulfillment:hover i {
+		color: #e63946;
+	}
+
+	/* Fulfillment table theming to match ledger */
+	.order-form .fulfillment-table {
+		border-radius: 6px;
+		overflow: hidden;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+	}
+
+	.order-form .fulfillment-table .table {
+		margin-bottom: 0;
+	}
+
+	.order-form .fulfillment-table .table {
+		min-width: 0;
+	}
+
+	.order-form .fulfillment-table thead th {
+		font-family: Lato-Bold;
+		font-size: 16px;
+		background-color: #827ffe;
+		color: #fff;
+		text-transform: uppercase;
+		line-height: 1.4;
+		padding: 10px 16px;
+		border: 0;
+	}
+
+	.order-form .fulfillment-table thead th:first-child {
+		border-top-left-radius: 6px;
+	}
+
+	.order-form .fulfillment-table thead th:last-child {
+		border-top-right-radius: 6px;
+	}
+
+	.order-form .fulfillment-table tbody td {
+		font-family: Lato-Regular;
+		font-size: 15px;
+		color: #808080;
+		padding: 12px 16px;
+	}
+
+	.order-form .fulfillment-table tbody tr:nth-child(even) {
+		background-color: #f8f6ff;
+	}
+
+	.order-form .fulfillment-table .form-control {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	/* Buttons row alignment */
+	.order-form .form-button {
+		height: 44px;
+	}
+
+	/* Agent name field styling */
+	#agent-name-group {
+		transition: all 0.3s ease;
+	}
+
+	#agent-name-group.show {
+		display: block !important;
+	}
+
+	#agent-name-group.hide {
+		display: none !important;
+	}
+
+	/* Fix double arrows on dropdown selects */
+	.order-form select {
+		appearance: none !important;
+		-webkit-appearance: none !important;
+		-moz-appearance: none !important;
+		-ms-appearance: none !important;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231f2937' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+		background-repeat: no-repeat !important;
+		background-position: right 0.75rem center !important;
+		background-size: 12px !important;
+		padding-right: 2rem !important;
+	}
+
+	/* Hide default arrow in IE */
+	.order-form select::-ms-expand {
+		display: none !important;
+	}
+
+	/* Responsive adjustments */
+	@media (max-width: 768px) {
+		.order-form {
+			max-width: 100%;
+		}
+
+		.order-form table.table thead th:nth-child(1) {
+			width: 40%;
+		}
+
+		.order-form table.table thead th:nth-child(2) {
+			width: 25%;
+		}
+
+		.order-form table.table thead th:nth-child(3) {
+			width: 25%;
+		}
+
+		.order-form table.table thead th:nth-child(4) {
+			width: 10%;
+		}
+
 		.order-form #fulfillment-rows input[type="date"],
 		.order-form #fulfillment-rows input[type="number"],
-		.order-form #fulfillment-rows input[type="text"] { 
-			width: 100%; 
-			max-width: 180px; 
+		.order-form #fulfillment-rows input[type="text"] {
+			width: 100%;
+			max-width: 100%;
 		}
 
-		/* Center delete icon, make it a bit crisper */
-		.order-form .delete-fulfillment { line-height: 1; }
-		.order-form .delete-fulfillment i { font-size: 18px; transition: color .15s ease-in-out; }
-		.order-form .delete-fulfillment:hover i { color: #e63946; }
-
-		/* Fulfillment table theming to match ledger */
-		.order-form .fulfillment-table { border-radius: 6px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
-		.order-form .fulfillment-table .table { margin-bottom: 0; }
-		.order-form .fulfillment-table .table { min-width: 0; }
-		.order-form .fulfillment-table thead th {
-			font-family: Lato-Bold; font-size: 16px; background-color: #827ffe; color: #fff;
-			text-transform: uppercase; line-height: 1.4; padding: 10px 16px; border: 0;
-		}
-		.order-form .fulfillment-table thead th:first-child { border-top-left-radius: 6px; }
-		.order-form .fulfillment-table thead th:last-child { border-top-right-radius: 6px; }
-		.order-form .fulfillment-table tbody td { font-family: Lato-Regular; font-size: 15px; color: #808080; padding: 12px 16px; }
-		.order-form .fulfillment-table tbody tr:nth-child(even) { background-color: #f8f6ff; }
-		.order-form .fulfillment-table .form-control { margin-left: auto; margin-right: auto; }
-
-		/* Buttons row alignment */
-		.order-form .form-button { height: 44px; }
-
-		/* Agent name field styling */
-		#agent-name-group {
-			transition: all 0.3s ease;
-		}
-		#agent-name-group.show {
-			display: block !important;
-		}
-		#agent-name-group.hide {
-			display: none !important;
+		.order-form .fulfillment-table {
+			margin: 0 -15px;
+			border-radius: 0;
 		}
 
-		/* Fix double arrows on dropdown selects */
-		.order-form select {
-			appearance: none !important;
-			-webkit-appearance: none !important;
-			-moz-appearance: none !important;
-			-ms-appearance: none !important;
-			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231f2937' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
-			background-repeat: no-repeat !important;
-			background-position: right 0.75rem center !important;
-			background-size: 12px !important;
-			padding-right: 2rem !important;
-		}
-		
-		/* Hide default arrow in IE */
-		.order-form select::-ms-expand {
-			display: none !important;
+		.order-form .fulfillment-table .table {
+			width: 100%;
+			min-width: 0;
 		}
 
-		/* Responsive adjustments */
-		@media (max-width: 768px) {
-			.order-form { max-width: 100%; }
-			.order-form table.table thead th:nth-child(1) { width: 40%; }
-			.order-form table.table thead th:nth-child(2) { width: 25%; }
-			.order-form table.table thead th:nth-child(3) { width: 25%; }
-			.order-form table.table thead th:nth-child(4) { width: 10%; }
-			.order-form #fulfillment-rows input[type="date"],
-			.order-form #fulfillment-rows input[type="number"],
-			.order-form #fulfillment-rows input[type="text"] { 
-				width: 100%; 
-				max-width: 100%; 
-			}
-			.order-form .fulfillment-table {
-				margin: 0 -15px;
-				border-radius: 0;
-			}
-			.order-form .fulfillment-table .table {
-				width: 100%;
-				min-width: 0;
-			}
-			.order-form .fulfillment-table thead th,
-			.order-form .fulfillment-table tbody td {
-				padding: 10px;
-				font-size: 14px;
-			}
+		.order-form .fulfillment-table thead th,
+		.order-form .fulfillment-table tbody td {
+			padding: 10px;
+			font-size: 14px;
+		}
+	}
+
+	@media (max-width: 576px) {
+		.order-form .fulfillment-table {
+			margin: 0;
+			border-radius: 12px;
+			background: linear-gradient(135deg, rgba(130, 127, 254, 0.25) 0%, rgba(167, 139, 250, 0.15) 100%);
 		}
 
-		@media (max-width: 576px) {
-			.order-form .fulfillment-table {
-				margin: 0;
-				border-radius: 12px;
-				background: linear-gradient(135deg, rgba(130, 127, 254, 0.25) 0%, rgba(167, 139, 250, 0.15) 100%);
-			}
-			.order-form .fulfillment-table .table,
-			.order-form .fulfillment-table thead,
-			.order-form .fulfillment-table tbody,
-			.order-form .fulfillment-table th,
-			.order-form .fulfillment-table td,
-			.order-form .fulfillment-table tr {
-				display: block;
-				width: 100%;
-			}
-			.order-form .fulfillment-table thead {
-				display: none;
-			}
-			.order-form .fulfillment-table tbody {
-				padding: 0;
-			}
-			.order-form .fulfillment-table tbody tr {
-				background: #ffffff;
-				border-radius: 12px;
-				box-shadow: 0 2px 6px rgba(130, 127, 254, 0.16);
-				margin-bottom: 12px;
-				padding: 12px;
-			}
-			.order-form .fulfillment-table tbody td {
-				padding: 8px 12px;
-				text-align: left;
-				position: relative;
-				font-size: 15px;
-			}
-			.order-form .fulfillment-table tbody td::before {
-				content: attr(data-label);
-				display: block;
-				font-size: 12px;
-				font-weight: 700;
-				text-transform: uppercase;
-				color: #5b59d6;
-				margin-bottom: 4px;
-				letter-spacing: 0.04em;
-			}
-			.order-form .fulfillment-table tbody td[data-label="Delete"] {
-				display: flex;
-				align-items: center;
-				justify-content: flex-start;
-			}
-			.order-form .fulfillment-table tbody tr:last-child {
-				margin-bottom: 0;
-			}
+		.order-form .fulfillment-table .table,
+		.order-form .fulfillment-table thead,
+		.order-form .fulfillment-table tbody,
+		.order-form .fulfillment-table th,
+		.order-form .fulfillment-table td,
+		.order-form .fulfillment-table tr {
+			display: block;
+			width: 100%;
 		}
-	</style>
+
+		.order-form .fulfillment-table thead {
+			display: none;
+		}
+
+		.order-form .fulfillment-table tbody {
+			padding: 0;
+		}
+
+		.order-form .fulfillment-table tbody tr {
+			background: #ffffff;
+			border-radius: 12px;
+			box-shadow: 0 2px 6px rgba(130, 127, 254, 0.16);
+			margin-bottom: 12px;
+			padding: 12px;
+		}
+
+		.order-form .fulfillment-table tbody td {
+			padding: 8px 12px;
+			text-align: left;
+			position: relative;
+			font-size: 15px;
+		}
+
+		.order-form .fulfillment-table tbody td::before {
+			content: attr(data-label);
+			display: block;
+			font-size: 12px;
+			font-weight: 700;
+			text-transform: uppercase;
+			color: #5b59d6;
+			margin-bottom: 4px;
+			letter-spacing: 0.04em;
+		}
+
+		.order-form .fulfillment-table tbody td[data-label="Delete"] {
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+		}
+
+		.order-form .fulfillment-table tbody tr:last-child {
+			margin-bottom: 0;
+		}
+	}
+</style>
 {% endblock css %}
 
 {% block header %}
-	{% include 'orderlist/orderlist_navbar.html' %}
+{% include 'orderlist/orderlist_navbar.html' %}
 {% endblock%}
 
 {% block body %}
-	<!-- Alert Invalid-->
-	<div class="container" id="alert_lr">
-		<div class="alert alert-danger alert-dismissible fade show" role="alert">
-			<strong>Invalid-data</strong> / Duplicate Order Number.
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<!-- Alert Invalid-->
+<div class="container" id="alert_lr">
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		<strong>Invalid-data</strong> / Duplicate Order Number.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
+		</button>
 	</div>
-	<!-- Alert Invalid-->
+</div>
+<!-- Alert Invalid-->
 
-	<!-- Alert Add/Update-->
-	<div class="container" id="alert_add">
-		<div class="alert alert-success alert-dismissible fade show" role="alert">
-			Order # <strong id="alert_add_content"></strong> added/updated.
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<!-- Alert Add/Update-->
+<div class="container" id="alert_add">
+	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		Order # <strong id="alert_add_content"></strong> added/updated.
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
+		</button>
 	</div>
-	<!-- Alert Add/Update-->
+</div>
+<!-- Alert Add/Update-->
 
-	<div class="container order-form">
-		{% if form.errors or form.non_field_errors or formset.non_form_errors %}
+<div class="container order-form">
+	{% if form.errors or form.non_field_errors or formset.non_form_errors %}
+	<div class="alert alert-danger" role="alert">
+		Please correct the errors below and resubmit.
+	</div>
+	{% endif %}
+	<form action="" method="post">
+		{% csrf_token %}
+		<div class="form-row">
+			<div class="form-group col-md-3">
+				<label for="id_order_number">Order Number</label>
+				{% render_field form.order_number class+="form-control" type="text" autocomplete="off" autofocus="true" %}
+				{% for e in form.order_number.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+			</div>
+			<div class="form-group col-md-3">
+				<label for="id_company_name">Company</label>
+				{% render_field form.company_name class+="form-control companyAutoComplete" autocomplete="off" %}
+				{% for e in form.company_name.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+			</div>
+			<div class="form-group col-md-3">
+				<label for="id_item">Item</label>
+				{% render_field form.item class+="form-control itemAutoComplete" autocomplete="off" %}
+				{% for e in form.item.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+			</div>
+			<div class="form-group col-md-3">
+				<label for="id_num_parcels">Number of parcels</label>
+				{% render_field form.num_parcels class+="form-control" type="number" %}
+				{% for e in form.num_parcels.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-3">
+				<label for="id_order_date">Order Date</label>
+				{% render_field form.order_date class+="form-control" type="date" %}
+				{% for e in form.order_date.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+			</div>
+			<div class="form-group col-md-3">
+				<label for="id_fulfilment_status">Fulfilment status</label>
+				{% render_field form.fulfilment_status class+="form-control" %}
+				{% for e in form.fulfilment_status.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+			</div>
+			<div class="form-group col-md-3">
+				<label for="id_order_price">Order Price</label>
+				{% render_field form.order_price class+="form-control" type="number" step="0.01" %}
+				{% for e in form.order_price.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+			</div>
+			<div class="form-group col-md-3">
+				<label for="id_mode">Mode</label>
+				{% render_field form.mode class+="form-control" %}
+				{% for e in form.mode.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-3">
+				<label for="id_transport">Transport</label>
+				{% render_field form.transport class+="form-control transportAutoComplete" autocomplete="off" %}
+				{% for e in form.transport.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="form-group col-md-6" id="agent-name-group" style="display: none;">
+				<label for="id_agent_name">Agent Name <span class="text-danger">*</span></label>
+				{% render_field form.agent_name class+="form-control" %}
+				{% for e in form.agent_name.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+			</div>
+			<div class="form-group col-md-6">
+				<label for="id_remark">Remark</label>
+				{% render_field form.remark class+="form-control" %}
+				{% for e in form.remark.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+			</div>
+		</div>
+
+		<h5>Fulfillment Dates</h5>
+		{% if formset.non_form_errors %}
 		<div class="alert alert-danger" role="alert">
-			Please correct the errors below and resubmit.
+			{% for e in formset.non_form_errors %}{{ e }}{% if not forloop.last %}<br />{% endif %}{% endfor %}
 		</div>
 		{% endif %}
-		<form action="" method="post">
-			{% csrf_token %}
-			<div class="form-row">
-				<div class="form-group col-md-3">
-					<label for="id_order_number">Order Number</label>
-					{% render_field form.order_number class+="form-control" type="text" autocomplete="off" autofocus="true" %}
-					{% for e in form.order_number.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-				</div>
-				<div class="form-group col-md-3">
-					<label for="id_company_name">Company</label>
-					{% render_field form.company_name class+="form-control" %}
-					{% for e in form.company_name.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-				</div>
-				<div class="form-group col-md-3">
-					<label for="id_item">Item</label>
-					{% render_field form.item class+="form-control" %}
-					{% for e in form.item.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-				</div>
-				<div class="form-group col-md-3">
-					<label for="id_num_parcels">Number of parcels</label>
-					{% render_field form.num_parcels class+="form-control" type="number" %}
-					{% for e in form.num_parcels.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="form-group col-md-3">
-					<label for="id_order_date">Order Date</label>
-					{% render_field form.order_date class+="form-control" type="date" %}
-					{% for e in form.order_date.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-				</div>
-				<div class="form-group col-md-3">
-					<label for="id_fulfilment_status">Fulfilment status</label>
-					{% render_field form.fulfilment_status class+="form-control" %}
-					{% for e in form.fulfilment_status.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-				</div>
-				<div class="form-group col-md-3">
-					<label for="id_order_price">Order Price</label>
-					{% render_field form.order_price class+="form-control" type="number" step="0.01" %}
-					{% for e in form.order_price.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-				</div>
-				<div class="form-group col-md-3">
-					<label for="id_mode">Mode</label>
-					{% render_field form.mode class+="form-control" %}
-					{% for e in form.mode.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="form-group col-md-3">
-					<label for="id_transport">Transport</label>
-					{% render_field form.transport class+="form-control" %}
-					{% for e in form.transport.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="form-group col-md-6" id="agent-name-group" style="display: none;">
-					<label for="id_agent_name">Agent Name <span class="text-danger">*</span></label>
-					{% render_field form.agent_name class+="form-control" %}
-					{% for e in form.agent_name.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-				</div>
-				<div class="form-group col-md-6">
-					<label for="id_remark">Remark</label>
-					{% render_field form.remark class+="form-control" %}
-					{% for e in form.remark.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-				</div>
-			</div>
-
-			<h5>Fulfillment Dates</h5>
-			{% if formset.non_form_errors %}
-				<div class="alert alert-danger" role="alert">
-					{% for e in formset.non_form_errors %}{{ e }}{% if not forloop.last %}<br/>{% endif %}{% endfor %}
-				</div>
-			{% endif %}
-			{{ formset.management_form }}
-			<div class="table-responsive text-nowrap fulfillment-table">
-				<table class="table table-hover">
-					<thead>
-						<tr><th>Date</th><th>Quantity</th><th>Bill No</th><th>Delete</th></tr>
-					</thead>
-					<tbody id="fulfillment-rows">
+		{{ formset.management_form }}
+		<div class="table-responsive text-nowrap fulfillment-table">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Quantity</th>
+						<th>Bill No</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody id="fulfillment-rows">
 					{% for f in formset.forms %}
-						<tr class="fulfillment-row">
-							{{ f.id }}
+					<tr class="fulfillment-row">
+						{{ f.id }}
 						<td data-label="Date">
-								{% render_field f.date class+="form-control" type="date" %}
-								{% for e in f.date.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-							</td>
+							{% render_field f.date class+="form-control" type="date" %}
+							{% for e in f.date.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+						</td>
 						<td data-label="Quantity">
-								{% render_field f.quantity class+="form-control" type="number" %}
-								{% for e in f.quantity.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-							</td>
+							{% render_field f.quantity class+="form-control" type="number" %}
+							{% for e in f.quantity.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+						</td>
 						<td data-label="Bill No">
-								{% render_field f.bill_no class+="form-control" type="text" %}
-								{% for e in f.bill_no.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
-							</td>
+							{% render_field f.bill_no class+="form-control" type="text" %}
+							{% for e in f.bill_no.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+						</td>
 						<td class="text-center align-middle" data-label="Delete">
-								{# Hidden DELETE checkbox controlled by trash icon #}
-								{% render_field f.DELETE class+="d-none fulfillment-delete-input" %}
-								<button type="button" class="btn btn-link text-danger p-0 delete-fulfillment" title="Delete fulfillment">
-									<i class="fa fa-trash"></i>
-								</button>
-							</td>
-						</tr>
+							{# Hidden DELETE checkbox controlled by trash icon #}
+							{% render_field f.DELETE class+="d-none fulfillment-delete-input" %}
+							<button type="button" class="btn btn-link text-danger p-0 delete-fulfillment" title="Delete fulfillment">
+								<i class="fa fa-trash"></i>
+							</button>
+						</td>
+					</tr>
 					{% endfor %}
-					</tbody>
-				</table>
+				</tbody>
+			</table>
+		</div>
+
+		{# Removed per-fulfillment confirmation modal for immediate delete #}
+
+		<div class="form-row">
+			{% if instance %}
+			<div class="form-group col-md-6">
+				<input type="submit" value="Add/Update" class="form-control btn btn-primary form-button"
+					onclick="return validateFulfillmentQuantity();">
 			</div>
+			<div class="form-group col-md-6">
+				<button type="button" class="form-control btn btn-danger form-button" data-toggle="modal"
+					data-target="#deleteOrderModal">
+					Delete Order
+				</button>
+			</div>
+			{% else %}
+			<div class="form-group col-md-12">
+				<input type="submit" value="Add/Update" class="form-control btn btn-primary form-button"
+					onclick="return validateFulfillmentQuantity();">
+			</div>
+			{% endif %}
+		</div>
+	</form>
 
-			{# Removed per-fulfillment confirmation modal for immediate delete #}
-
-			<div class="form-row">
-				{% if  instance %}
-				<div class="form-group col-md-6">
-					<input type="submit" value="Add/Update" class="form-control btn btn-primary form-button" onclick="return validateFulfillmentQuantity();">
-				</div>
-				<div class="form-group col-md-6">
-					<button type="button" class="form-control btn btn-danger form-button" data-toggle="modal" data-target="#deleteOrderModal">
-						Delete Order
+	{# Delete order modal to avoid confusion with per-row deletes #}
+	{% if instance %}
+	<div class="modal fade" id="deleteOrderModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog " role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Are you sure?</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				{% else %}
-				<div class="form-group col-md-12">
-					<input type="submit" value="Add/Update" class="form-control btn btn-primary form-button" onclick="return validateFulfillmentQuantity();">
-				</div>
-				{% endif %}
-			</div>
-		</form>
-
-		{# Delete order modal to avoid confusion with per-row deletes #}
-		{% if instance %}
-		<div class="modal fade" id="deleteOrderModal" tabindex="-1" role="dialog" aria-hidden="true">
-			<div class="modal-dialog " role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Are you sure?</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="form-control btn btn-secondary" data-dismiss="modal">Close</button>
-						<a href="{% url 'order_delete' id=instance %}" class="form-control btn btn-danger">Delete Order</a>
-					</div>
+				<div class="modal-footer">
+					<button type="button" class="form-control btn btn-secondary" data-dismiss="modal">Close</button>
+					<a href="{% url 'order_delete' id=instance %}" class="form-control btn btn-danger">Delete Order</a>
 				</div>
 			</div>
 		</div>
-		{% endif %}
 	</div>
+	{% endif %}
+</div>
 {% endblock body %}
 
 {% block footer %}
-	{% include 'footer.html' %}
+{% include 'footer.html' %}
 {% endblock %}
 
 {% block script %}
-	<script src="{% static 'orderlist/js/add_order.js' %}"></script>
+<script src="{% static 'orderlist/js/add_order.js' %}"></script>
+<script>
+	$('.companyAutoComplete').autoComplete({
+		minLength: 1,
+		bootstrapVersion: '4',
+		preventEnter: true,
+		resolverSettings: {
+			url: "{% url 'order_autocomplete'%}?field=company_name",
+			requestThrottling: 700
+		}
+	});
+	$('.itemAutoComplete').autoComplete({
+		minLength: 1,
+		bootstrapVersion: '4',
+		preventEnter: true,
+		resolverSettings: {
+			url: "{% url 'order_autocomplete'%}?field=item",
+			requestThrottling: 700
+		}
+	});
+	$('.transportAutoComplete').autoComplete({
+		minLength: 1,
+		bootstrapVersion: '4',
+		preventEnter: true,
+		resolverSettings: {
+			url: "{% url 'order_autocomplete'%}?field=transport",
+			requestThrottling: 700
+		}
+	});
+</script>
 {% endblock script %}
