@@ -10,9 +10,7 @@ Add Order
 <link rel="stylesheet" type="text/css" href="{% static 'ledger/css/main.css'%}">
 <style>
 	/* Scoped tweaks for Add Order page (match Ledger look & feel) */
-	.order-form {
-		max-width: 960px;
-	}
+	/* .order-form { max-width: 960px; } Removed to match Ledger form width */
 
 	.order-form table.table th,
 	.order-form table.table td {
@@ -45,22 +43,27 @@ Add Order
 	}
 
 	/* Tighter column layout for fulfillment table */
+	/* Tighter column layout for fulfillment table */
 	.order-form table.table thead th:nth-child(1) {
-		width: 35%;
+		width: 30%;
+		/* Date */
 	}
 
 	.order-form table.table thead th:nth-child(2) {
-		width: 20%;
+		width: 25%;
+		/* Quantity */
 		text-align: center;
 	}
 
 	.order-form table.table thead th:nth-child(3) {
-		width: 25%;
+		width: 35%;
+		/* Bill No */
 		text-align: center;
 	}
 
 	.order-form table.table thead th:nth-child(4) {
 		width: 10%;
+		/* Delete */
 		text-align: center;
 	}
 
@@ -81,15 +84,30 @@ Add Order
 	/* Center delete icon, make it a bit crisper */
 	.order-form .delete-fulfillment {
 		line-height: 1;
+		background: #fee2e2;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.2s;
+		text-decoration: none;
 	}
 
 	.order-form .delete-fulfillment i {
-		font-size: 18px;
+		font-size: 16px;
 		transition: color .15s ease-in-out;
+		color: #ef4444;
+	}
+
+	.order-form .delete-fulfillment:hover {
+		background: #fecaca;
+		text-decoration: none;
 	}
 
 	.order-form .delete-fulfillment:hover i {
-		color: #e63946;
+		color: #dc2626;
 	}
 
 	/* Fulfillment table theming to match ledger */
@@ -228,7 +246,9 @@ Add Order
 		.order-form .fulfillment-table {
 			margin: 0;
 			border-radius: 12px;
-			background: linear-gradient(135deg, rgba(130, 127, 254, 0.25) 0%, rgba(167, 139, 250, 0.15) 100%);
+			background: transparent;
+			/* Removed gradient background for cleaner look */
+			box-shadow: none;
 		}
 
 		.order-form .fulfillment-table .table,
@@ -252,16 +272,37 @@ Add Order
 		.order-form .fulfillment-table tbody tr {
 			background: #ffffff;
 			border-radius: 12px;
-			box-shadow: 0 2px 6px rgba(130, 127, 254, 0.16);
-			margin-bottom: 12px;
-			padding: 12px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+			/* Enhanced shadow */
+			margin-bottom: 16px;
+			/* Increased spacing between cards */
+			padding: 20px 16px 16px 16px;
+			/* Top padding for delete button space */
+			border: 1px solid rgba(0, 0, 0, 0.05);
+			position: relative;
+			/* For absolute positioning of delete button */
 		}
 
 		.order-form .fulfillment-table tbody td {
-			padding: 8px 12px;
+			padding: 8px 0;
+			/* Vertical padding only */
 			text-align: left;
+			/* Align content to left */
 			position: relative;
 			font-size: 15px;
+			display: block;
+			/* Stacked layout */
+			border-bottom: none;
+			/* Removed separator */
+		}
+
+		.order-form .fulfillment-table tbody td:last-child {
+			border-bottom: none;
+			padding: 0;
+			position: absolute;
+			top: 12px;
+			right: 12px;
+			width: auto;
 		}
 
 		.order-form .fulfillment-table tbody td::before {
@@ -271,14 +312,54 @@ Add Order
 			font-weight: 700;
 			text-transform: uppercase;
 			color: #5b59d6;
-			margin-bottom: 4px;
+			margin-bottom: 6px;
+			/* Space between label and input */
+			margin-right: 0;
 			letter-spacing: 0.04em;
+			text-align: left;
+		}
+
+		.order-form .fulfillment-table tbody td[data-label="Delete"]::before {
+			display: none;
+			/* Hide label for delete button */
+		}
+
+		.order-form .fulfillment-table tbody td .form-control {
+			width: 100% !important;
+			/* Full width input */
+			max-width: 100%;
+			margin: 0;
+			text-align: left;
+			height: 40px;
+			/* Taller inputs for mobile */
 		}
 
 		.order-form .fulfillment-table tbody td[data-label="Delete"] {
+			display: block;
+		}
+
+		.order-form .fulfillment-table tbody td[data-label="Delete"] .delete-fulfillment {
+			background: #fee2e2;
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
 			display: flex;
 			align-items: center;
-			justify-content: flex-start;
+			justify-content: center;
+			transition: all 0.2s;
+		}
+
+		.order-form .fulfillment-table tbody td[data-label="Delete"] .delete-fulfillment i {
+			color: #ef4444;
+			font-size: 16px;
+		}
+
+		.order-form .fulfillment-table tbody td[data-label="Delete"] .delete-fulfillment:hover {
+			background: #fecaca;
+		}
+
+		.order-form .fulfillment-table tbody td[data-label="Delete"] .delete-fulfillment:hover i {
+			color: #dc2626;
 		}
 
 		.order-form .fulfillment-table tbody tr:last-child {
