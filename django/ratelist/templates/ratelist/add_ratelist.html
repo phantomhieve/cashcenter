@@ -3,149 +3,544 @@
 {% load widget_tweaks %}
 
 {% block title %}
-    Add Rate
+Add Rate
 {% endblock title %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'ratelist/css/main.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'ledger/css/main.css'%}">
+<style>
+    /* Scoped tweaks for Add Ratelist page (match Ledger look & feel) */
+    /* .ratelist-form { max-width: 960px; } Removed to match Ledger form width */
+
+    .ratelist-form table.table th,
+    .ratelist-form table.table td {
+        vertical-align: middle;
+    }
+
+    .ratelist-form h5 {
+        font-family: Lato-Bold;
+        text-transform: uppercase;
+        color: #5b59d6;
+        margin-top: 10px;
+    }
+
+    /* Compact form spacing */
+    .ratelist-form .form-row {
+        margin-left: -8px;
+        margin-right: -8px;
+    }
+
+    .ratelist-form .form-row>.form-group {
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-bottom: 12px;
+    }
+
+    .ratelist-form .form-control {
+        height: 38px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+
+    /* Tighter column layout for fulfillment table */
+    .ratelist-form table.table thead th:nth-child(1) {
+        width: 15%;
+        /* Sales */
+    }
+
+    .ratelist-form table.table thead th:nth-child(2) {
+        width: 30%;
+        /* Sales Date */
+        text-align: center;
+    }
+
+    .ratelist-form table.table thead th:nth-child(3) {
+        width: 15%;
+        /* Purchase */
+        text-align: center;
+    }
+
+    .ratelist-form table.table thead th:nth-child(4) {
+        width: 30%;
+        /* Purchase Date */
+        text-align: center;
+    }
+
+    .ratelist-form table.table thead th:nth-child(5) {
+        width: 10%;
+        /* Delete */
+        text-align: center;
+    }
+
+    .ratelist-form table.table tbody td:nth-child(2),
+    .ratelist-form table.table tbody td:nth-child(3),
+    .ratelist-form table.table tbody td:nth-child(4),
+    .ratelist-form table.table tbody td:nth-child(5) {
+        text-align: center;
+    }
+
+    /* Limit input widths so columns don't stretch too wide */
+    .ratelist-form #fulfillment-rows input[type="date"],
+    .ratelist-form #fulfillment-rows input[type="number"],
+    .ratelist-form #fulfillment-rows input[type="text"] {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Center delete icon, make it a bit crisper */
+    .ratelist-form .delete-fulfillment {
+        line-height: 1;
+        background: #fee2e2;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+
+    .ratelist-form .delete-fulfillment i {
+        font-size: 16px;
+        transition: color .15s ease-in-out;
+        color: #ef4444;
+    }
+
+    .ratelist-form .delete-fulfillment:hover {
+        background: #fecaca;
+        text-decoration: none;
+    }
+
+    .ratelist-form .delete-fulfillment:hover i {
+        color: #dc2626;
+    }
+
+    /* Fulfillment table theming to match ledger */
+    .ratelist-form .fulfillment-table {
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+    }
+
+    .ratelist-form .fulfillment-table .table {
+        margin-bottom: 0;
+    }
+
+    .ratelist-form .fulfillment-table .table {
+        min-width: 0;
+    }
+
+    .ratelist-form .fulfillment-table thead th {
+        font-family: Lato-Bold;
+        font-size: 16px;
+        background-color: #827ffe;
+        color: #fff;
+        text-transform: uppercase;
+        line-height: 1.4;
+        padding: 10px 16px;
+        border: 0;
+    }
+
+    .ratelist-form .fulfillment-table thead th:first-child {
+        border-top-left-radius: 6px;
+    }
+
+    .ratelist-form .fulfillment-table thead th:last-child {
+        border-top-right-radius: 6px;
+    }
+
+    .ratelist-form .fulfillment-table tbody td {
+        font-family: Lato-Regular;
+        font-size: 15px;
+        color: #808080;
+        padding: 12px 16px;
+    }
+
+    .ratelist-form .fulfillment-table tbody tr:nth-child(even) {
+        background-color: #f8f6ff;
+    }
+
+    .ratelist-form .fulfillment-table .form-control {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Buttons row alignment */
+    .ratelist-form .form-button {
+        height: 44px;
+    }
+
+    /* Fix double arrows on dropdown selects */
+    .ratelist-form select {
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        -ms-appearance: none !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231f2937' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat !important;
+        background-position: right 0.75rem center !important;
+        background-size: 12px !important;
+        padding-right: 2rem !important;
+    }
+
+    /* Hide default arrow in IE */
+    .ratelist-form select::-ms-expand {
+        display: none !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .ratelist-form {
+            max-width: 100%;
+        }
+
+        .ratelist-form table.table thead th:nth-child(1) {
+            width: 20%;
+        }
+
+        .ratelist-form table.table thead th:nth-child(2) {
+            width: 25%;
+        }
+
+        .ratelist-form table.table thead th:nth-child(3) {
+            width: 20%;
+        }
+
+        .ratelist-form table.table thead th:nth-child(4) {
+            width: 25%;
+        }
+
+        .ratelist-form table.table thead th:nth-child(5) {
+            width: 10%;
+        }
+
+        .ratelist-form #fulfillment-rows input[type="date"],
+        .ratelist-form #fulfillment-rows input[type="number"],
+        .ratelist-form #fulfillment-rows input[type="text"] {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .ratelist-form .fulfillment-table {
+            margin: 0 -15px;
+            border-radius: 0;
+        }
+
+        .ratelist-form .fulfillment-table .table {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .ratelist-form .fulfillment-table thead th,
+        .ratelist-form .fulfillment-table tbody td {
+            padding: 10px;
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .ratelist-form .fulfillment-table {
+            margin: 0;
+            border-radius: 12px;
+            background: transparent;
+            /* Removed gradient background for cleaner look */
+            box-shadow: none;
+        }
+
+        .ratelist-form .fulfillment-table .table,
+        .ratelist-form .fulfillment-table thead,
+        .ratelist-form .fulfillment-table tbody,
+        .ratelist-form .fulfillment-table th,
+        .ratelist-form .fulfillment-table td,
+        .ratelist-form .fulfillment-table tr {
+            display: block;
+            width: 100%;
+        }
+
+        .ratelist-form .fulfillment-table thead {
+            display: none;
+        }
+
+        .ratelist-form .fulfillment-table tbody {
+            padding: 0;
+        }
+
+        .ratelist-form .fulfillment-table tbody tr {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            /* Enhanced shadow */
+            margin-bottom: 16px;
+            /* Increased spacing between cards */
+            padding: 20px 16px 16px 16px;
+            /* Top padding for delete button space */
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            /* For absolute positioning of delete button */
+        }
+
+        .ratelist-form .fulfillment-table tbody td {
+            padding: 8px 0;
+            /* Vertical padding only */
+            text-align: left;
+            /* Align content to left */
+            position: relative;
+            font-size: 15px;
+            display: block;
+            /* Stacked layout */
+            border-bottom: none;
+            /* Removed separator */
+        }
+
+        .ratelist-form .fulfillment-table tbody td:last-child {
+            border-bottom: none;
+            padding: 0;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: auto;
+        }
+
+        .ratelist-form .fulfillment-table tbody td::before {
+            content: attr(data-label);
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #5b59d6;
+            margin-bottom: 6px;
+            /* Space between label and input */
+            margin-right: 0;
+            letter-spacing: 0.04em;
+            text-align: left;
+        }
+
+        .ratelist-form .fulfillment-table tbody td[data-label="Delete"]::before {
+            display: none;
+            /* Hide label for delete button */
+        }
+
+        .ratelist-form .fulfillment-table tbody td .form-control {
+            width: 100% !important;
+            /* Full width input */
+            max-width: 100%;
+            margin: 0;
+            text-align: left;
+            height: 40px;
+            /* Taller inputs for mobile */
+        }
+
+        .ratelist-form .fulfillment-table tbody td[data-label="Delete"] {
+            display: block;
+        }
+
+        .ratelist-form .fulfillment-table tbody td[data-label="Delete"] .delete-fulfillment {
+            background: #fee2e2;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .ratelist-form .fulfillment-table tbody td[data-label="Delete"] .delete-fulfillment i {
+            color: #ef4444;
+            font-size: 16px;
+        }
+
+        .ratelist-form .fulfillment-table tbody td[data-label="Delete"] .delete-fulfillment:hover {
+            background: #fecaca;
+        }
+
+        .ratelist-form .fulfillment-table tbody td[data-label="Delete"] .delete-fulfillment:hover i {
+            color: #dc2626;
+        }
+
+        .ratelist-form .fulfillment-table tbody tr:last-child {
+            margin-bottom: 0;
+        }
+    }
+</style>
 {% endblock css %}
 
 {% block header %}
-    {% include 'ratelist/ratelist_navbar.html' %}
+{% include 'ratelist/ratelist_navbar.html' %}
 {% endblock header%}
 
 {% block body %}
 
-    <!-- Alert Invalid-->
-    <div class="container" id="alert_invalid">
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Invalid-data</strong> / Dublicate Entry.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<!-- Alert Invalid-->
+<div class="container" id="alert_invalid">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Invalid-data</strong> / Duplicate Entry.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+        </button>
     </div>
-    <!-- Alert Invalid-->
+</div>
+<!-- Alert Invalid-->
 
-    <!-- Alert Add/Update-->
-    <div class="container" id="alert_add">
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            HSN No - <strong id="alert_add_content"></strong> added/updated.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<!-- Alert Add/Update-->
+<div class="container" id="alert_add">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        HSN No - <strong id="alert_add_content"></strong> added/updated.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+        </button>
     </div>
-    <!-- Alert Add/Update-->
+</div>
+<!-- Alert Add/Update-->
 
-    <div class="container">
-        <form action="" method="post">
-            {% csrf_token %}
-            <div class="form-row top-row">
-                {% for field in form %}
-                    {% if forloop.first %}
-                    <div class="form-group col-md-3">
-                    {% else %}
-                    <div class="form-group col-md-2">
+<div class="container ratelist-form">
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="form-row top-row">
+            {% for field in form %}
+            {% if forloop.first %}
+            <div class="form-group col-md-3">
+                {% else %}
+                <div class="form-group col-md-2">
                     {% endif%}
-                        {% if field.name == 'hsn' %}
-                            <label for="id_{{field.name}}">{{field.name|upper}}</label>
-                        {% else %}
-                            <label for="id_{{field.name}}">{{field.name|capfirst}}</label>
-                        {% endif %}
-                        
-                        {% if field.name == 'quantity' %}
-                            {% render_field field class+="form-control" type="number" autocomplete="off" autofocus="true" %}
-                        {% else %}
-                            {% render_field field class+="form-control" type="text" autocomplete="off" autofocus="true" %}
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </div>
-            {{ formset.management_form }}
-            <div class="container">
-                <h5>Rates</h5>
-                {% for form in formset %}
-                <div class="card">
-                    <div class="form-row">
-                    
-                        <!--Display fields-->
-                        {% for field in form %}
-                            {% if field.name != 'id' and field.name != 'ratelistdata' %}
-                                {% if field.name == 'p_price' or  field.name == 's_price' %}
-                                    <div class="form-group col-md-2">
-                                        {% render_field field class+="form-control" type="number" placeholder=field.name|capfirst %}
-                                    </div>
-                                {% elif field.name == 'DELETE' %}
-                                    <div class="form-group col-md-1">
-                                        <span style="color: red;padding-left: 1rem;">Delete</span>
-                                        {% render_field field class+="form-control" type="checkbox"%}
-                                    </div>
-                                    
-                                {% else %}
-                                    <div class="form-group col-md-3">
-                                        {% render_field field class+="form-control" type="date" %}
-                                    </div>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                        <!--Display fields-->
+                    {% if field.name == 'hsn' %}
+                    <label for="id_{{field.name}}">{{field.name|upper}}</label>
+                    {% else %}
+                    <label for="id_{{field.name}}">{{field.name|capfirst}}</label>
+                    {% endif %}
 
-                        <!--Hidden fields-->
-                        {% for hidden_field in form.hidden_fields %}
-                            {{ hidden_field }}
-                        {% endfor %}
-                        <!--Hidden fields-->
-                        
-                    </div>
+                    {% if field.name == 'quantity' %}
+                    {% render_field field class+="form-control" type="number" autocomplete="off" autofocus="true" %}
+                    {% else %}
+                    {% render_field field class+="form-control" type="text" autocomplete="off" autofocus="true" %}
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
-            <div class="form-row">
-                {% if  instance %}
-                    <div class="form-group col-md-6">
-                        <input type="submit" value="Add/Update" class="form-control btn btn-primary form-button">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <button type="button" class="form-control btn btn-danger form-button" data-toggle="modal" data-target="#deleteConformation">
+
+            <h5>Rates</h5>
+            {% if formset.non_form_errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for e in formset.non_form_errors %}{{ e }}{% if not forloop.last %}<br />{% endif %}{% endfor %}
+            </div>
+            {% endif %}
+            {{ formset.management_form }}
+            <div class="table-responsive text-nowrap fulfillment-table">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Sales</th>
+                            <th>Sales Date</th>
+                            <th>Purchase</th>
+                            <th>Purchase Date</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fulfillment-rows">
+                        {% for f in formset.forms %}
+                        <tr class="fulfillment-row">
+                            {{ f.id }}
+                            {{ f.ratelistdata }}
+                            <td data-label="Sales">
+                                {% render_field f.s_price class+="form-control" type="number" step="0.01" %}
+                                {% for e in f.s_price.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+                            </td>
+                            <td data-label="Sales Date">
+                                {% render_field f.s_date class+="form-control" type="date" %}
+                                {% for e in f.s_date.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+                            </td>
+                            <td data-label="Purchase">
+                                {% render_field f.p_price class+="form-control" type="number" step="0.01" %}
+                                {% for e in f.p_price.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+                            </td>
+                            <td data-label="Purchase Date">
+                                {% render_field f.p_date class+="form-control" type="date" %}
+                                {% for e in f.p_date.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
+                            </td>
+                            <td class="text-center align-middle" data-label="Delete">
+                                {# Hidden DELETE checkbox controlled by trash icon #}
+                                {% render_field f.DELETE class+="d-none fulfillment-delete-input" %}
+                                <button type="button" class="btn btn-link text-danger p-0 delete-fulfillment"
+                                    title="Delete rate">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-row mt-3">
+                {% if instance %}
+                <div class="form-group col-md-6">
+                    <input type="submit" value="Add/Update" class="form-control btn btn-primary form-button">
+                </div>
+                <div class="form-group col-md-6">
+                    <button type="button" class="form-control btn btn-danger form-button" data-toggle="modal"
+                        data-target="#deleteConformation">
                         Delete
-                        </button>
-                    </div>
-                    {% else %}
-                    <div class="form-group col-md-12">
-                        <input type="submit" value="Add/Update" class="form-control btn btn-primary form-button">
-                    </div>
+                    </button>
+                </div>
+                {% else %}
+                <div class="form-group col-md-12">
+                    <input type="submit" value="Add/Update" class="form-control btn btn-primary form-button">
+                </div>
                 {% endif %}
             </div>
-        </form>
-    </div>
-    <!-- Modal -->
-    {% if instance %}
-    <div class="modal fade" id="deleteConformation" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog " role="document">
-            <div class="modal-content">
+    </form>
+</div>
+<!-- Modal -->
+{% if instance %}
+<div class="modal fade" id="deleteConformation" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="form-control btn btn-secondary" data-dismiss="modal">Close</button>
                 <a href="{% url 'ratelist_delete' id=instance %}" class="form-control btn btn-danger ">Delete</a>
             </div>
-            </div>
         </div>
     </div>
-    {% endif %}
-    <!-- Modal -->
+</div>
+{% endif %}
+<!-- Modal -->
 {% endblock body %}
 
 {% block footer %}
-    {% include 'footer.html' %}
+{% include 'footer.html' %}
 {% endblock %}
 
 {% block script%}
-    <script src="{% static 'ratelist/js/add_ratelist.js'%}"></script>
+<script src="{% static 'ratelist/js/add_ratelist.js'%}"></script>
+<script>
+    // Simple script to handle the custom delete button
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.delete-fulfillment');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const row = this.closest('tr');
+                const checkbox = row.querySelector('.fulfillment-delete-input');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    if (checkbox.checked) {
+                        row.style.opacity = '0.5';
+                        this.querySelector('i').classList.remove('fa-trash');
+                        this.querySelector('i').classList.add('fa-undo');
+                    } else {
+                        row.style.opacity = '1';
+                        this.querySelector('i').classList.remove('fa-undo');
+                        this.querySelector('i').classList.add('fa-trash');
+                    }
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}
-
