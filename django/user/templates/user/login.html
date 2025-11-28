@@ -3,58 +3,209 @@
 {% load widget_tweaks %}
 
 {% block title %}
-    Login
+Login
 {% endblock title %}
+
 {% block css %}
-	<link rel="stylesheet" type="text/css" href="{% static 'user/css/main.css'%}">
+<style>
+	/* Scoped Login Styles */
+	body,
+	html {
+		height: 100%;
+		margin: 0;
+		font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	}
+
+	/* Override base body padding if any */
+	#body {
+		padding: 0 !important;
+		height: 100vh;
+	}
+
+	.login-wrapper {
+		min-height: 100vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: #f3f4f6;
+		background-image: radial-gradient(circle at 50% 50%, #e0e7ff 0%, #f3f4f6 100%);
+		padding: 15px;
+	}
+
+	.login-card {
+		background: #ffffff;
+		width: 100%;
+		max-width: 400px;
+		border-radius: 16px;
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+		overflow: hidden;
+		padding: 40px 30px;
+		position: relative;
+		border-top: 5px solid #827ffe;
+	}
+
+	.login-header {
+		text-align: center;
+		margin-bottom: 30px;
+	}
+
+	.login-header h2 {
+		font-weight: 700;
+		color: #333;
+		margin-bottom: 10px;
+		font-size: 28px;
+	}
+
+	.login-header p {
+		color: #666;
+		font-size: 14px;
+	}
+
+	.form-group {
+		margin-bottom: 20px;
+		position: relative;
+	}
+
+	.form-control {
+		height: 50px;
+		border-radius: 8px;
+		border: 1px solid #e1e1e1;
+		padding-left: 15px;
+		font-size: 15px;
+		transition: all 0.3s ease;
+		background-color: #f9f9f9;
+	}
+
+	.form-control:focus {
+		border-color: #a78bfa;
+		box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+		background-color: #fff;
+	}
+
+	.form-control::placeholder {
+		color: #aaa;
+	}
+
+	.custom-checkbox .custom-control-input:checked~.custom-control-label::before {
+		background-color: #827ffe;
+		border-color: #827ffe;
+	}
+
+	.btn-login {
+		width: 100%;
+		height: 50px;
+		border-radius: 8px;
+		background: linear-gradient(135deg, #827ffe 0%, #a78bfa 100%);
+		border: none;
+		color: #fff;
+		font-weight: 600;
+		font-size: 16px;
+		cursor: pointer;
+		transition: transform 0.2s, box-shadow 0.2s;
+		margin-top: 10px;
+	}
+
+	.btn-login:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 5px 15px rgba(130, 127, 254, 0.3);
+		color: #fff;
+		background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
+	}
+
+	.btn-login:active {
+		transform: translateY(0);
+	}
+
+	.login-footer {
+		text-align: center;
+		margin-top: 20px;
+		font-size: 13px;
+		color: #888;
+	}
+
+	.error-message {
+		color: #dc3545;
+		font-size: 13px;
+		margin-top: 5px;
+		text-align: left;
+	}
+
+	.alert-danger {
+		border-radius: 8px;
+		font-size: 14px;
+		background-color: #fee2e2;
+		border-color: #fecaca;
+		color: #991b1b;
+	}
+
+	/* Animation */
+	.login-card {
+		animation: fadeInUp 0.5s ease-out forwards;
+		opacity: 0;
+		transform: translateY(20px);
+	}
+
+	@keyframes fadeInUp {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>
 {% endblock css %}
 
 {% block body %}
-    <div class="limiter">
-		<div class="container-login100">
-			<div class="wrap-login100 p-t-50 p-b-90">
-				<form class="login100-form validate-form flex-sb flex-w" method="post">
-                    {% csrf_token %}
-					<span class="login100-form-title p-b-45">
-						Accounting
-					</span>
-					<div class="wrap-input100 validate-input m-b-16" data-validate = "Username is required">
-						{% render_field form.username class+="input100" placeholder="Username" %}
-						<span class="focus-input100"></span>
-					</div>
-					<div class="wrap-input100 validate-input m-b-16" data-validate = "Password is required">
-						{% render_field form.password class+="input100" placeholder="Password" %}
-						<span class="focus-input100"></span>
-					</div>
-					
-					<div class="flex-sb-m w-full p-t-3 p-b-24">
-						<div class="contact100-form-checkbox">
-							<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
-							<label class="label-checkbox100" for="ckb1">
-								Remember me
-							</label>
-						</div>
-					</div>
-
-					<div class="container-login100-form-btn m-t-17">
-						<button class="login100-form-btn">
-							Login
-						</button>
-					</div>
-					<span class="login100-form-error p-t-30">
-						{% if form.errors %}
-							{% for field in form %}
-								{% for error in field.errors %}	
-									{{ error|escape }}
-								{% endfor %}
-							{% endfor %}
-							{% for error in form.non_field_errors %}
-								{{ error|escape }}
-							{% endfor %}
-						{% endif %}
-					</span>
-				</form>
-			</div>
+<div class="login-wrapper">
+	<div class="login-card">
+		<div class="login-header">
+			<h2>Welcome Back</h2>
+			<p>Please sign in to your account</p>
 		</div>
+
+		<form method="post" class="login-form">
+			{% csrf_token %}
+
+			{% if form.non_field_errors %}
+			<div class="alert alert-danger mb-4">
+				{% for error in form.non_field_errors %}
+				{{ error }}
+				{% endfor %}
+			</div>
+			{% endif %}
+
+			<div class="form-group">
+				{% render_field form.username class+="form-control" placeholder="Username" %}
+				{% if form.username.errors %}
+				<div class="error-message">
+					{{ form.username.errors.0 }}
+				</div>
+				{% endif %}
+			</div>
+
+			<div class="form-group">
+				{% render_field form.password class+="form-control" placeholder="Password" %}
+				{% if form.password.errors %}
+				<div class="error-message">
+					{{ form.password.errors.0 }}
+				</div>
+				{% endif %}
+			</div>
+
+			<div class="form-group d-flex justify-content-between align-items-center">
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" class="custom-control-input" id="rememberMe" name="remember-me">
+					<label class="custom-control-label text-muted" for="rememberMe" style="font-size: 14px;">Remember me</label>
+				</div>
+			</div>
+
+			<button type="submit" class="btn btn-login">
+				Sign In
+			</button>
+
+			<div class="login-footer">
+				&copy; {% now "Y" %} Cash Center. All rights reserved.
+			</div>
+		</form>
 	</div>
+</div>
 {% endblock body %}
