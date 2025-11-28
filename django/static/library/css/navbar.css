@@ -281,11 +281,29 @@
         /* prevent iOS zoom */
     }
 
+    .navbar-toggler-icon i {
+        transition: transform 0.3s ease, opacity 0.2s ease;
+        font-size: 22px;
+        /* Reduced from 28px */
+        color: #fff;
+    }
+
+    /* Make the cross look less bold/heavy */
+    .navbar-toggler-icon i.fa-times {
+        font-weight: 300;
+        /* Try to make it lighter if font supports it, or scale it down slightly */
+        transform: rotate(90deg);
+        font-size: 20px;
+        /* Reduced from 24px */
+        /* Slightly smaller to match visual weight of bars */
+    }
+
     .navbar-expand-xl .navbar-toggler {
         display: block;
         border: 2px solid rgba(255, 255, 255, 0.3);
         border-radius: 8px;
-        padding: 0.5rem 0.75rem;
+        padding: 0.4rem 0.6rem;
+        /* Slightly reduced padding */
         margin-left: auto;
         margin-bottom: 0;
     }
@@ -333,7 +351,8 @@
 
     /* Add spacing to body to prevent navbar overlap on mobile */
     body {
-        padding-top: 60px !important;
+        padding-top: 54px !important;
+        /* Reduced from 60px to fix spacing on Order page */
         /* Standard spacing, Ledger page will need more */
     }
 
