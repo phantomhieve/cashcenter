@@ -458,7 +458,7 @@ Add Order
 		<div class="form-row">
 			<div class="form-group col-md-6" id="agent-name-group" style="display: none;">
 				<label for="id_agent_name">Agent Name <span class="text-danger">*</span></label>
-				{% render_field form.agent_name class+="form-control" %}
+				{% render_field form.agent_name class+="form-control agentAutoComplete" autocomplete="off" %}
 				{% for e in form.agent_name.errors %}<small class="text-danger">{{ e }}</small>{% endfor %}
 			</div>
 			<div class="form-group col-md-6">
@@ -590,6 +590,15 @@ Add Order
 		preventEnter: true,
 		resolverSettings: {
 			url: "{% url 'order_autocomplete'%}?field=transport",
+			requestThrottling: 700
+		}
+	});
+	$('.agentAutoComplete').autoComplete({
+		minLength: 1,
+		bootstrapVersion: '4',
+		preventEnter: true,
+		resolverSettings: {
+			url: "{% url 'order_autocomplete'%}?field=agent_name",
 			requestThrottling: 700
 		}
 	});
