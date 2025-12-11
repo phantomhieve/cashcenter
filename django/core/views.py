@@ -14,9 +14,51 @@ def switch_financial_year(request):
     fy_id = request.POST.get('year')
     password = request.POST.get('password')
     
-    # 1. Verify Password
-    config = SystemConfig.objects.first()
-    if not config or not check_password(password, config.financial_year_password):
+    # 1. Verify Password against UserProfile
+    # Note: request.user.profile should exist due to signal, but we can be safe:
+    if not hasattr(request.user, 'profile'):
+        # Just in case signals didn't catch an old user until now
+        from .models import UserProfile
+        UserProfile.objects.create(user=request.user)
+    
+    user_password_config = request.user.profile.financial_year_password
+    
+    if not check_password(password, user_password_config):
+        # Fallback check: if the user hasn't set a hashed password yet (e.g. default 'admin' is plain text in db?)
+        # Standard django check_password handles plain text if not hashed? No, it expects encoded. 
+        # But our default was 'admin', which is plain text.
+        # Wait, check_password compares (plain_text, encoded_hash). 
+        # If 'admin' is stored as plain text in the DB CharField, check_password will fail if it expects a hash structure.
+        # However, for simplicity and backward compat with the previous SystemConfig which likely stored plain text or hash
+        # The previous code used: check_password(password, config.financial_year_password)
+        # If config.financial_year_password was 'admin' plain text, check_password might fail or return False depending on how it treats non-hash strings.
+        # Actually Django's check_password return False if the hash format is invalid (like plain text).
+        # Let's assume for now we WANT hashed passwords, but the default 'admin' might need to be handled.
+        # If the stored password == the input password (plain text match), we accept it (migration phase)
+        # OR we just use the same logic as before.
+        
+        # If the stored value matches input exactly (plain text fallback)
+        if password == user_password_config:
+             pass # valid
+        else:
+             messages.error(request, "Incorrect Financial Year Password")
+             # Return early? logic below was "if not ... error else ..."
+             # Let's restructure to match original flow
+             
+    # Reworking the flow to match original indentation structure but with new logic
+    # We need to determine Validity first
+    is_valid = False
+    
+    if hasattr(request.user, 'profile'):
+         real_stored_pwd = request.user.profile.financial_year_password
+         if check_password(password, real_stored_pwd) or password == real_stored_pwd:
+             is_valid = True
+    else:
+         # Should not happen with our lazy create above, but safety
+         # Fallback to system default if profile completely missing? No, create above handles it.
+         pass
+
+    if not is_valid:
         messages.error(request, "Incorrect Financial Year Password")
     else:
         # 2. Update Persisted Year
