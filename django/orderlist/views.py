@@ -63,6 +63,7 @@ def orderAddView(request, id=None):
         if form.is_valid():
             order = form.save(commit=False)
             order.user = request.user
+            order.financial_year = getattr(request, 'financial_year', None)
             # Save first to ensure PK exists before binding inline formset
             order.save()
             formset = FulfillmentFormSet(request.POST, instance=order)
@@ -125,7 +126,8 @@ def autocompleteView(request):
     users = getUsersFromGroup(request.user)
     results = Order.objects.filter(
         **{f"{field}__icontains": query},
-        user__in=users
+        user__in=users,
+        financial_year=getattr(request, 'financial_year', None)
     ).order_by(field).values_list(field, flat=True)
 
     unique_results = []

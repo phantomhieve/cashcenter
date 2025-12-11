@@ -73,6 +73,7 @@ class RatelistAddView(View):
         
         if form.is_valid():
             ratelist = form.save(commit=False)
+            ratelist.financial_year = getattr(self.request, 'financial_year', None)
             formset = RatelistDataFormset(
                 self.request.POST,
                 self.request.FILES,
