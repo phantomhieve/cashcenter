@@ -28,3 +28,12 @@ class OrderFilter(django_filters.FilterSet):
     class Meta:
         model = Order
         fields = []
+
+    @property
+    def qs(self):
+        """Filter queryset by user and financial year."""
+        queryset = super().qs
+        queryset = queryset.filter(user=self.request.user)
+        if getattr(self.request, 'financial_year', None):
+            queryset = queryset.filter(financial_year=self.request.financial_year)
+        return queryset

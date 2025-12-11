@@ -6,6 +6,12 @@ class RatelistData(models.Model):
     """Model for storing rate list data."""
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    financial_year = models.ForeignKey(
+        'core.FinancialYear',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     category = models.CharField(null=False, max_length=255)
     item = models.CharField(null=False, max_length=255)
     hsn = models.CharField(blank=True, null=True, max_length=255)

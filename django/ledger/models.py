@@ -7,7 +7,7 @@ class LedgerData(models.Model):
     
     class Meta:
         ordering = ['l_r_date', 'id']
-        unique_together = ('user', 'l_r_no')
+        # unique_together = ('user', 'l_r_no') # Removed for Financial Year migration
         indexes = [
             models.Index(fields=['user', 'l_r_date']),
             models.Index(fields=['l_r_date', 'delivery']),
@@ -15,6 +15,12 @@ class LedgerData(models.Model):
         ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    financial_year = models.ForeignKey(
+        'core.FinancialYear',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     l_r_no = models.CharField(max_length=255, db_index=True)
     l_r_date = models.DateField(blank=True, null=True)
     bale_no = models.CharField(blank=True, null=True, max_length=255)

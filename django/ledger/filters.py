@@ -83,6 +83,9 @@ class LedgerDataFilter(django_filters.FilterSet):
     def filter_by_delivery(self, queryset, name, value):
         """Filter queryset by delivery status."""
         queryset_ = queryset.filter(user=self.request.user)
+        if getattr(self.request, 'financial_year', None):
+            queryset_ = queryset_.filter(financial_year=self.request.financial_year)
+
         if value == 'True':
             queryset_ = queryset_.exclude(delivery=None)
         elif value == 'False':
@@ -100,7 +103,10 @@ class LedgerDataFilter(django_filters.FilterSet):
         """Filter queryset by selected columns."""
         value.append('id')
         self.values = value
-        return queryset.filter(user=self.request.user).values(*self.values)
+        queryset = queryset.filter(user=self.request.user)
+        if getattr(self.request, 'financial_year', None):
+            queryset = queryset.filter(financial_year=self.request.financial_year)
+        return queryset.values(*self.values)
     
     # Extra Field: Delivery after date filter
     delivery_after = django_filters.DateFilter(
@@ -110,14 +116,16 @@ class LedgerDataFilter(django_filters.FilterSet):
     
     def filter_delivery_after(self, queryset, name, value):
         """Filter queryset for deliveries after a specific date."""
+        base_qs = queryset.filter(user=self.request.user)
+        if getattr(self.request, 'financial_year', None):
+            base_qs = base_qs.filter(financial_year=self.request.financial_year)
+
         queryset_ = (
-            queryset.filter(
-                user=self.request.user,
+            base_qs.filter(
                 l_r_date__lt=value,
                 delivery=None
             ) |
-            queryset.filter(
-                user=self.request.user,
+            base_qs.filter(
                 l_r_date__lt=value,
                 delivery__gte=value
             )
@@ -139,4 +147,7 @@ class LedgerDataFilter(django_filters.FilterSet):
     def qs(self):
         """Filter queryset by user and return selected values."""
         queryset = super().qs
-        return queryset.filter(user=self.request.user).values(*self.values)
+        queryset = queryset.filter(user=self.request.user)
+        if getattr(self.request, 'financial_year', None):
+            queryset = queryset.filter(financial_year=self.request.financial_year)
+        return queryset.values(*self.values)
