@@ -47,6 +47,7 @@ def stockAddView(request, id=None):
         if form.is_valid():
             stock = form.save(commit=False)
             stock.user = request.user
+            stock.financial_year = getattr(request, 'financial_year', None)
             stock.save()
             return HttpResponseRedirect(reverse('stock_list'))
         return render(request, '404.html')
@@ -80,7 +81,8 @@ def autoComplete(request):
         # Use distinct() at database level instead of set() in Python
         data = StockData.objects.filter(
             **lookup,
-            user=request.user
+            user=request.user,
+            financial_year=getattr(request, 'financial_year', None)
         ).values_list(field, flat=True).distinct()[:10]
         
         return JsonResponse(list(data), safe=False)

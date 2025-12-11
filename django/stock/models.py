@@ -6,6 +6,12 @@ class StockData(models.Model):
     """Model for storing stock data."""
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    financial_year = models.ForeignKey(
+        'core.FinancialYear',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     category = models.CharField(max_length=255)
     company = models.CharField(max_length=255)
     item = models.CharField(max_length=255)

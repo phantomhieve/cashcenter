@@ -46,7 +46,11 @@ class LedgerListView(FilterView):
                 get_params.pop('columns', None)  # Remove column filter
                 base_filterset = self.filterset_class(
                     get_params,
-                    queryset=self.model.objects.filter(user=self.request.user),
+                    get_params,
+                    queryset=self.model.objects.filter(
+                        user=self.request.user,
+                        financial_year=getattr(self.request, 'financial_year', None)
+                    ),
                     request=self.request
                 )
                 base_qs = base_filterset.qs
@@ -97,6 +101,7 @@ def ledgerAddView(request, id=None):
         if form.is_valid():
             ledger = form.save(commit=False)
             ledger.user = request.user
+            ledger.financial_year = getattr(request, 'financial_year', None)
             # Use exists() instead of len() for better performance
             existing_data = LedgerData.objects.filter(
                 l_r_no=ledger.l_r_no,
@@ -142,7 +147,8 @@ def autoComplete(request):
         queryset = (
             LedgerData.objects.filter(
                 **lookup,
-                user__in=users
+                user__in=users,
+                financial_year=getattr(request, 'financial_year', None)
             )
             .order_by(field)
             .values_list(field, flat=True)
