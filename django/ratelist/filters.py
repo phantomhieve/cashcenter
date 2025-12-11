@@ -18,4 +18,7 @@ class RatelistDataFilter(django_filters.FilterSet):
     def qs(self):
         """Filter queryset by user."""
         queryset = super().qs
-        return queryset.filter(user=self.request.user)
+        queryset = queryset.filter(user=self.request.user)
+        if getattr(self.request, 'financial_year', None):
+            queryset = queryset.filter(financial_year=self.request.financial_year)
+        return queryset

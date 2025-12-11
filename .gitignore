@@ -165,4 +165,8 @@ reports/
 docker-compose.yml
 
 # Django management commands
-django/**/management
+# django/**/management
+
+# Data Generation Scripts
+generate_legacy_data.py
+seed_data.py

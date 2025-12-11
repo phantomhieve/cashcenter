@@ -19,6 +19,12 @@ class Order(models.Model):
         AGENT = 'agent', _('Agent')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    financial_year = models.ForeignKey(
+        'core.FinancialYear',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     order_number = models.CharField(max_length=255)
     company_name = models.CharField(max_length=255)
     item = models.CharField(max_length=255)

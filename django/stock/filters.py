@@ -17,4 +17,7 @@ class StockDataFilter(django_filters.FilterSet):
     def qs(self):
         """Filter queryset by user and order by id."""
         queryset = super().qs
-        return queryset.filter(user=self.request.user).order_by('id')
+        queryset = queryset.filter(user=self.request.user)
+        if getattr(self.request, 'financial_year', None):
+            queryset = queryset.filter(financial_year=self.request.financial_year)
+        return queryset.order_by('id')
