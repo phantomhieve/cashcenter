@@ -81,12 +81,19 @@
     line-height: 1.2;
 }
 
+.navbar-content i {
+    width: 24px;
+    text-align: center;
+    display: inline-block;
+}
+
 .navbar-content:hover {
     color: white !important;
     background-color: rgba(255, 255, 255, 0.15);
     transform: translateY(-2px);
     text-decoration: none;
 }
+
 
 .navbar-item {
     padding-right: 8px;
@@ -114,21 +121,21 @@
     cursor: pointer;
 }
 
-.financial-year-select {
-    background: transparent;
-    border: none;
+.financial-year-text {
+    font-family: 'Ubuntu-Regular', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: inherit !important;
+    margin-left: 4px;
     color: white;
-    padding: 0;
-    height: auto;
-    width: auto;
-    font-weight: 500;
-    cursor: pointer;
-    box-shadow: none;
-    -webkit-appearance: none;
-    appearance: none;
-    line-height: inherit;
-    font-family: inherit;
-    font-size: inherit;
+}
+
+.financial-year-wrapper.dropdown-toggle::after {
+    display: none;
+}
+
+.financial-year-dropdown {
+    max-height: 150px !important;
+    overflow-y: auto;
 }
 
 .financial-year-select:focus {
@@ -280,7 +287,7 @@
         width: 100%;
         text-align: left;
         justify-content: flex-start;
-        border-radius: 12px;
+        border-radius: 8px;
         background-color: rgba(255, 255, 255, 0.08);
     }
 
@@ -337,7 +344,9 @@
     .navbar-expand-xl .navbar-toggler {
         display: block;
         border: 2px solid rgba(255, 255, 255, 0.3);
-        border-radius: 8px;
+
+
+
         padding: 0.4rem 0.6rem;
         /* Slightly reduced padding */
         margin-left: auto;

@@ -17,27 +17,26 @@
 
     <div class="collapse navbar-collapse" id="navbarNav">
         <!-- Left Side: Financial Year Selector -->
-        <ul class="navbar-nav mr-auto">
+
+
+        <ul class="{% block nav_class %}navbar-nav ml-auto{% endblock %}">
             {% with url_name=request.resolver_match.url_name %}
             {% if url_name != 'ledger_add' and url_name != 'ledger_update' and url_name != 'ratelist_add' and url_name != 'ratelist_update' and url_name != 'order_add' and url_name != 'order_update' and url_name != 'stock_add' and url_name != 'stock_update' %}
-            <li class="nav-item navbar-item">
-                <div class="navbar-content financial-year-wrapper">
+            <li class="nav-item navbar-item dropdown">
+                <div class="navbar-content financial-year-wrapper dropdown-toggle" id="fyDropdown"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-calendar" style="color: white;"></i>
-                    <select class="form-control financial-year-select"
-                        onchange="location.href='{% url 'switch_financial_year' %}?year='+this.value;">
-                        {% for fy in financial_years %}
-                        <option value="{{ fy.id }}" {% if current_financial_year == fy %}selected {%endif %}>
-                            {{ fy }}
-                        </option>
-                        {% endfor %}
-                    </select>
+                    <span class="financial-year-text">{{ current_financial_year }}</span>
+                </div>
+                <div class="dropdown-menu financial-year-dropdown" aria-labelledby="fyDropdown"
+                    style="max-height: 200px !important; overflow-y: auto !important;">
+                    {% for fy in financial_years %}
+                    <a class="dropdown-item" href="{% url 'switch_financial_year' %}?year={{ fy.id }}">{{ fy }}</a>
+                    {% endfor %}
                 </div>
             </li>
             {% endif %}
             {% endwith %}
-        </ul>
-
-        <ul class="{% block nav_class %}navbar-nav ml-auto{% endblock %}">
             {% if request.user.is_staff %}
             <li class="nav-item navbar-item">
                 <a href="{% url 'ledger_list' %}?{% url_replace %}" class="nav-link navbar-content">
