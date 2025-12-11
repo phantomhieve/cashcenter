@@ -46,7 +46,6 @@ class LedgerListView(FilterView):
                 get_params.pop('columns', None)  # Remove column filter
                 base_filterset = self.filterset_class(
                     get_params,
-                    get_params,
                     queryset=self.model.objects.filter(
                         user=self.request.user,
                         financial_year=getattr(self.request, 'financial_year', None)
