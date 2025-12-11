@@ -16,6 +16,27 @@
     {% endblock search %}
 
     <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Left Side: Financial Year Selector -->
+        <ul class="navbar-nav mr-auto">
+            {% with url_name=request.resolver_match.url_name %}
+            {% if url_name != 'ledger_add' and url_name != 'ledger_update' and url_name != 'ratelist_add' and url_name != 'ratelist_update' and url_name != 'order_add' and url_name != 'order_update' and url_name != 'stock_add' and url_name != 'stock_update' %}
+            <li class="nav-item navbar-item">
+                <div class="navbar-content financial-year-wrapper">
+                    <i class="fa fa-calendar" style="color: white;"></i>
+                    <select class="form-control financial-year-select"
+                        onchange="location.href='{% url 'switch_financial_year' %}?year='+this.value;">
+                        {% for fy in financial_years %}
+                        <option value="{{ fy.id }}" {% if current_financial_year == fy %}selected {%endif %}>
+                            {{ fy }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </li>
+            {% endif %}
+            {% endwith %}
+        </ul>
+
         <ul class="{% block nav_class %}navbar-nav ml-auto{% endblock %}">
             {% if request.user.is_staff %}
             <li class="nav-item navbar-item">
@@ -45,20 +66,6 @@
             </li> -->
             {% block links %}
             {% endblock links %}
-            {% with url_name=request.resolver_match.url_name %}
-            {% if url_name != 'ledger_add' and url_name != 'ledger_update' and url_name != 'ratelist_add' and url_name != 'ratelist_update' and url_name != 'order_add' and url_name != 'order_update' and url_name != 'stock_add' and url_name != 'stock_update' %}
-            <li class="nav-item navbar-item" style="margin-right: 15px; margin-top: 2px;">
-                <form class="form-inline">
-                    <select class="form-control form-control-sm" style="background-color: transparent; color: white;"onchange="location.href='{% url 'switch_financial_year' %}?year='+this.value;">{% for fy in financial_years %}
-                        <option value="{{ fy.id }}" style="color: black;" {% if current_financial_year == fy %}selected{%endif %}>
-                            {{ fy }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </form>
-            </li>
-            {% endif %}
-            {% endwith %}
             <li class="nav-item navbar-item navbar-logout">
                 <form method="post" action="{% url 'user_logout' %}" class="navbar-logout-form">
                     {% csrf_token %}

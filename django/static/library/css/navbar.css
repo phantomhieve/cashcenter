@@ -106,6 +106,42 @@
     width: 100%;
 }
 
+/* ============================================
+   FINANCIAL YEAR SELECTOR
+   ============================================ */
+.financial-year-wrapper {
+    margin: 0;
+    cursor: pointer;
+}
+
+.financial-year-select {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 0;
+    height: auto;
+    width: auto;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
+    line-height: inherit;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.financial-year-select:focus {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: white;
+}
+
+.financial-year-select option {
+    color: #333;
+}
+
 .navbar .navbar-nav form {
     margin: 0;
     padding: 0;
