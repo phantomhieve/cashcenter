@@ -246,7 +246,160 @@
 .navbar .btn-danger:hover,
 .navbar .btn-danger:focus {
     background: linear-gradient(135deg, #fda4af 0%, #fb7185 100%);
+
     outline: none;
+}
+
+/* Modal Polish - Refined Blue/Red Theme */
+.modal-content {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    background-color: #ffffff;
+}
+
+.modal-header {
+    background: #827ffe;
+    color: white;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    /* Subtle separator instead of none, helps structure */
+    align-items: center;
+    position: relative;
+}
+
+.modal-title {
+    font-family: 'Ubuntu-Bold', sans-serif;
+    font-size: 1.25rem;
+    margin: 0;
+    letter-spacing: 0.3px;
+    text-shadow: none;
+    width: 100%;
+    /* Ensure it takes space */
+}
+
+/* Close Button - Rectified Positioning */
+.modal-header .close {
+    color: white;
+    opacity: 0.8;
+    text-shadow: none;
+    transition: all 0.2s ease;
+    outline: none;
+    position: absolute;
+    right: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.4rem;
+    margin: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    line-height: 1;
+}
+
+.modal-header .close:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.2);
+    /* No rotation, just background highlight */
+}
+
+.modal-header .close span {
+    font-size: 1.75rem;
+    padding-bottom: 4px;
+    /* Visual center fix for 'times' char */
+}
+
+/* Body - Removed "Box in Box" feeling */
+.modal-body {
+    padding: 2rem 2rem 1rem;
+    /* More breathing room */
+    background-color: transparent;
+    /* Inherit from content */
+}
+
+.modal-body p {
+    margin-bottom: 1.25rem;
+    font-size: 1.1rem;
+    color: #334155;
+    font-weight: 500;
+}
+
+.modal-body label {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    color: #64748b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+/* Input Fields - Crisp & Clean */
+#fyPasswordModal .form-control {
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    color: #1e293b;
+    transition: all 0.2s ease;
+    height: auto;
+}
+
+#fyPasswordModal .form-control:focus {
+    border-color: #827ffe;
+    box-shadow: 0 0 0 4px rgba(130, 127, 254, 0.15);
+}
+
+.modal-footer {
+    border-top: none;
+    padding: 1rem 2rem 2rem;
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Cancel Button - Red Text/Ghost Style */
+#fyPasswordModal .btn-danger {
+    background: transparent;
+    color: #ef4444;
+    /* Red Text */
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    font-size: 1rem;
+    box-shadow: none;
+}
+
+#fyPasswordModal .btn-danger:hover {
+    background-color: #fef2f2;
+    /* Light Red Background */
+    color: #dc2626;
+    transform: translateY(-1px);
+}
+
+/* Primary "Switch Year" Button - Blue Theme */
+#fyPasswordModal .btn-primary {
+    background: #827ffe;
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 2.5rem;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    box-shadow: 0 4px 12px rgba(130, 127, 254, 0.3);
+    transition: all 0.2s ease;
+}
+
+#fyPasswordModal .btn-primary:hover {
+    background: #6d6af0;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(130, 127, 254, 0.35);
 }
 
 /* Desktop-specific styles for search bar positioning - v2 */

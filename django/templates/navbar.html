@@ -31,7 +31,7 @@
                 <div class="dropdown-menu financial-year-dropdown" aria-labelledby="fyDropdown"
                     style="max-height: 200px !important; overflow-y: auto !important;">
                     {% for fy in financial_years %}
-                    <a class="dropdown-item" href="{% url 'switch_financial_year' %}?year={{ fy.id }}">{{ fy }}</a>
+                    <a class="dropdown-item" href="#" onclick="openFyModal('{{ fy.id }}', '{{ fy }}')">{{ fy }}</a>
                     {% endfor %}
                 </div>
             </li>
@@ -76,3 +76,43 @@
         </ul>
     </div>
 </nav>
+
+<!-- Financial Year Password Modal -->
+<div class="modal fade" id="fyPasswordModal" tabindex="-1" role="dialog" aria-labelledby="fyPasswordModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fyPasswordModalLabel">Switch Financial Year</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" action="{% url 'switch_financial_year' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p class="mb-2">Enter password to switch to <b id="fyTargetName"></b></p>
+                    <input type="hidden" name="year" id="fyTargetInput">
+                    <div class="form-group mb-0">
+                        <label for="fyPassword" class="small text-muted font-weight-bold">PASSWORD</label>
+                        <input type="password" class="form-control" name="password" id="fyPassword" required autofocus
+                            placeholder="Enter password">
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Switch Year</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openFyModal(yearId, yearName) {
+        $('#fyTargetInput').val(yearId);
+        $('#fyTargetName').text(yearName);
+        $('#fyPassword').val(''); // Clear password
+        $('#fyPasswordModal').modal('show');
+    }
+</script>
