@@ -2,15 +2,17 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-import json
-
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-    with open('.env', 'r') as stream:
-        secret_values: dict = json.loads(stream.read())
-        for key, value in secret_values.items():
-            os.environ.setdefault(key, value)
+    try:
+        with open('.env', 'r') as f:
+            for line in f:
+                if line.strip() and not line.strip().startswith('#'):
+                    key, value = line.strip().split('=', 1)
+                    os.environ.setdefault(key, value)
+    except FileNotFoundError:
+        pass
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
