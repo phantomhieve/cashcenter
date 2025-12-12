@@ -571,6 +571,271 @@
     }
 
     /* Removed manual child toggling to allow bootstrap transition */
+
+    /* Ensure dropdowns appear inline on mobile, not floating absolutely */
+    /* Ensure financial year dropdown appears inline on mobile - ULTRA SPECIFICITY */
+    #mobileFyMenu {
+        position: static !important;
+        transform: none !important;
+        top: auto !important;
+        left: auto !important;
+        float: none !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        margin-top: 0 !important;
+        background-color: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        padding: 0 0 0 1.5rem !important;
+        border-radius: 0 !important;
+        display: block;
+        /* Ensure it takes up space when open */
+    }
+
+    /* Ensure only the active dropdown shows (Bootstrap adds 'show' class) */
+    #mobileFyMenu.dropdown-menu {
+        display: block !important;
+        /* Always in DOM for transition */
+        max-height: 0 !important;
+        opacity: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        transition: all 0.3s ease-in-out;
+        border: 0 !important;
+    }
+
+    #mobileFyMenu.dropdown-menu.show {
+        max-height: 500px !important;
+        opacity: 1 !important;
+        /* Removed background color individually to match theme seamlessly */
+        background-color: transparent !important;
+    }
+
+    /* Styling for items inside mobile FY dropdown */
+    #mobileFyMenu .dropdown-item {
+        color: rgba(255, 255, 255, 0.9) !important;
+        padding: 0.75rem 1rem !important;
+        /* Increased padding */
+        white-space: normal !important;
+        border-radius: 8px;
+        margin-bottom: 2px;
+    }
+
+    #mobileFyMenu .dropdown-item:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: #ffffff !important;
+    }
+
+    /* Highlight the active year if needed - assuming generic link for now */
+
+    /* Hide the header inside mobile dropdown if needed, or style it */
+    #mobileFyMenu .dropdown-header {
+        display: none !important;
+        /* Hide header to make list cleaner */
+    }
+
+    /* Fix Toggler Width and Caret Position on Mobile */
+    #mobileFyDropdown {
+        width: 100% !important;
+        display: flex !important;
+        /* Override inline-flex to ensure full width */
+        justify-content: space-between !important;
+        /* Push caret to end */
+        background: rgba(255, 255, 255, 0.1);
+        /* Match other buttons style if needed */
+    }
+
+    /* Ensure caret (::after) is visible and pushed */
+    #mobileFyDropdown::after {
+        margin-left: auto !important;
+        /* Push to right */
+        display: inline-block !important;
+        /* Ensure visibility */
+        border-top: 0.3em solid;
+        border-right: 0.3em solid transparent;
+        border-bottom: 0;
+        border-left: 0.3em solid transparent;
+    }
+
+    /* Ensure the parent list item is full width */
+    .mobile-fy-li {
+        width: 100% !important;
+        display: block !important;
+    }
 }
 
 /* Removed 1024-1199 block as it is now covered by mobile styles */
+
+/* ============================================
+   DROPDOWN POLISH
+   ============================================ */
+
+/* Fix spacing in dropdown - tighter dividers */
+.dropdown-divider {
+    margin: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    padding-top: 0;
+    padding-bottom: 0;
+    /* Remove bottom padding to fix white gap */
+    background-color: #ffffff;
+    /* Explicit white */
+    font-family: 'Ubuntu-Regular', sans-serif;
+    /* Explicit font */
+    text-align: left;
+    /* Ensure left align */
+    overflow: hidden;
+    /* Clip children (like hover bg) to border radius */
+}
+
+/* Generic Item Styling */
+/* Generic Item Styling */
+.dropdown-item {
+    font-family: 'Ubuntu-Regular', sans-serif;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.95rem;
+    color: #334155;
+    transition: all 0.2s ease;
+    width: 100%;
+    /* Force full width */
+    display: block;
+    /* Ensure block level */
+    clear: both;
+    font-weight: 400;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
+
+.dropdown-item:hover {
+    background: linear-gradient(135deg, #827ffe 0%, #a78bfa 100%);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.dropdown-item i {
+    width: 20px;
+    text-align: center;
+    margin-right: 2px;
+    color: #827ffe;
+    display: inline-block;
+}
+
+.dropdown-item:hover i {
+    color: #ffffff !important;
+}
+
+
+.dropdown-header {
+    font-family: 'Ubuntu-Bold', sans-serif;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+/* Global removal, moved to media query below */
+
+/* Specific desktop override to kill ghost lines */
+@media screen and (min-width: 1200px) {
+    .mobile-fy-header {
+        display: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+}
+
+@media screen and (max-width: 1199.98px) {
+    /* ... existing mobile styles ... */
+
+    /* Mobile FY Header - Active here */
+    .mobile-fy-header {
+        display: block;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        margin-top: 0.35rem;
+        padding-top: 0.75rem;
+    }
+}
+
+/* Logout Dropdown Item - Red Scheme (Placed LAST for specificity) */
+.dropdown-item-danger {
+    color: #dc3545 !important;
+    font-weight: 500;
+    display: flex;
+    /* Flex layout */
+    align-items: center;
+    gap: 0.1rem;
+    /* Reduced gap to match standard item spacing essentially */
+    width: 100%;
+    /* Ensure padding matches generic item exactly */
+    padding: 0.6rem 1.25rem;
+
+    /* Match font metrics of standard items to ensure exact same height */
+    font-family: 'Ubuntu-Regular', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.dropdown-item-danger:hover,
+.dropdown-item-danger:active,
+.dropdown-item-danger:focus {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+    color: #ffffff !important;
+    text-decoration: none;
+}
+
+/* Ensure icon turns white too */
+/* Specific ID override to guarantee precedence */
+#logout-item {
+    color: #dc3545 !important;
+}
+
+#logout-item:hover,
+#logout-item:focus,
+#logout-item:active {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+    color: white !important;
+}
+
+#logout-item i {
+    color: #dc3545 !important;
+}
+
+#logout-item:hover i {
+    color: white !important;
+}
+
+/* Override generic icon color for danger item normal state */
+.dropdown-item-danger i {
+    color: #dc3545 !important;
+}
+
+/* Refactored Utility Classes (Moving inline styles to CSS) */
+
+.fy-modal-body {
+    max-height: 200px !important;
+    overflow-y: auto !important;
+}
+
+.profile-nav-link {
+    color: white !important;
+}
+
+.profile-icon-large {
+    font-size: 24px !important;
+}
+
+.dropdown-divider-top {
+    border-top: 1px solid #e2e8f0;
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+}

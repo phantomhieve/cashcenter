@@ -5,7 +5,9 @@ from django.views.decorators.http import require_http_methods
 from .models import FinancialYear, SystemConfig, UserFinancialYear
 from django.contrib import messages
 
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
+from django.shortcuts import redirect, render
+from .forms import FinancialPasswordChangeForm
 
 @login_required
 @require_http_methods(["POST"])
@@ -82,3 +84,21 @@ def switch_financial_year(request):
     clean_url = urlunparse((parsed.scheme, parsed.netloc, parsed.path, parsed.params, '', ''))
     
     return redirect(clean_url)
+
+@login_required
+def change_financial_password(request):
+    if request.method == 'POST':
+        form = FinancialPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            new_password = form.cleaned_data['new_password']
+            # Update password
+            profile = request.user.profile
+            profile.financial_year_password = make_password(new_password)
+            profile.save()
+            messages.success(request, "Financial Year password updated successfully.")
+            return redirect('ledger_base_list') # Redirect to home/dashboard
+    else:
+        form = FinancialPasswordChangeForm(request.user)
+    
+    return render(request, 'core/change_financial_password.html', {'form': form})
+
