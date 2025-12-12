@@ -8,7 +8,7 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon">
-            <i class="fa fa-navicon" style="color:#fff; font-size:28px;"></i>
+            <i class="fa fa-navicon"></i>
         </span>
     </button>
 
@@ -22,14 +22,14 @@
         <ul class="{% block nav_class %}navbar-nav ml-auto{% endblock %}">
             {% with url_name=request.resolver_match.url_name %}
             {% if url_name != 'ledger_add' and url_name != 'ledger_update' and url_name != 'ratelist_add' and url_name != 'ratelist_update' and url_name != 'order_add' and url_name != 'order_update' and url_name != 'stock_add' and url_name != 'stock_update' %}
-            <li class="nav-item navbar-item dropdown">
+            <li class="nav-item navbar-item dropdown d-none d-xl-block">
                 <div class="navbar-content financial-year-wrapper dropdown-toggle" id="fyDropdown"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-calendar" style="color: white;"></i>
+                    <i class="fa fa-calendar text-white"></i>
                     <span class="financial-year-text">{{ current_financial_year }}</span>
                 </div>
-                <div class="dropdown-menu financial-year-dropdown" aria-labelledby="fyDropdown"
-                    style="max-height: 200px !important; overflow-y: auto !important;">
+                <!-- Refactored: .fy-modal-body added -->
+                <div class="dropdown-menu financial-year-dropdown fy-modal-body" aria-labelledby="fyDropdown">
                     {% for fy in financial_years %}
                     <a class="dropdown-item" href="#" onclick="openFyModal('{{ fy.id }}', '{{ fy }}')">{{ fy }}</a>
                     {% endfor %}
@@ -37,6 +37,25 @@
             </li>
             {% endif %}
             {% endwith %}
+            <!-- Mobile Financial Year Selector (Visible only on mobile) -->
+            <li class="nav-item navbar-item d-xl-none mobile-fy-li">
+                <a class="nav-link dropdown-toggle navbar-content" href="#" id="mobileFyDropdown" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-calendar text-white"></i> {{ current_financial_year }}
+                </a>
+                <div class="dropdown-menu mobile-fy-dropdown" id="mobileFyMenu" aria-labelledby="mobileFyDropdown">
+                    <h6 class="dropdown-header">Switch Financial Year</h6>
+                    {% for fy in financial_years %}
+                    <a class="dropdown-item" href="#" onclick="openFyModal('{{ fy.id }}', '{{ fy }}')">
+                        {% if fy.id == current_financial_year.id %}
+                        <i class="fa fa-check text-success"></i>
+                        {% endif %}
+                        {{ fy }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </li>
+
             {% if request.user.is_staff %}
             <li class="nav-item navbar-item">
                 <a href="{% url 'ledger_list' %}?{% url_replace %}" class="nav-link navbar-content">
@@ -65,13 +84,29 @@
             </li> -->
             {% block links %}
             {% endblock links %}
-            <li class="nav-item navbar-item navbar-logout">
-                <form method="post" action="{% url 'user_logout' %}" class="navbar-logout-form">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-sm">
+            <li class="nav-item navbar-item dropdown">
+                <!-- Refactored: .profile-nav-link and .profile-icon-large added -->
+                <a class="nav-link dropdown-toggle navbar-content profile-nav-link" href="#" id="profileDropdown"
+                    role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-user-circle profile-icon-large" aria-hidden="true"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
+                    <span class="dropdown-header">Signed in as <b>{{ request.user.username }}</b></span>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
+                    <a class="dropdown-item" href="{% url 'change_financial_password' %}">Change Admin Password</a>
+
+                    <!-- Standard divider instead of border styling -->
+                    <div class="dropdown-divider"></div>
+
+                    <a class="dropdown-item dropdown-item-danger" href="#" id="logout-item"
+                        onclick="document.getElementById('logout-nav-form').submit();">
                         <i class="fa fa-sign-out" aria-hidden="true"></i> Logout
-                    </button>
-                </form>
+                    </a>
+                    <form id="logout-nav-form" method="post" action="{% url 'user_logout' %}" class="d-none">
+                        {% csrf_token %}
+                    </form>
+                </div>
             </li>
         </ul>
     </div>

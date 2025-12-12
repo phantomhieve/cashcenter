@@ -1,0 +1,202 @@
+/* Auth Theme CSS - Shared styles for Login, Change Password, etc. */
+
+/* 
+   Scoping: We apply base fonts to the specific wrapper to avoid 
+   overriding the global navbar styles when these pages are used 
+   inside the main app layout.
+*/
+
+/* Global Resets for Auth Pages */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure #body (from base.html) doesn't add padding */
+#body {
+  padding: 0 !important;
+  min-height: 100vh;
+}
+
+.login-wrapper {
+  min-height: 100vh;
+  /* Reduced padding-top to avoid excessive space on login, 
+     but keeping enough if navbar is present. 
+     Actually, if we want centered login, we might not want fixed padding-top 
+     unless the navbar is strictly fixed overlay. 
+     Let's use a safe value or handle it via flex centering. */
+  padding-top: 60px;
+  padding-bottom: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Default Background (Blue/Standard) */
+  background: radial-gradient(circle at 50% 50%, #e0e7ff 0%, #f3f4f6 100%) no-repeat fixed;
+  background-size: cover;
+}
+
+/* Variant: Financial (Amber/Warm) */
+.login-wrapper.theme-financial {
+  background: radial-gradient(circle at 50% 50%, #fff7ed 0%, #fffbeb 100%) no-repeat fixed;
+}
+
+.login-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 400px;
+  /* Reverted to 400px as per user request */
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  padding: 40px 30px;
+  position: relative;
+  border-top: 5px solid #827ffe;
+  /* Default Blue */
+
+  /* Animation */
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.login-wrapper.theme-financial .login-card {
+  border-top-color: #f59e0b;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-header h2 {
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 26px;
+}
+
+.login-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+.auth-form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.auth-form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.auth-form-control {
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid #e1e1e1;
+  padding-left: 15px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
+  width: 100%;
+  display: block;
+}
+
+.auth-form-control:focus {
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+  background-color: #fff;
+  outline: none;
+}
+
+.login-wrapper.theme-financial .auth-form-control:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+.auth-help-text {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Buttons */
+.btn-auth-action {
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #827ffe 0%, #a78bfa 100%);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.btn-auth-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(130, 127, 254, 0.3);
+  color: #fff;
+  background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%);
+  text-decoration: none;
+}
+
+/* Financial Theme Button */
+.login-wrapper.theme-financial .btn-auth-action {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.login-wrapper.theme-financial .btn-auth-action:hover {
+  box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+}
+
+.btn-auth-cancel {
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  border: none;
+  color: #fff;
+  /* Danger Gradient */
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.btn-auth-cancel:hover {
+  background: linear-gradient(135deg, #d66ec0 0%, #db3e56 100%);
+  color: #fff;
+  box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
