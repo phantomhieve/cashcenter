@@ -4,10 +4,30 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from .models import FinancialYear, SystemConfig, UserFinancialYear
 from django.contrib import messages
+from django.http import JsonResponse
+import json
 
 from django.contrib.auth.hashers import check_password, make_password
 from django.shortcuts import redirect, render
 from .forms import FinancialPasswordChangeForm
+
+@login_required
+@require_http_methods(["POST"])
+def verify_financial_password(request):
+    try:
+        data = json.loads(request.body)
+        password = data.get('password')
+        
+        if not hasattr(request.user, 'profile'):
+             return JsonResponse({'success': False, 'message': 'User profile not found'})
+
+        real_stored_pwd = request.user.profile.financial_year_password
+        if check_password(password, real_stored_pwd) or password == real_stored_pwd:
+             return JsonResponse({'success': True})
+        else:
+             return JsonResponse({'success': False, 'message': 'Incorrect Password'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})
 
 @login_required
 @require_http_methods(["POST"])
