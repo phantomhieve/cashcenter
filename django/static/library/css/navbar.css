@@ -250,23 +250,33 @@
     outline: none;
 }
 
-/* Modal Polish - Refined Blue/Red Theme */
+/* Modal Polish - Refined Style (Purple Header) */
 .modal-content {
     border: none;
-    border-radius: 16px;
+    border-radius: 12px;
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
     overflow: hidden;
     background-color: #ffffff;
 }
 
+/* Vertical Centering Fix */
+.modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 3.5rem);
+}
+
 .modal-header {
     background: #827ffe;
+    /* Reverted to Purple per user image */
     color: white;
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    /* Subtle separator instead of none, helps structure */
+    padding: 1rem 1.5rem;
+    /* Reduced height/padding */
+    border-bottom: none;
     align-items: center;
     position: relative;
+    display: flex;
+    justify-content: space-between;
 }
 
 .modal-title {
@@ -274,23 +284,22 @@
     font-size: 1.25rem;
     margin: 0;
     letter-spacing: 0.3px;
-    text-shadow: none;
-    width: 100%;
-    /* Ensure it takes space */
+    color: white;
+    /* White text on purple */
 }
 
-/* Close Button - Rectified Positioning */
+/* Close Button - White on Purple */
 .modal-header .close {
-    color: white;
-    opacity: 0.8;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    opacity: 1;
     text-shadow: none;
-    transition: all 0.2s ease;
     outline: none;
     position: absolute;
-    right: 1.25rem;
+    right: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    padding: 0.4rem;
+    padding: 0;
     margin: 0;
     width: 32px;
     height: 32px;
@@ -298,108 +307,135 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    line-height: 1;
+    transition: all 0.2s ease;
+    border: none;
+    box-shadow: none;
 }
 
 .modal-header .close:hover {
-    opacity: 1;
     background-color: rgba(255, 255, 255, 0.2);
-    /* No rotation, just background highlight */
+    color: #ffffff;
+    transform: translateY(-50%);
+    /* Keep centered */
 }
 
 .modal-header .close span {
-    font-size: 1.75rem;
-    padding-bottom: 4px;
-    /* Visual center fix for 'times' char */
+    font-size: 1.5rem;
+    line-height: 1;
+    display: block;
+    margin-top: -2px;
 }
 
-/* Body - Removed "Box in Box" feeling */
+/* Body - Flowing from Header */
 .modal-body {
-    padding: 2rem 2rem 1rem;
-    /* More breathing room */
-    background-color: transparent;
-    /* Inherit from content */
+    padding: 1.5rem 2rem 1rem;
+    /* More breathing room top since header color differs */
+    background-color: #ffffff;
+}
+
+#universalFinancialModal form {
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 
 .modal-body p {
-    margin-bottom: 1.25rem;
-    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
     color: #334155;
     font-weight: 500;
 }
 
 .modal-body label {
-    font-size: 0.8rem;
-    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
     color: #64748b;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.8px;
 }
 
-/* Input Fields - Crisp & Clean */
-#fyPasswordModal .form-control {
-    border-radius: 10px;
-    border: 2px solid #e2e8f0;
+/* Input Fields - Totally Flat / No Nested Look */
+#fyPasswordModal .form-control,
+#universalFinancialModal .form-control {
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
     padding: 0.75rem 1rem;
     font-size: 1rem;
     color: #1e293b;
-    transition: all 0.2s ease;
+    background-color: #ffffff;
+    /* pure white, no contrast box */
     height: auto;
+    box-shadow: none !important;
+    /* Remove any inset shadow */
 }
 
-#fyPasswordModal .form-control:focus {
+#fyPasswordModal .form-control:focus,
+#universalFinancialModal .form-control:focus {
     border-color: #827ffe;
-    box-shadow: 0 0 0 4px rgba(130, 127, 254, 0.15);
+    box-shadow: 0 0 0 2px rgba(130, 127, 254, 0.1) !important;
+    /* Very subtle glow */
 }
 
 .modal-footer {
     border-top: none;
-    padding: 1rem 2rem 2rem;
+    padding: 0 2rem 2rem;
+    /* Adjusted to pull buttons closer to content if needed, but 2rem matches body side padding */
     background-color: transparent;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 0;
 }
 
-/* Cancel Button - Red Text/Ghost Style */
-#fyPasswordModal .btn-danger {
-    background: transparent;
-    color: #ef4444;
-    /* Red Text */
+/* RESTORED BUTTONS (Removed Ghost Style overrides) */
+/* The global .navbar .btn-danger styles will apply if inside .navbar,
+   but the modal is moved to body on open usually?
+   Bootstrap modals attach to body. So we need to re-apply the desired styles here
+   since they might lose the .navbar parent context if the modal isn't inside it visually.
+   (Actually in HTML structure it IS inside nav, but bootstrap moves it? No, bootstrap 4 moves the backdrop, not necessarily the modal markup unless appended.)
+   Let's assume we want the filled look. */
+
+#fyPasswordModal .btn-danger,
+#universalFinancialModal .btn-danger {
+    /* Replicating the "filled" look */
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
     border: none;
+    box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);
+    padding: 0.5rem 1.25rem;
     border-radius: 8px;
     font-weight: 600;
-    padding: 0.6rem 1.5rem;
-    font-size: 1rem;
-    box-shadow: none;
 }
 
-#fyPasswordModal .btn-danger:hover {
-    background-color: #fef2f2;
-    /* Light Red Background */
-    color: #dc2626;
+#fyPasswordModal .btn-danger:hover,
+#universalFinancialModal .btn-danger:hover {
+    background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+    color: white;
     transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(239, 68, 68, 0.25);
 }
 
 /* Primary "Switch Year" Button - Blue Theme */
-#fyPasswordModal .btn-primary {
+#fyPasswordModal .btn-primary,
+#universalFinancialModal .btn-primary {
+    /* Replicating the "filled" look */
     background: #827ffe;
-    border: none;
-    border-radius: 10px;
-    padding: 0.75rem 2.5rem;
     color: white;
-    font-size: 1rem;
+    border: none;
+    box-shadow: 0 4px 10px rgba(130, 127, 254, 0.3);
+    padding: 0.6rem 2rem;
+    border-radius: 8px;
     font-weight: 600;
     letter-spacing: 0.3px;
-    box-shadow: 0 4px 12px rgba(130, 127, 254, 0.3);
     transition: all 0.2s ease;
 }
 
-#fyPasswordModal .btn-primary:hover {
+#fyPasswordModal .btn-primary:hover,
+#universalFinancialModal .btn-primary:hover {
     background: #6d6af0;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(130, 127, 254, 0.35);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(130, 127, 254, 0.35);
 }
 
 /* Desktop-specific styles for search bar positioning - v2 */
