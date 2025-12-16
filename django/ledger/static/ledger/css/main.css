@@ -1354,3 +1354,122 @@ ul.navbar-nav.mr-auto .form-inline,
   box-shadow: none !important;
   border: none !important;
 }
+
+/* ============================================
+   TABLE TOTAL BAR
+   ============================================ */
+.total-floating-bar {
+  position: relative;
+  margin: 2rem auto;
+  background: linear-gradient(135deg, #827ffe 0%, #a78bfa 100%);
+  border-radius: 50px;
+  box-shadow: 0 10px 40px rgba(130, 127, 254, 0.4);
+  padding: 0.6rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  min-width: 300px;
+  max-width: 550px;
+  justify-content: space-between;
+}
+
+.total-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  color: white;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.total-label i {
+  color: white;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.total-value-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.secure-text {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 3px;
+  color: white;
+  line-height: 1;
+  position: relative;
+  top: 2px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#actual-total-value {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-unlock {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.btn-unlock:hover {
+  background: white;
+  color: #827ffe;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-unlock i {
+  transition: transform 0.2s ease;
+}
+
+.btn-unlock:hover i {
+  transform: rotate(15deg);
+  /* playful lock animation */
+}
+
+/* Ensure pagination respects floating bar */
+.pagination-wrapper-with-total {
+  margin-bottom: 2rem !important;
+  /* Reset to standard spacing */
+}
+
+/* Responsive adjustment */
+@media screen and (max-width: 768px) {
+  .total-floating-bar {
+    width: 90%;
+    margin: 1.5rem auto;
+    padding: 0.6rem 1.25rem;
+    gap: 0.75rem;
+  }
+
+  .total-label {
+    font-size: 0.85rem;
+  }
+
+  .secure-text,
+  #actual-total-value {
+    font-size: 1.1rem;
+  }
+}
