@@ -163,12 +163,9 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "core.storage.StrictFalseStaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
-
-# Allow missing source maps (common in vendor libs)
-WHITENOISE_MANIFEST_STRICT = False
 
 # Performance optimizations
 if not DEBUG:
