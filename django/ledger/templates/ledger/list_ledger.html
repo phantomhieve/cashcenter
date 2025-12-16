@@ -5,384 +5,412 @@
 {% load list_tags %}
 
 {% block title %}
-    Ledger
+Ledger
 {% endblock title %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'ledger/css/main.css'%}">
+<link rel="stylesheet" type="text/css" href="{% static 'ledger/css/main.css'%}">
 {% endblock css %}
 
 {% block header %}
-    {% include 'ledger/ledger_navbar.html' %}
+{% include 'ledger/ledger_navbar.html' %}
 {% endblock%}
 
 {% block body %}
-    <!-- Alert Delete-->
-    <div class="container" id="alert_delete">
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            L R No - <strong id="alert_delete_content"></strong> deleted.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<!-- Alert Delete-->
+<div class="container" id="alert_delete">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        L R No - <strong id="alert_delete_content"></strong> deleted.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+        </button>
     </div>
-    <!-- Alert Delete-->
+</div>
+<!-- Alert Delete-->
 
-    <!-- Alert Update-->
-    <div class="container" id="alert_update">
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            L R No - <strong id="alert_update_content"></strong> Updated.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<!-- Alert Update-->
+<div class="container" id="alert_update">
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        L R No - <strong id="alert_update_content"></strong> Updated.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</div>
+<!-- Alert Update-->
+
+<!--Filter form-->
+<div class="filter-wrapper-modern">
+    <div class="row align-items-center">
+        <div class="col-md-6 col-12 mb-2 mb-md-0">
+            <button class="filter-toggle-seamless" type="button" data-toggle="collapse" data-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample" id="collapseButton">
+                <i class="fa fa-filter" aria-hidden="true"></i>
+                <span class="filter-text">Filters</span>
+                <i class="fa fa-chevron-down ml-auto filter-icon" aria-hidden="true"></i>
             </button>
         </div>
+        <div class="col-md-6 col-12 text-md-right">
+            {% include 'ledger/pagination.html' %}
+        </div>
     </div>
-    <!-- Alert Update-->
-    
-    <!--Filter form-->
-    <div class="filter-wrapper-modern">
-        <div class="row align-items-center">
-            <div class="col-md-6 col-12 mb-2 mb-md-0">
-                <button class="filter-toggle-seamless" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" id="collapseButton">
-                    <i class="fa fa-filter" aria-hidden="true"></i> 
-                    <span class="filter-text">Filters</span>
-                    <i class="fa fa-chevron-down ml-auto filter-icon" aria-hidden="true"></i>
+
+    <div class="collapse" id="collapseExample">
+        <form action="" method="get" id="filterForm">
+            {% csrf_token %}
+
+            <!-- Basic Information Filters -->
+            <div class="filter-section-modern">
+                <div class="filter-section-header">
+                    <i class="fa fa-list-ul" aria-hidden="true"></i>
+                    <span class="filter-section-title">Basic Information</span>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_l_r_no__icontains" class="filter-floating-label">
+                            <i class="fa fa-hashtag" aria-hidden="true"></i> <span>L R No</span>
+                        </label>
+                        {% render_field filter.form.l_r_no__icontains class+="form-control filter-input-chip" placeholder="L R No" id="id_l_r_no__icontains"%}
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_item__icontains" class="filter-floating-label">
+                            <i class="fa fa-tag" aria-hidden="true"></i> <span>Item</span>
+                        </label>
+                        {% render_field filter.form.item__icontains class+="form-control filter-input-chip" placeholder="Item" id="id_item__icontains"%}
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_supplier__icontains" class="filter-floating-label">
+                            <i class="fa fa-building" aria-hidden="true"></i> <span>Supplier</span>
+                        </label>
+                        {% render_field filter.form.supplier__icontains class+="form-control filter-input-chip" placeholder="Supplier" id="id_supplier__icontains"%}
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_bale_no__icontains" class="filter-floating-label">
+                            <i class="fa fa-cube" aria-hidden="true"></i> <span>Bale No</span>
+                        </label>
+                        {% render_field filter.form.bale_no__icontains class+="form-control filter-input-chip" placeholder="Bale No" id="id_bale_no__icontains"%}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status & Delivery Filters -->
+            <div class="filter-section-modern">
+                <div class="filter-section-header">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    <span class="filter-section-title">Status & Delivery</span>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_status" class="filter-field-label">
+                            <i class="fa fa-check-circle" aria-hidden="true"></i> Status
+                        </label>
+                        {% render_field filter.form.status class+="form-select filter-select-chip" data-section="status" id="id_status"%}
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_d_status" class="filter-field-label">
+                            <i class="fa fa-truck" aria-hidden="true"></i> Delivery Status
+                        </label>
+                        {% render_field filter.form.d_status class+="form-select filter-select-chip" data-section="delivery" id="id_d_status"%}
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_transport__icontains" class="filter-floating-label">
+                            <i class="fa fa-truck" aria-hidden="true"></i> <span>Transport</span>
+                        </label>
+                        {% render_field filter.form.transport__icontains class+="form-control filter-input-chip" placeholder="Transport" id="id_transport__icontains"%}
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_location__icontains" class="filter-floating-label">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i> <span>Location</span>
+                        </label>
+                        {% render_field filter.form.location__icontains class+="form-control filter-input-chip" placeholder="Location" id="id_location__icontains"%}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date Filters -->
+            <div class="filter-section-modern">
+                <div class="filter-section-header">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                    <span class="filter-section-title">Date Range</span>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_l_r_date_0" class="filter-field-label">
+                            <i class="fa fa-calendar-o" aria-hidden="true"></i> L R Date From
+                        </label>
+                        <input type="date" name="l_r_date_min" class="form-control filter-input-chip" id="id_l_r_date_0" value="{{ request.GET.l_r_date_min }}" placeholder="L R Date From">
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_l_r_date_1" class="filter-field-label">
+                            <i class="fa fa-calendar-o" aria-hidden="true"></i> L R Date To
+                        </label>
+                        <input type="date" name="l_r_date_max" class="form-control filter-input-chip" id="id_l_r_date_1" value="{{ request.GET.l_r_date_max }}" placeholder="L R Date To">
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_delivery" class="filter-field-label">
+                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Delivery Date
+                        </label>
+                        {% render_field filter.form.delivery class+="form-control filter-input-chip" type="date" id="id_delivery" placeholder="Delivery Date"%}
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_delivery_after" class="filter-field-label">
+                            <i class="fa fa-calendar" aria-hidden="true"></i> Stock Date
+                        </label>
+                        {% render_field filter.form.delivery_after class+="form-control filter-input-chip" type="date" id="id_delivery_after" placeholder="Stock Date"%}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Filters -->
+            <div class="filter-section-modern">
+                <div class="filter-section-header">
+                    <i class="fa fa-cog" aria-hidden="true"></i>
+                    <span class="filter-section-title">Advanced Options</span>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_hsn_code__icontains" class="filter-floating-label">
+                            <i class="fa fa-barcode" aria-hidden="true"></i> <span>HSN Code</span>
+                        </label>
+                        {% render_field filter.form.hsn_code__icontains class+="form-control filter-input-chip" placeholder="HSN Code" id="id_hsn_code__icontains"%}
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        <label for="id_reciept__icontains" class="filter-floating-label">
+                            <i class="fa fa-file-text" aria-hidden="true"></i> <span>Receipt</span>
+                        </label>
+                        {% render_field filter.form.reciept__icontains class+="form-control filter-input-chip" placeholder="Receipt" id="id_reciept__icontains"%}
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
+                        {% render_field filter.form.columns class+="form-select filter-select-chip selectpicker" data-live-search="true" size="3" data-section="columns" id="id_columns"%}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="filter-actions-bar">
+                <button type="button" class="btn-filter-reset" onclick="window.location.href='{% url 'ledger_list' %}'">
+                    Reset
+                </button>
+                <button type="submit" class="btn-filter-apply">
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i> Apply Filters
                 </button>
             </div>
-            <div class="col-md-6 col-12 text-md-right">
-                {% include 'ledger/pagination.html' %}
-            </div>
-        </div>
-        
-        <div class="collapse" id="collapseExample">
-            <form action="" method="get" id="filterForm">
-                {% csrf_token %}
-                
-                <!-- Basic Information Filters -->
-                <div class="filter-section-modern">
-                    <div class="filter-section-header">
-                        <i class="fa fa-list-ul" aria-hidden="true"></i>
-                        <span class="filter-section-title">Basic Information</span>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_l_r_no__icontains" class="filter-floating-label">
-                                <i class="fa fa-hashtag" aria-hidden="true"></i> <span>L R No</span>
-                            </label>
-                            {% render_field filter.form.l_r_no__icontains class+="form-control filter-input-chip" placeholder="L R No" id="id_l_r_no__icontains"%}
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_item__icontains" class="filter-floating-label">
-                                <i class="fa fa-tag" aria-hidden="true"></i> <span>Item</span>
-                            </label>
-                            {% render_field filter.form.item__icontains class+="form-control filter-input-chip" placeholder="Item" id="id_item__icontains"%}
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_supplier__icontains" class="filter-floating-label">
-                                <i class="fa fa-building" aria-hidden="true"></i> <span>Supplier</span>
-                            </label>
-                            {% render_field filter.form.supplier__icontains class+="form-control filter-input-chip" placeholder="Supplier" id="id_supplier__icontains"%}
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_bale_no__icontains" class="filter-floating-label">
-                                <i class="fa fa-cube" aria-hidden="true"></i> <span>Bale No</span>
-                            </label>
-                            {% render_field filter.form.bale_no__icontains class+="form-control filter-input-chip" placeholder="Bale No" id="id_bale_no__icontains"%}
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Status & Delivery Filters -->
-                <div class="filter-section-modern">
-                    <div class="filter-section-header">
-                        <i class="fa fa-check-circle" aria-hidden="true"></i>
-                        <span class="filter-section-title">Status & Delivery</span>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_status" class="filter-field-label">
-                                <i class="fa fa-check-circle" aria-hidden="true"></i> Status
-                            </label>
-                            {% render_field filter.form.status class+="form-select filter-select-chip" data-section="status" id="id_status"%}
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_d_status" class="filter-field-label">
-                                <i class="fa fa-truck" aria-hidden="true"></i> Delivery Status
-                            </label>
-                            {% render_field filter.form.d_status class+="form-select filter-select-chip" data-section="delivery" id="id_d_status"%}
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_transport__icontains" class="filter-floating-label">
-                                <i class="fa fa-truck" aria-hidden="true"></i> <span>Transport</span>
-                            </label>
-                            {% render_field filter.form.transport__icontains class+="form-control filter-input-chip" placeholder="Transport" id="id_transport__icontains"%}
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_location__icontains" class="filter-floating-label">
-                                <i class="fa fa-map-marker" aria-hidden="true"></i> <span>Location</span>
-                            </label>
-                            {% render_field filter.form.location__icontains class+="form-control filter-input-chip" placeholder="Location" id="id_location__icontains"%}
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Date Filters -->
-                <div class="filter-section-modern">
-                    <div class="filter-section-header">
-                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                        <span class="filter-section-title">Date Range</span>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_l_r_date_0" class="filter-field-label">
-                                <i class="fa fa-calendar-o" aria-hidden="true"></i> L R Date From
-                            </label>
-                            <input type="date" name="l_r_date_min" class="form-control filter-input-chip" id="id_l_r_date_0" value="{{ request.GET.l_r_date_min }}" placeholder="L R Date From">
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_l_r_date_1" class="filter-field-label">
-                                <i class="fa fa-calendar-o" aria-hidden="true"></i> L R Date To
-                            </label>
-                            <input type="date" name="l_r_date_max" class="form-control filter-input-chip" id="id_l_r_date_1" value="{{ request.GET.l_r_date_max }}" placeholder="L R Date To">
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_delivery" class="filter-field-label">
-                                <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Delivery Date
-                            </label>
-                            {% render_field filter.form.delivery class+="form-control filter-input-chip" type="date" id="id_delivery" placeholder="Delivery Date"%}
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_delivery_after" class="filter-field-label">
-                                <i class="fa fa-calendar" aria-hidden="true"></i> Stock Date
-                            </label>
-                            {% render_field filter.form.delivery_after class+="form-control filter-input-chip" type="date" id="id_delivery_after" placeholder="Stock Date"%}
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Advanced Filters -->
-                <div class="filter-section-modern">
-                    <div class="filter-section-header">
-                        <i class="fa fa-cog" aria-hidden="true"></i>
-                        <span class="filter-section-title">Advanced Options</span>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_hsn_code__icontains" class="filter-floating-label">
-                                <i class="fa fa-barcode" aria-hidden="true"></i> <span>HSN Code</span>
-                            </label>
-                            {% render_field filter.form.hsn_code__icontains class+="form-control filter-input-chip" placeholder="HSN Code" id="id_hsn_code__icontains"%}
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            <label for="id_reciept__icontains" class="filter-floating-label">
-                                <i class="fa fa-file-text" aria-hidden="true"></i> <span>Receipt</span>
-                            </label>
-                            {% render_field filter.form.reciept__icontains class+="form-control filter-input-chip" placeholder="Receipt" id="id_reciept__icontains"%}
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3" style="position: relative;">
-                            {% render_field filter.form.columns class+="form-select filter-select-chip selectpicker" data-live-search="true" size="3" data-section="columns" id="id_columns"%}
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="filter-actions-bar">
-                    <button type="button" class="btn-filter-reset" onclick="window.location.href='{% url 'ledger_list' %}'">
-                        Reset
-                    </button>
-                    <button type="submit" class="btn-filter-apply">
-                        <i class="fa fa-arrow-left" aria-hidden="true"></i> Apply Filters
-                    </button>
-                </div>
-            </form>    
-        </div>
+        </form>
     </div>
-    <!-- Filter form end-->
+</div>
+<!-- Filter form end-->
 
-    <!--Table Bootstrap-->
-    <div class="table-wrapper">
-        <div class="table-responsive text-nowrap">
-            <table class="table table-hover table-striped">
-                <thead>
-                    <tr>
-                        {% with object_list|first as first %}
-                            {% for key in first%}
-                                {% if key != 'id' %}
-                                <th scope="col" class="table-header">
-                                    <span class="table-header-content">
-                                        <i class="fa {{ key|get_column_icon }}" aria-hidden="true"></i> {{ key|underscore_to_space|title }}
-                                    </span>
-                                </th>
-                                {% endif %}
-                            {% endfor %}
-                        {% endwith %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for ledger in object_list %}
-                    <tr class="clickable-row table-row" data-href="{% url 'ledger_add' %}{{ ledger.id }}/?{% url_replace %}">
-                        {% for key, value in  ledger.items %}
-                                {% if key == 'status' %}
-                                    {% if value == True %}
-                                        <td>
-                                            <span class="badge badge-success">
-                                                <i class="fa fa-check-circle" aria-hidden="true"></i> Done
-                                            </span>
-                                        </td>
-                                    {% else%}
-                                        <td>
-                                            <span class="badge badge-warning">
-                                                <i class="fa fa-clock-o" aria-hidden="true"></i> Pending
-                                            </span>
-                                        </td>
-                                    {% endif %}
-                                {% elif key == 'delivery'%}
-                                    <td>
-                                        {% if value %}
-                                            <span class="badge badge-info">
-                                                <i class="fa fa-calendar-check-o" aria-hidden="true"></i> {{ value }}
-                                            </span>
-                                        {% else %}
-                                            <span class="badge badge-secondary">
-                                                <i class="fa fa-calendar-times-o" aria-hidden="true"></i> Not Delivered
-                                            </span>
-                                        {% endif %}
-                                    </td>
-                                {% elif key != 'id'%}
-                                    {% if key == 'l_r_no' %}
-                                        <td class="numeric-cell">{{ value|default_if_none:"-" }}</td>
-                                    {% elif key == 'pcs_mtr'%}
-                                        <td>{{ value|format_numeric_if_possible|default_if_none:"-" }}</td>
-                                    {% elif key == 'price' or key == 'frieght' or key == 'bill_ammount' or key == 'no_of_bale' %}
-                                        <td>{{ value|format_numeric|default_if_none:"-" }}</td>
-                                    {% else %}
-                                        <td>{{ value|default_if_none:"-" }}</td>
-                                    {% endif %}
-                                {% endif %}
-                        {% endfor %}
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="100%" class="text-center py-5 empty-state">
-                            <i class="fa fa-inbox fa-3x text-muted mb-3" aria-hidden="true"></i>
-                            <p class="text-muted mb-0">No records found. Try adjusting your filters.</p>
-                        </td>
-                    </tr>
+<!--Table Bootstrap-->
+<div class="table-wrapper">
+    <div class="table-responsive text-nowrap">
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    {% with object_list|first as first %}
+                    {% for key in first%}
+                    {% if key != 'id' %}
+                    <th scope="col" class="table-header">
+                        <span class="table-header-content">
+                            <i class="fa {{ key|get_column_icon }}" aria-hidden="true"></i>
+                            {{key|underscore_to_space|title }}
+                        </span>
+                    </th>
+                    {% endif %}
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    {% endwith %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for ledger in object_list %}
+                <tr class="clickable-row table-row"
+                    data-href="{% url 'ledger_add' %}{{ ledger.id }}/?{% url_replace %}">
+                    {% for key, value in ledger.items %}
+                    {% if key == 'status' %}
+                    {% if value == True %}
+                    <td>
+                        <span class="badge badge-success">
+                            <i class="fa fa-check-circle" aria-hidden="true"></i> Done
+                        </span>
+                    </td>
+                    {% else%}
+                    <td>
+                        <span class="badge badge-warning">
+                            <i class="fa fa-clock-o" aria-hidden="true"></i> Pending
+                        </span>
+                    </td>
+                    {% endif %}
+                    {% elif key == 'delivery'%}
+                    <td>
+                        {% if value %}
+                        <span class="badge badge-info">
+                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i> {{ value }}
+                        </span>
+                        {% else %}
+                        <span class="badge badge-secondary">
+                            <i class="fa fa-calendar-times-o" aria-hidden="true"></i> Not Delivered
+                        </span>
+                        {% endif %}
+                    </td>
+                    {% elif key != 'id'%}
+                    {% if key == 'l_r_no' %}
+                    <td class="numeric-cell">{{ value|default_if_none:"-" }}</td>
+                    {% elif key == 'pcs_mtr'%}
+                    <td>{{ value|format_numeric_if_possible|default_if_none:"-" }}</td>
+                    {% elif key == 'price' or key == 'frieght' or key == 'bill_ammount' or key == 'no_of_bale' %}
+                    <td>{{ value|format_numeric|default_if_none:"-" }}</td>
+                    {% else %}
+                    <td>{{ value|default_if_none:"-" }}</td>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="100%" class="text-center py-5 empty-state">
+                        <i class="fa fa-inbox fa-3x text-muted mb-3" aria-hidden="true"></i>
+                        <p class="text-muted mb-0">No records found. Try adjusting your filters.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    <!--Table Bootstrap End-->
+</div>
+<!--Table Bootstrap End-->
 
-    {% if total and selected_columns %}
-        {% if 'bill_ammount' in selected_columns %}
-    <div class="table-total-wrapper">
-        <div class="table-responsive text-nowrap">
-            <table class="table table-total">
-                <thead>
-                    <tr>
-                        <th class="total-label">
-                            <i class="fa fa-calculator" aria-hidden="true"></i> Total
-                        </th>
-                        <th class="total-value">
-                            {{ total|format_numeric }}
-                        </th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
+{% if total and selected_columns %}
+{% if 'bill_ammount' in selected_columns %}
+<div class="table-total-wrapper">
+    <div class="table-responsive text-nowrap">
+        <table class="table table-total">
+            <thead>
+                <tr>
+                    <th class="total-label">
+                        <i class="fa fa-calculator" aria-hidden="true"></i> Total
+                    </th>
+                    <th class="total-value">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span id="secure-total-display" style="letter-spacing: 2px;">******</span>
+                            <span id="actual-total-value" style="display:none;">{{ total|format_numeric }}</span>
+                            <button class="btn btn-sm btn-light ml-2 py-0 px-2" id="trigger-financial-auth"
+                                style="border-radius: 20px; font-size: 0.8rem;" title="Unlock Total">
+                                <i class="fa fa-lock text-primary"></i>
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+        </table>
     </div>
-        {% endif %}
-    {% endif %}
-    
-    <!-- Pagination with extra bottom spacing when total is present -->
-    <div class="pagination-wrapper-bottom {% if total and selected_columns and 'bill_ammount' in selected_columns %}pagination-wrapper-with-total{% endif %}">
-        {% include 'ledger/pagination.html' %}
-    </div>
+</div>
+{% endif %}
+{% endif %}
+
+<!-- Pagination with extra bottom spacing when total is present -->
+<div
+    class="pagination-wrapper-bottom {% if total and selected_columns and 'bill_ammount' in selected_columns %}pagination-wrapper-with-total{% endif %}">
+    {% include 'ledger/pagination.html' %}
+</div>
+
+<!-- Financial Password Modal Removed (Using Global from Navbar) -->
 {% endblock body %}
 
 {% block footer %}
-    {% include 'footer.html' %}
+{% include 'footer.html' %}
 {% endblock %}
 
-{% block script %}  
-    <script>
-        // Filter toggle icon animation
-        $('#collapseButton').on('click', function() {
-            $(this).find('.filter-icon').toggleClass('fa-chevron-down fa-chevron-up');
-        });
-        
-        // Clear filter form function
-        function clearFilterForm() {
-            document.getElementById('filterForm').reset();
-            $('.filter-input-chip').val('');
-            $('.filter-select-chip').val('').trigger('change');
-            updateSelectColors();
-        }
-        
-        // Update select colors based on selection
-        function updateSelectColors() {
-            $('.filter-select-chip').each(function() {
-                const $select = $(this);
-                const section = $select.data('section');
-                const value = $select.val();
-                
-                // Remove all color classes
-                $select.removeClass('filter-selected-status filter-selected-delivery filter-selected-columns filter-selected-mode');
-                
-                // Add appropriate color class based on section and value
-                // Skip delivery and columns - they should stay default color
-                if (value && value !== '') {
-                    if (section === 'status') {
-                        $select.addClass('filter-selected-status');
-                    } else if (section === 'mode') {
-                        $select.addClass('filter-selected-mode');
-                    }
-                    // Note: delivery and columns intentionally don't get colored - they stay white/default
+{% block script %}
+<script>
+    // Filter toggle icon animation
+    $('#collapseButton').on('click', function () {
+        $(this).find('.filter-icon').toggleClass('fa-chevron-down fa-chevron-up');
+    });
+
+    // Clear filter form function
+    function clearFilterForm() {
+        document.getElementById('filterForm').reset();
+        $('.filter-input-chip').val('');
+        $('.filter-select-chip').val('').trigger('change');
+        updateSelectColors();
+    }
+
+    // Update select colors based on selection
+    function updateSelectColors() {
+        $('.filter-select-chip').each(function () {
+            const $select = $(this);
+            const section = $select.data('section');
+            const value = $select.val();
+
+            // Remove all color classes
+            $select.removeClass('filter-selected-status filter-selected-delivery filter-selected-columns filter-selected-mode');
+
+            // Add appropriate color class based on section and value
+            // Skip delivery and columns - they should stay default color
+            if (value && value !== '') {
+                if (section === 'status') {
+                    $select.addClass('filter-selected-status');
+                } else if (section === 'mode') {
+                    $select.addClass('filter-selected-mode');
                 }
-            });
-        }
-        
-        // Initialize colors on page load
-        $(document).ready(function() {
-            updateSelectColors();
-            
-            // Update colors on change
-            $('.filter-select-chip').on('change', function() {
-                updateSelectColors();
-            });
-            
-            // Handle input focus/blur for labels
-            $('.filter-input-chip').on('focus', function() {
-                $(this).siblings('.filter-floating-label').addClass('label-focused');
-            }).on('blur', function() {
-                $(this).siblings('.filter-floating-label').removeClass('label-focused');
-                if ($(this).val() && $(this).val() !== '') {
-                    $(this).siblings('.filter-floating-label').addClass('label-active');
-                } else {
-                    $(this).siblings('.filter-floating-label').removeClass('label-active');
-                }
-            });
+                // Note: delivery and columns intentionally don't get colored - they stay white/default
+            }
         });
-        
-        // AutoComplete
-        $('.lrAutoComplete').autoComplete({
-            minLength: 1,
-            resolverSettings: {
-                url: "{% url 'autocomplete'%}?field=l_r_no",
-                requestThrottling: 700
-            },
+    }
+
+    // Initialize colors on page load
+    $(document).ready(function () {
+        updateSelectColors();
+
+        // Update colors on change
+        $('.filter-select-chip').on('change', function () {
+            updateSelectColors();
         });
 
-        $('.lrAutoComplete').on('autocomplete.select', (evt, item)=>{
-            window.location.replace(`{% url 'ledger_add'%}?l_r_view=${item}&{% url_replace %}`);
+        // Handle input focus/blur for labels
+        $('.filter-input-chip').on('focus', function () {
+            $(this).siblings('.filter-floating-label').addClass('label-focused');
+        }).on('blur', function () {
+            $(this).siblings('.filter-floating-label').removeClass('label-focused');
+            if ($(this).val() && $(this).val() !== '') {
+                $(this).siblings('.filter-floating-label').addClass('label-active');
+            } else {
+                $(this).siblings('.filter-floating-label').removeClass('label-active');
+            }
         });
-        
-        // Table row click handler
-        $('.clickable-row').on('click', function() {
-            window.location.href = $(this).data('href');
-        });
-    </script>
-    <script src="{% static 'ledger/js/list_ledger.js'%}"></script>
+    });
+
+    // AutoComplete
+    $('.lrAutoComplete').autoComplete({
+        minLength: 1,
+        resolverSettings: {
+            url: "{% url 'autocomplete'%}?field=l_r_no",
+            requestThrottling: 700
+        },
+    });
+
+    $('.lrAutoComplete').on('autocomplete.select', (evt, item) => {
+        window.location.replace(`{% url 'ledger_add'%}?l_r_view=${item}&{% url_replace %}`);
+    });
+
+    // Table row click handler
+    $('.clickable-row').on('click', function () {
+        window.location.href = $(this).data('href');
+    });
+
+    // Financial Password Auth Logic
+    $('#trigger-financial-auth').on('click', function () {
+        // Use global function from navbar.html
+        if (typeof openFinancialCheck === 'function') {
+            openFinancialCheck(function () {
+                // Success callback
+                $('#secure-total-display').hide();
+                $('#trigger-financial-auth').hide();
+                $('#actual-total-value').fadeIn();
+            });
+        } else {
+            console.error('Global financial check function not found');
+        }
+    });
+</script>
+<script src="{% static 'ledger/js/list_ledger.js'%}"></script>
 {% endblock script %}
