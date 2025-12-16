@@ -263,7 +263,16 @@
 .modal-dialog-centered {
     display: flex;
     align-items: center;
+    justify-content: center;
+    /* Fix for mobile horizontal alignment */
     min-height: calc(100% - 3.5rem);
+}
+
+@media (min-width: 768px) {
+    .modal-dialog-centered {
+        padding-bottom: 5rem;
+        /* Pushes content up visually on desktop */
+    }
 }
 
 .modal-header {
