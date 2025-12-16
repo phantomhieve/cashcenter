@@ -43,7 +43,7 @@ function openFinancialCheck(callback) {
     onAuthSuccess = callback;
     
     el.title.text('Security Check');
-    el.msg.text('Enter Financial Password to reveal content');
+    el.msg.text('Enter password to reveal content');
     el.btn.text('Unlock');
     
     el.input.val('').removeClass('is-invalid');
