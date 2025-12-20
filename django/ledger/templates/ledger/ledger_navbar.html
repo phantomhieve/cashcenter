@@ -4,7 +4,8 @@
 {% block search %}
 <div class="form-inline my-2 my-lg-0 ml-auto">
     <input class="form-control mr-sm-2 lrAutoComplete" type="search" placeholder="Search L R" aria-label="Search"
-        autocomplete="off">
+        autocomplete="off" data-url="{% url 'autocomplete' %}?field=l_r_no"
+        data-redirect-url="{% url 'ledger_add' %}?l_r_view=" data-query-params="&{% url_replace %}">
 </div>
 {% endblock search %}
 
