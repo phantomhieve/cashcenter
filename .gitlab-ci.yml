@@ -3,7 +3,7 @@
 stages:
   - deploy
 
-deploy-production:
+deploy-server:
   stage: deploy
   image: alpine:3.20
   rules:
