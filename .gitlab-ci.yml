@@ -1,10 +1,9 @@
-# Optional GitLab CI — same deploy script as GitHub Actions.
-# Set CI variables: DEPLOY_SSH_PRIVATE_KEY, DEPLOY_HOST, DEPLOY_USER=cashcenter-deploy
+# GitLab CI — set protected variables (see .github/DEPLOY-SECRETS.md).
 
 stages:
   - deploy
 
-deploy-server:
+deploy-production:
   stage: deploy
   image: alpine:3.20
   rules:
@@ -17,7 +16,6 @@ deploy-server:
     - ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
   script:
     - export SSH_KEY_FILE=~/.ssh/deploy_key
-    - export DEPLOY_USER="${DEPLOY_USER:-cashcenter-deploy}"
     - chmod +x scripts/deploy-server.sh
     - ./scripts/deploy-server.sh
-  resource_group: server-production
+  resource_group: production
