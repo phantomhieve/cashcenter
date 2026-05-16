@@ -1,23 +1,13 @@
 #!/usr/bin/env bash
-# Deploy cashcenter to server (production).
-#
-# CI (GitHub Actions / GitLab CI): dedicated user cashcenter-deploy
-#   DEPLOY_SSH_PRIVATE_KEY → secrets
-#   DEPLOY_USER=cashcenter-deploy (default)
-#
-# Manual admin deploy (optional, existing atul access):
-#   DEPLOY_USER=atul SSH_KEY_FILE=~/.ssh/admin_ssh_key ./scripts/deploy-server.sh
-#
-# Env: DEPLOY_HOST, DEPLOY_USER, DEPLOY_SSH_PORT, SSH_KEY_FILE
+# Deploy over SSH + rsync. See .github/DEPLOY-SECRETS.md for CI variables.
 
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 HOST="${DEPLOY_HOST:?set DEPLOY_HOST}"
-USER="${DEPLOY_USER:-}"
-USER="${USER:-cashcenter-deploy}"
+USER="${DEPLOY_USER:-cashcenter-deploy}"
 SSH_PORT="${DEPLOY_SSH_PORT:-22}"
-REMOTE_APP=/home/YOUR_APP_USER/cash-center
+REMOTE_APP="${DEPLOY_APP_DIR:?set DEPLOY_APP_DIR}"
 REMOTE_DJANGO="${REMOTE_APP}/django"
 ACTIVATE_SCRIPT=/usr/local/sbin/cashcenter-deploy-activate.sh
 
@@ -29,7 +19,6 @@ RSYNC_SSH="ssh ${SSH_OPTS[*]}"
 
 echo "==> Deploy as ${USER}@${HOST}"
 
-echo "==> Sync django/ → ${REMOTE_DJANGO}"
 rsync -avz \
   -e "$RSYNC_SSH" \
   --exclude '.env' \
@@ -45,14 +34,9 @@ rsync -avz \
   --exclude 'static/library/css/util.css' \
   "${ROOT}/django/" "${USER}@${HOST}:${REMOTE_DJANGO}/"
 
-echo "==> Sync requirements.txt"
 rsync -avz -e "$RSYNC_SSH" "${ROOT}/requirements.txt" "${USER}@${HOST}:${REMOTE_APP}/requirements.txt"
 
-echo "==> Activate on server (migrate, collectstatic, restart)"
-if [[ "$USER" == "cashcenter-deploy" ]]; then
-  ssh "${SSH_OPTS[@]}" "${USER}@${HOST}" "sudo ${ACTIVATE_SCRIPT}"
-else
-  # Legacy: full shell as atul (manual only)
+if [[ "${DEPLOY_USE_LEGACY_ACTIVATE:-0}" == "1" ]]; then
   ssh "${SSH_OPTS[@]}" "${USER}@${HOST}" bash -s <<REMOTE
 set -euo pipefail
 cd ${REMOTE_APP}
@@ -63,14 +47,14 @@ cd django
 sudo systemctl restart gunicorn-cashcenter.service
 sleep 2
 sudo systemctl is-active --quiet gunicorn-cashcenter.service
-echo "gunicorn-cashcenter: active"
 REMOTE
+else
+  ssh "${SSH_OPTS[@]}" "${USER}@${HOST}" "sudo ${ACTIVATE_SCRIPT}"
 fi
 
-echo "==> Smoke check https://your-site.example/"
-if command -v curl >/dev/null; then
-  code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 -L https://your-site.example/ || echo "000")
-  echo "HTTP ${code} (expect 200 or 302)"
+if [[ -n "${DEPLOY_HEALTHCHECK_URL:-}" ]] && command -v curl >/dev/null; then
+  code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 -L "${DEPLOY_HEALTHCHECK_URL}" || echo "000")
+  echo "==> Health check HTTP ${code}"
 fi
 
 echo "==> Deploy complete"

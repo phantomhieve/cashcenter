@@ -1,47 +1,43 @@
 # CI/CD secrets (GitHub Actions / GitLab CI)
 
-Dedicated deploy user on server: **`cashcenter-deploy`** (not `atul`).
+Store values in your CI provider’s **secret / protected variables** — never commit hosts, users, keys, or paths.
 
-| Secret | Value |
-|--------|--------|
-| `DEPLOY_SSH_PRIVATE_KEY` | Contents of `~/.ssh/deploy_key` (private key) |
-| `DEPLOY_HOST` | `YOUR_DEPLOY_HOST` |
-| `DEPLOY_USER` | `cashcenter-deploy` |
-| `DEPLOY_SSH_PORT` | `22` (optional) |
+| Secret / variable | Description |
+|-------------------|-------------|
+| `DEPLOY_SSH_PRIVATE_KEY` | Deploy-only SSH private key (full PEM, including header/footer lines) |
+| `DEPLOY_HOST` | Server hostname or IP |
+| `DEPLOY_USER` | Dedicated deploy UNIX user (least privilege) |
+| `DEPLOY_APP_DIR` | App root on server (e.g. `/home/<app-user>/cash-center`) |
+| `DEPLOY_SSH_PORT` | SSH port (optional, default `22`) |
+| `DEPLOY_HEALTHCHECK_URL` | Optional URL for post-deploy HTTP check |
 
-```bash
-cat ~/.ssh/deploy_key
-```
-
-## What the deploy user can do
+## Deploy user model
 
 | Allowed | Blocked |
 |---------|---------|
-| `rsync` into `/home/YOUR_APP_USER/cash-center/` (group `cashcenter`) | Read `django/.env` (mode 600, owner `atul`) |
-| `sudo /usr/local/sbin/cashcenter-deploy-activate.sh` only | Any other `sudo`, shell as `atul` |
-| Activate runs pip/migrate/collectstatic **as atul**, restarts gunicorn | SSH to other hosts, other paths |
+| `rsync` into app directory (group-writable tree) | Read `django/.env` |
+| `sudo` **only** the server activate script | Other `sudo`, login as app owner |
+| Activate: deps, migrate, collectstatic as app owner; restart app service | Other hosts/paths |
 
-Manual admin SSH as **`atul`** is unchanged.
+Configure the activate script path and sudoers on the server via `scripts/setup-deploy-user.sh`.
 
 ## One-time server setup
 
-Already applied via `scripts/setup-deploy-user.sh`. To re-run (e.g. rotate key):
-
 ```bash
-PUB=$(cat ~/.ssh/deploy_key.pub)
-scp scripts/setup-deploy-user.sh server:/tmp/
-ssh YOUR_SSH_TARGET "sudo DEPLOY_PUBKEY='$PUB' bash /tmp/setup-deploy-user.sh"
+export APP_OWNER=your-app-unix-user
+export APP_DIR=/home/${APP_OWNER}/cash-center
+export DEPLOY_USER=your-deploy-user
+PUB="$(cat /path/to/deploy_key.pub)"
+scp scripts/setup-deploy-user.sh YOUR_SSH_TARGET:/tmp/
+ssh YOUR_SSH_TARGET "sudo APP_OWNER=$APP_OWNER APP_DIR=$APP_DIR DEPLOY_USER=$DEPLOY_USER DEPLOY_PUBKEY='$PUB' bash /tmp/setup-deploy-user.sh"
 ```
 
-## Local test
+## Local / CI test
 
 ```bash
-SSH_KEY_FILE=~/.ssh/deploy_key \
-DEPLOY_HOST=YOUR_DEPLOY_HOST \
-DEPLOY_USER=cashcenter-deploy \
+export SSH_KEY_FILE=/path/to/deploy_key
+export DEPLOY_HOST=your.server.example
+export DEPLOY_USER=your-deploy-user
+export DEPLOY_APP_DIR=/home/your-app-user/cash-center
 ./scripts/deploy-server.sh
 ```
-
-## GitLab CI
-
-Use the same env vars in protected CI variables and run `./scripts/deploy-server.sh` in a deploy job (see `.gitlab-ci.yml` if present).
