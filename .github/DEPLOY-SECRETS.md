@@ -32,7 +32,32 @@ scp scripts/setup-deploy-user.sh YOUR_SSH_TARGET:/tmp/
 ssh YOUR_SSH_TARGET "sudo APP_OWNER=$APP_OWNER APP_DIR=$APP_DIR DEPLOY_USER=$DEPLOY_USER DEPLOY_PUBKEY='$PUB' bash /tmp/setup-deploy-user.sh"
 ```
 
-## Local / CI test
+## fail2ban + GitHub Actions
+
+CI runners use [GitHub Actions IP ranges](https://api.github.com/meta) (`actions` key). On the server:
+
+```bash
+sudo EXTRA_IGNORE_IPS="YOUR_HOME_PUBLIC_IP/32" bash scripts/configure-fail2ban-github-actions.sh
+```
+
+Adds `/etc/fail2ban/jail.d/sshd-github-actions.local` with those CIDRs in `ignoreip`. Re-run weekly or after GitHub meta changes.
+
+## Local test (before pushing)
+
+```bash
+cp .env.deploy.local.example .env.deploy.local   # fill values, never commit
+chmod +x scripts/test-deploy-ssh.sh
+./scripts/test-deploy-ssh.sh          # SSH + activate only
+./scripts/test-deploy-ssh.sh --full   # full rsync deploy
+```
+
+## Security audit (on server)
+
+```bash
+sudo APP_OWNER=your-app-user APP_DIR=/home/your-app-user/cash-center bash scripts/audit-deploy-security.sh
+```
+
+## Manual deploy
 
 ```bash
 export SSH_KEY_FILE=/path/to/deploy_key

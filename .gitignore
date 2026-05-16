@@ -5,6 +5,7 @@ __pycache__/
 *.sqlite3
 *.log
 *.env
+.env.deploy.local
 env/
 venv/
 .DS_Store
