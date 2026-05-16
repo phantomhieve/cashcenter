@@ -16,10 +16,12 @@ if [[ -n "${SSH_KEY_FILE:-}" ]]; then
   SSH_OPTS+=(-i "$SSH_KEY_FILE")
 fi
 RSYNC_SSH="ssh ${SSH_OPTS[*]}"
+# Deploy user is group-writer, not owner — do not preserve times/owner (rsync -a utime fails).
+RSYNC_FLAGS=(-rlvz --no-times --omit-dir-times)
 
 echo "==> Deploy as ${USER}@${HOST}"
 
-rsync -avz \
+rsync "${RSYNC_FLAGS[@]}" \
   -e "$RSYNC_SSH" \
   --exclude '.env' \
   --exclude '.env.server' \
@@ -34,7 +36,7 @@ rsync -avz \
   --exclude 'static/library/css/util.css' \
   "${ROOT}/django/" "${USER}@${HOST}:${REMOTE_DJANGO}/"
 
-rsync -avz -e "$RSYNC_SSH" "${ROOT}/requirements.txt" "${USER}@${HOST}:${REMOTE_APP}/requirements.txt"
+rsync "${RSYNC_FLAGS[@]}" -e "$RSYNC_SSH" "${ROOT}/requirements.txt" "${USER}@${HOST}:${REMOTE_APP}/requirements.txt"
 
 if [[ "${DEPLOY_USE_LEGACY_ACTIVATE:-0}" == "1" ]]; then
   ssh "${SSH_OPTS[@]}" "${USER}@${HOST}" bash -s <<REMOTE
