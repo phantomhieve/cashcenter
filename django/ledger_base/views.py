@@ -90,7 +90,8 @@ def ledgerAddView(request, id=None):
         # Check if entry already exists in main ledger
         existing_objects = LedgerData.objects.filter(
             l_r_no=request.POST.get('l_r_no'),
-            user__in=getUsersFromGroup(request.user)
+            user__in=getUsersFromGroup(request.user),
+            financial_year=getattr(request, 'financial_year', None)
         )
         
         if form.is_valid() and not existing_objects.exists():

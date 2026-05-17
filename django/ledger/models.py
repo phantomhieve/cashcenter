@@ -7,7 +7,7 @@ class LedgerData(models.Model):
     
     class Meta:
         ordering = ['l_r_date', 'id']
-        # unique_together = ('user', 'l_r_no') # Removed for Financial Year migration
+        unique_together = ('user', 'l_r_no', 'financial_year')
         indexes = [
             models.Index(fields=['user', 'l_r_date']),
             models.Index(fields=['l_r_date', 'delivery']),
