@@ -104,7 +104,8 @@ def ledgerAddView(request, id=None):
             # Use exists() instead of len() for better performance
             existing_data = LedgerData.objects.filter(
                 l_r_no=ledger.l_r_no,
-                user=ledger.user
+                user=ledger.user,
+                financial_year=ledger.financial_year
             )
             
             if not existing_data.exists() or (id and instance.l_r_no == ledger.l_r_no):
