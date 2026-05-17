@@ -89,7 +89,8 @@ def ledgerAddView(request, id=None):
         instance = get_object_or_404(
             LedgerData.objects.select_related('user'),
             l_r_no=query.pop('l_r_view')[0],
-            user=request.user
+            user=request.user,
+            financial_year=getattr(request, 'financial_year', None)
         )
         return HttpResponseRedirect(
             reverse('ledger_update', args=[instance.id]) + f'?{query.urlencode()}'
