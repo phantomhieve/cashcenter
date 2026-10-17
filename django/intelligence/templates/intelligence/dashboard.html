@@ -133,9 +133,35 @@
     .ix-rank .vl small { color: var(--text-muted); font-weight: 500; margin-left: .35rem; }
     .ix-bar { grid-column: 1 / -1; height: 7px; border-radius: 99px; background: rgba(255,255,255,.06); overflow: hidden; }
     .ix-bar i { display: block; height: 100%; width: 0; border-radius: 99px; background: linear-gradient(90deg, #6366f1, #06b6d4); transition: width 1s cubic-bezier(.2,.8,.2,1); }
-    .ix-extra { display: none; }
-    .ix-open .ix-extra { display: grid; }
-    .ix-open tr.ix-extra { display: table-row; }
+    .ix-rank li.ix-extra,
+    .ix-table tr.ix-extra,
+    tr.ix-extra,
+    .ix-extra { display: none !important; }
+
+    .ix-open .ix-rank li.ix-extra,
+    .ix-open .ix-extra { display: grid !important; }
+
+    .ix-open tr.ix-extra,
+    .ix-open .ix-table tr.ix-extra { display: table-row !important; }
+
+    .ix-open .ix-rank {
+        max-height: 480px;
+        overflow-y: auto;
+        padding-right: 0.5rem;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(99, 102, 241, 0.5) rgba(255, 255, 255, 0.05);
+    }
+    .ix-open .ix-rank::-webkit-scrollbar {
+        width: 6px;
+    }
+    .ix-open .ix-rank::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+    }
+    .ix-open .ix-rank::-webkit-scrollbar-thumb {
+        background: rgba(99, 102, 241, 0.5);
+        border-radius: 4px;
+    }
 
     /* ---------- 30/60/90 plan ---------- */
     .ix-plan { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; position: relative; }
