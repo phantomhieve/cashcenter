@@ -47,7 +47,31 @@ if _allowed_hosts:
 elif DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
+    ALLOWED_HOSTS = [
+        '127.0.0.1',
+        'localhost',
+        'testserver',
+        'phantomhive.in',
+        'www.phantomhive.in',
+        '.phantomhive.in',
+    ]
+
+# Trust Nginx reverse proxy SSL termination header
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+_csrf_origins = os.environ.get('CSRF_TRUSTED_ORIGINS')
+if _csrf_origins:
+    CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',') if o.strip()]
+else:
+    CSRF_TRUSTED_ORIGINS = [
+        'https://phantomhive.in',
+        'https://www.phantomhive.in',
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+        'http://localhost:8080',
+        'http://127.0.0.1:8080',
+    ]
+
 
 
 # Application definition
