@@ -52,6 +52,11 @@ sudo -u "\$APP_OWNER" "\$APP/.venv/bin/pip" install -q -r requirements.txt
 cd django
 sudo -u "\$APP_OWNER" "\$APP/.venv/bin/python" manage.py migrate --noinput
 sudo -u "\$APP_OWNER" "\$APP/.venv/bin/python" manage.py collectstatic --noinput
+if [[ -d "/var/www/cash-center/static" ]]; then
+  rsync -a --delete "\$APP/django/staticfiles/" "/var/www/cash-center/static/"
+  chmod -R a+rX "/var/www/cash-center/static/"
+  chown -R atul:atul "/var/www/cash-center/static/" 2>/dev/null || true
+fi
 systemctl restart gunicorn-cashcenter.service
 sleep 2
 systemctl is-active --quiet gunicorn-cashcenter.service
