@@ -1,14 +1,17 @@
-from urllib.parse import urlparse, urlunparse
-from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
-from .models import FinancialYear
-from django.contrib import messages
-from django.http import JsonResponse
 import json
-
+import logging
+from urllib.parse import urlparse, urlunparse
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, make_password
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.http import require_http_methods
 from .forms import FinancialPasswordChangeForm
+from .models import FinancialYear
+
+logger = logging.getLogger(__name__)
 
 
 def _verify_fy_password(user, password):
@@ -32,7 +35,8 @@ def verify_financial_password(request):
             return JsonResponse({'success': True})
         return JsonResponse({'success': False, 'message': 'Incorrect Password'})
     except Exception as e:
-        return JsonResponse({'success': False, 'message': str(e)})
+        logger.warning("Error verifying financial password: %s", e)
+        return JsonResponse({'success': False, 'message': 'Invalid request data'}, status=400)
 
 
 @login_required
@@ -56,6 +60,8 @@ def switch_financial_year(request):
     referer = request.META.get('HTTP_REFERER', '/')
     parsed = urlparse(referer)
     clean_url = urlunparse((parsed.scheme, parsed.netloc, parsed.path, parsed.params, '', ''))
+    if not url_has_allowed_host_and_scheme(clean_url, allowed_hosts={request.get_host()}):
+        clean_url = '/'
     return redirect(clean_url)
 
 

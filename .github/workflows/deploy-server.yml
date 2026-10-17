@@ -10,7 +10,35 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  pre-deploy-check:
+    name: Pre-Deployment Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Scan for Secret Files
+        run: |
+          set -euo pipefail
+          FORBIDDEN='(\.env$|\.env\.local$|\.env\.server$|\.key\.json$|id_rsa|\.pem$|\.pfx$)'
+          if git ls-files | grep -Eq "$FORBIDDEN"; then
+            echo "❌ ERROR: Cannot deploy with committed secrets!"
+            exit 1
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Syntax Compilation Check
+        run: |
+          python -m py_compile $(find django -name "*.py" -not -path "*/.venv/*")
+          echo "✅ Pre-deployment syntax verification passed."
+
   deploy:
+    name: Deploy to Server
+    needs: pre-deploy-check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

@@ -30,4 +30,5 @@ urlpatterns = [
     path('core/', include('core.urls')),
     path('orderlist/', include('orderlist.urls')),
     path('stock/', include('stock.urls')),
+    path('intelligence/', include('intelligence.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
