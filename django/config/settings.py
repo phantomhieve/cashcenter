@@ -16,6 +16,18 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load local .env if present
+_env_file = BASE_DIR / '.env'
+if _env_file.exists():
+    with open(_env_file, 'r') as _f:
+        for _line in _f:
+            _line = _line.strip()
+            if _line and not _line.startswith('#') and '=' in _line:
+                _k, _v = _line.split('=', 1)
+                _k = _k.strip()
+                _v = _v.strip().strip("'\"")
+                if not os.environ.get(_k):
+                    os.environ[_k] = _v
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -29,7 +41,13 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() in ('1', 'true', 'yes', 'on')
 
-ALLOWED_HOSTS = ['*']
+_allowed_hosts = os.environ.get('ALLOWED_HOSTS')
+if _allowed_hosts:
+    ALLOWED_HOSTS = [h.strip() for h in _allowed_hosts.split(',') if h.strip()]
+elif DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 
 # Application definition
@@ -43,6 +61,7 @@ INSTALLED_APPS = [
     'stock.apps.StockConfig',
     'orderlist.apps.OrderlistConfig',
     'core',
+    'intelligence.apps.IntelligenceConfig',
     'django_filters',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -178,7 +197,23 @@ if not DEBUG:
             'django.template.loaders.app_directories.Loader',
         ]),
     ]
+    # Production security headers & cookie policies
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', 'False').lower() in ('1', 'true', 'yes')
+    CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'False').lower() in ('1', 'true', 'yes')
 
 LOGIN_REDIRECT_URL = '/ledger/'
 
 LOGOUT_REDIRECT_URL = '/user/login/'
+
+# AI Market Intelligence Gateway Settings
+# Dev defaults to gemini-3.8-flash (cost effective, fast)
+# Prod defaults to gemini-4-argon (exhaustive deep reasoning)
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+_default_gemini_model = 'gemini-3.8-flash' if DEBUG else 'gemini-4-argon'
+GEMINI_MODEL = os.environ.get('GEMINI_MODEL', '') or _default_gemini_model
+
+

@@ -23,9 +23,9 @@ def url_replace(context, **kwargs):
 def get_shop(context, **kwargs):
     user = context['request'].user
     user_group = getUserGroup(user)
-    if user_group:
+    if user_group and getattr(user_group, 'shop', None):
         return user_group.shop
-    return context['request'].user.username
+    return "Cash Center"
 
 @register.filter
 def format_numeric(value):

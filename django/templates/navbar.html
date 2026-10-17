@@ -72,6 +72,22 @@
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i> Order List
                 </a>
             </li>
+            <li class="nav-item navbar-item">
+                <a href="{% url 'intelligence:dashboard' %}" class="nav-link navbar-content">
+                    <i class="fa fa-line-chart" aria-hidden="true"></i> AI Insights
+                </a>
+            </li>
+            {% else %}
+            <li class="nav-item navbar-item">
+                <a href="{% url 'ledger_base_list' %}?{% url_replace %}" class="nav-link navbar-content">
+                    <i class="fa fa-book" aria-hidden="true"></i> Pending Ledger
+                </a>
+            </li>
+            <li class="nav-item navbar-item">
+                <a href="{% url 'intelligence:dashboard' %}" class="nav-link navbar-content">
+                    <i class="fa fa-line-chart" aria-hidden="true"></i> AI Insights
+                </a>
+            </li>
             {% endif %}
             <!-- <li class="nav-item navbar-item">
                 <h5><a href="{% url 'ledger_base_list' %}?{% url_replace %}" class="nav-link navbar-content">

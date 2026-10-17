@@ -1,0 +1,1024 @@
+{% extends "intelligence/base.html" %}
+
+{% block title %}Run #{{ run.id }} &bull; Market Intelligence{% endblock %}
+
+{% block extra_head %}
+<style>
+    .run-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .meta-badges {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        flex-wrap: wrap;
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .btn-action-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.45rem 0.9rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-subtle);
+        border-radius: 8px;
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .btn-action-outline:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .detail-tabs {
+        display: flex;
+        gap: 0.5rem;
+        border-bottom: 1px solid var(--border-subtle);
+        margin-bottom: 1.75rem;
+        overflow-x: auto;
+    }
+
+    .detail-tab-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        padding: 0.85rem 1.25rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .detail-tab-btn:hover {
+        color: #ffffff;
+    }
+
+    .detail-tab-btn.active {
+        color: var(--accent-indigo);
+        border-bottom-color: var(--accent-indigo);
+    }
+
+    .tab-content-pane {
+        display: none;
+    }
+
+    .tab-content-pane.active {
+        display: block;
+    }
+
+    /* Executive Decision Brief Styling */
+    .executive-brief-banner {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(99, 102, 241, 0.35);
+        border-radius: 16px;
+        padding: 1.75rem;
+        margin-bottom: 1.75rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .executive-brief-banner::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, var(--accent-indigo), var(--accent-emerald));
+    }
+
+    .brief-title-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .brief-title {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #ffffff;
+        letter-spacing: -0.01em;
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+    }
+
+    .brief-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .brief-kpi-card {
+        background: rgba(11, 15, 25, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .brief-kpi-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .brief-kpi-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-muted);
+        margin-bottom: 0.35rem;
+        font-weight: 600;
+    }
+
+    .brief-kpi-value {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #f8fafc;
+        display: flex;
+        align-items: baseline;
+        gap: 0.35rem;
+    }
+
+    .brief-kpi-subtitle {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-top: 0.25rem;
+    }
+
+    .brief-breakdown-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+    }
+
+    @media (max-width: 900px) {
+        .brief-breakdown-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .brief-column-box {
+        background: rgba(15, 23, 42, 0.55);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 12px;
+        padding: 1.25rem;
+    }
+
+    .brief-column-header {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .brief-column-header.danger {
+        color: #fca5a5;
+    }
+
+    .brief-column-header.success {
+        color: #6ee7b7;
+    }
+
+    .brief-bullet-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .brief-bullet-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.65rem;
+        font-size: 0.88rem;
+        line-height: 1.45;
+        color: #cbd5e1;
+    }
+
+    .brief-bullet-item i {
+        margin-top: 0.25rem;
+        flex-shrink: 0;
+    }
+
+    /* Sticky Module Quick Jump Nav */
+    .module-nav-bar {
+        position: sticky;
+        top: 60px;
+        z-index: 90;
+        background: rgba(11, 15, 25, 0.92);
+        backdrop-filter: blur(14px);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        padding: 0.65rem 1rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        overflow-x: auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .module-nav-title {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        white-space: nowrap;
+        margin-right: 0.5rem;
+    }
+
+    .module-pill-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 9999px;
+        padding: 0.35rem 0.85rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        cursor: pointer;
+        white-space: nowrap;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .module-pill-btn:hover {
+        background: rgba(99, 102, 241, 0.2);
+        color: #ffffff;
+        border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    /* Rendered Markdown Styling */
+    .report-prose {
+        color: #e2e8f0;
+        line-height: 1.75;
+        font-size: 0.95rem;
+    }
+
+    .report-prose h1, .report-prose h2, .report-prose h3, .report-prose h4 {
+        color: #ffffff;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+    }
+
+    .report-prose h1 {
+        font-size: 1.6rem;
+        margin: 2rem 0 1rem 0;
+        border-bottom: 2px solid rgba(99, 102, 241, 0.4);
+        padding-bottom: 0.5rem;
+    }
+
+    .report-prose h2 {
+        font-size: 1.35rem;
+        margin: 2.25rem 0 1rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-subtle);
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        color: #f1f5f9;
+        scroll-margin-top: 130px;
+    }
+
+    .report-prose h2::before {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 18px;
+        border-radius: 4px;
+        background: linear-gradient(180deg, var(--accent-indigo), var(--accent-cyan));
+    }
+
+    .report-prose h3 {
+        font-size: 1.15rem;
+        margin: 1.75rem 0 0.75rem 0;
+        color: #a5b4fc;
+    }
+
+    .report-prose h4 {
+        font-size: 1rem;
+        margin: 1.25rem 0 0.5rem 0;
+        color: #cbd5e1;
+    }
+
+    .report-prose p {
+        margin-bottom: 1.25rem;
+        color: #cbd5e1;
+    }
+
+    .report-prose ul, .report-prose ol {
+        margin: 0.75rem 0 1.25rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+    }
+
+    .report-prose li {
+        color: #e2e8f0;
+    }
+
+    .report-prose strong {
+        color: #ffffff;
+        font-weight: 700;
+    }
+
+    /* Markdown Tables */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(15, 23, 42, 0.7);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .report-prose table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+        text-align: left;
+    }
+
+    .report-prose th {
+        background: rgba(30, 41, 59, 0.8);
+        color: #a5b4fc;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        padding: 0.85rem 1.15rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        white-space: nowrap;
+    }
+
+    .report-prose td {
+        padding: 0.85rem 1.15rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        color: #e2e8f0;
+        vertical-align: middle;
+    }
+
+    .report-prose tr:last-child td {
+        border-bottom: none;
+    }
+
+    .report-prose tr:hover td {
+        background: rgba(99, 102, 241, 0.06);
+    }
+
+    .report-prose blockquote {
+        background: rgba(99, 102, 241, 0.08);
+        border-left: 4px solid var(--accent-indigo);
+        border-radius: 0 10px 10px 0;
+        padding: 1rem 1.25rem;
+        margin: 1.5rem 0;
+        color: #e0e7ff;
+        font-style: italic;
+    }
+
+    .report-prose blockquote p {
+        margin-bottom: 0;
+    }
+
+    .report-prose code {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        background: rgba(0, 0, 0, 0.4);
+        color: #f472b6;
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .report-prose pre code {
+        background: transparent;
+        border: none;
+        color: #f8fafc;
+        padding: 0;
+    }
+
+    /* Print media styling */
+    @media print {
+        body {
+            background: #ffffff !important;
+            color: #000000 !important;
+        }
+        .intel-navbar, .detail-tabs, .module-nav-bar, .header-actions, .intel-footer, .btn-primary-glow {
+            display: none !important;
+        }
+        .card, .executive-brief-banner, .brief-kpi-card, .brief-column-box {
+            background: #ffffff !important;
+            border: 1px solid #cccccc !important;
+            color: #000000 !important;
+            box-shadow: none !important;
+        }
+        .report-prose, .report-prose p, .report-prose h1, .report-prose h2, .report-prose h3, .report-prose td, .report-prose th {
+            color: #000000 !important;
+        }
+        .table-responsive {
+            border: 1px solid #cccccc !important;
+        }
+    }
+
+    /* Interactive Feedback Loop */
+    .feedback-thread {
+        margin-top: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .feedback-item-card {
+        background: rgba(11, 15, 25, 0.7);
+        border: 1px solid var(--border-subtle);
+        border-radius: 14px;
+        padding: 1.25rem;
+    }
+
+    .feedback-user-query {
+        background: rgba(99, 102, 241, 0.1);
+        border-left: 3px solid var(--accent-indigo);
+        padding: 0.75rem 1rem;
+        border-radius: 0 8px 8px 0;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .feedback-critique-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 3px solid var(--accent-amber);
+        padding: 0.75rem 1rem;
+        border-radius: 0 8px 8px 0;
+        margin-bottom: 1rem;
+        font-size: 0.85rem;
+        color: #fde68a;
+    }
+
+    .form-textarea {
+        width: 100%;
+        min-height: 100px;
+        background: #050811;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 1rem;
+        color: #f8fafc;
+        font-family: inherit;
+        font-size: 0.9rem;
+        resize: vertical;
+        outline: none;
+    }
+
+    .form-textarea:focus {
+        border-color: var(--accent-indigo);
+        box-shadow: var(--glow-indigo);
+    }
+
+    /* Search card grid */
+    .search-card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.25rem;
+    }
+
+    .search-item-card {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .search-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+    }
+
+    .search-snippet {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+
+    .search-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.8rem;
+    }
+
+    .search-price-badge {
+        background: rgba(16, 185, 129, 0.15);
+        color: #6ee7b7;
+        padding: 0.2rem 0.6rem;
+        border-radius: 6px;
+        font-weight: 600;
+    }
+
+    .search-link {
+        color: #a5b4fc;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .search-link:hover {
+        color: #ffffff;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="run-header">
+    <div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <a href="{% url 'intelligence:dashboard' %}" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">
+                <i class="fa-solid fa-arrow-left"></i> Dashboard
+            </a>
+            <span style="color: var(--text-muted);">&bull;</span>
+            <span style="font-size: 0.85rem; color: #a5b4fc; font-weight: 600;">Run #{{ run.id }}</span>
+        </div>
+        <h1 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em;">
+            {{ run.seller_name }} &bull; Market Diagnostic
+        </h1>
+        <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">
+            Executed on {{ run.created_at|date:"M d, Y H:i:s" }} &bull; Latency: {{ run.execution_time_seconds }}s
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.75rem;">
+        <div class="meta-badges">
+            <span class="badge-pill badge-emerald">
+                <i class="fa-solid fa-shield-check"></i> Grounding {{ run.grounding_score|floatformat:1 }}%
+            </span>
+            <span class="badge-pill {% if run.hallucination_risk == 'LOW' %}badge-emerald{% else %}badge-amber{% endif %}">
+                <i class="fa-solid fa-radar"></i> Risk: {{ run.hallucination_risk }}
+            </span>
+            <span class="badge-pill badge-indigo">
+                <i class="fa-solid fa-layer-group"></i> {{ run.total_records }} Consignments Analyzed
+            </span>
+            <span class="badge-pill badge-amber">
+                <i class="fa-solid fa-broom"></i> {{ run.anomalies_flagged }} Hygiene Fixes
+            </span>
+        </div>
+
+        <div class="header-actions">
+            <button type="button" class="btn-action-outline" onclick="copyStrategicBrief()" id="btnCopyBrief">
+                <i class="fa-regular fa-copy"></i>
+                <span id="copyBriefLabel">Copy Strategic Brief</span>
+            </button>
+            <button type="button" class="btn-action-outline" onclick="window.print()">
+                <i class="fa-solid fa-print"></i>
+                <span>Print / PDF</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Tabs Navigation -->
+<div class="detail-tabs">
+    <button type="button" class="detail-tab-btn active" onclick="switchDetailTab('report')">
+        <i class="fa-solid fa-file-invoice"></i> Executive Market Report
+    </button>
+    <button type="button" class="detail-tab-btn" onclick="switchDetailTab('studio')">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Prompt Studio & Feedback Loop
+    </button>
+    <button type="button" class="detail-tab-btn" onclick="switchDetailTab('hygiene')">
+        <i class="fa-solid fa-broom"></i> Data Hygiene & Anomaly Audit ({{ anomalies|length }})
+    </button>
+    <button type="button" class="detail-tab-btn" onclick="switchDetailTab('search')">
+        <i class="fa-solid fa-globe"></i> Live Internet Grounding ({{ market_searches|length }})
+    </button>
+    <button type="button" class="detail-tab-btn" onclick="switchDetailTab('telemetry')">
+        <i class="fa-solid fa-circle-nodes"></i> Processing log
+    </button>
+</div>
+
+<!-- TAB 1: Executive Market Report -->
+<div id="tabPaneReport" class="tab-content-pane active">
+
+    <!-- Real numbers from the ledger (same figures as the dashboard) -->
+    {% if stats.has_data %}
+    <div class="executive-brief-banner">
+        <div class="brief-title-bar">
+            <div>
+                <div class="brief-title">
+                    <i class="fa-solid fa-chart-simple" style="color: var(--accent-emerald);"></i>
+                    <span>Ledger snapshot &bull; {{ run.seller_name }}</span>
+                </div>
+                <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.25rem;">
+                    Calculated directly from your recorded supplier bills &mdash; not estimated by the AI.
+                </div>
+            </div>
+            <a href="{% url 'intelligence:dashboard' %}" class="btn-action-outline">
+                <i class="fa-solid fa-arrow-left"></i> Back to overview
+            </a>
+        </div>
+        <div class="brief-kpi-grid" style="margin-bottom: 0;">
+            {% for k in stats.kpis %}
+            <div class="brief-kpi-card" title="{{ k.hint }}">
+                <div class="brief-kpi-label">{{ k.label }}</div>
+                <div class="brief-kpi-value"><span>{{ k.value }}</span></div>
+                <div class="brief-kpi-subtitle">{{ k.sub }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Section jump bar (built from the report's own headings) -->
+    <div class="module-nav-bar" id="moduleNavBar" hidden>
+        <span class="module-nav-title"><i class="fa-solid fa-compass"></i> Sections:</span>
+    </div>
+
+    <!-- Main Strategic Report Card -->
+    <div class="card">
+        <div class="card-header-styled">
+            <div class="card-title-styled">
+                <i class="fa-solid fa-newspaper" style="color: var(--accent-emerald);"></i>
+                <span>Comprehensive Market Strategic Analysis & Operational Blueprint</span>
+            </div>
+            <span class="badge-pill badge-emerald">
+                <i class="fa-solid fa-check-circle"></i> Refined via Reflective Feedback Loop
+            </span>
+        </div>
+
+        <!-- Rendered HTML Container -->
+        <div id="renderedReportProse" class="report-prose">
+            <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
+                <p style="margin-top: 0.75rem;">Rendering strategic insights...</p>
+            </div>
+        </div>
+
+        <!-- Hidden Raw Markdown Data Source -->
+        <div id="rawMarkdownContent" style="display: none;">{{ run.final_refined_insight }}</div>
+        <div id="rawMarkdownContentEn" style="display: none;">{{ run.final_refined_insight }}</div>
+        <div id="rawMarkdownContentHi" style="display: none;">{{ run.final_refined_insight_hi|default:"" }}</div>
+    </div>
+</div>
+
+<!-- TAB 2: Prompt Studio & Feedback Loop -->
+<div id="tabPaneStudio" class="tab-content-pane">
+    <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header-styled">
+            <div class="card-title-styled">
+                <i class="fa-solid fa-terminal" style="color: var(--accent-indigo);"></i>
+                <span>Instructions the AI was given (technical)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span class="badge-pill badge-indigo">Model: gemini-4-argon</span>
+                <button type="button" class="btn-action-outline" onclick="copyMasterPrompt()" id="btnCopyPrompt" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">
+                    <i class="fa-regular fa-copy"></i> <span id="copyPromptLabel">Copy Prompt</span>
+                </button>
+            </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            This exhaustive prompt was automatically synthesized by Argon based on the shop's ledger volume velocity, transit timings, and live internet wholesale search results.
+        </p>
+        <div class="code-box" id="masterPromptBox">{{ run.generated_prompt }}</div>
+    </div>
+
+    <!-- Initial Insight vs Critique -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+        <div class="card">
+            <div class="card-header-styled">
+                <div class="card-title-styled" style="font-size: 0.95rem;">
+                    <i class="fa-solid fa-arrow-turn-down"></i> Initial Reasoning (Pre-Loop)
+                </div>
+            </div>
+            <div class="code-box" style="max-height: 400px;">{{ run.initial_insight }}</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header-styled">
+                <div class="card-title-styled" style="font-size: 0.95rem; color: #fbbf24;">
+                    <i class="fa-solid fa-stethoscope"></i> Auditor Critique & Grounding Audit
+                </div>
+                <span class="badge-pill badge-amber">{{ run.grounding_score|floatformat:0 }}/100</span>
+            </div>
+            <div class="code-box" style="max-height: 400px; color: #fef08a;">{{ run.critique_text }}</div>
+        </div>
+    </div>
+
+    <!-- Human Feedback Trigger Form -->
+    <div class="card">
+        <div class="card-header-styled">
+            <div class="card-title-styled">
+                <i class="fa-solid fa-comments" style="color: var(--accent-emerald);"></i>
+                <span>Interactive Feedback Loop &bull; Human-in-the-Loop</span>
+            </div>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+            Provide additional business constraints, market conditions, or directives to trigger a new refinement loop with Argon.
+        </p>
+
+        <form method="post" action="{% url 'intelligence:submit_feedback' run_id=run.id %}">
+            {% csrf_token %}
+            <div style="margin-bottom: 1rem;">
+                <textarea name="human_instruction" class="form-textarea" placeholder="e.g. 'Assume Cotton prices increase by 8% next month due to mill strikes in Gujarat. Re-evaluate purchasing priority and freight routes.'"></textarea>
+            </div>
+            <button type="submit" class="btn-primary-glow">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>Execute Next Feedback Refinement Loop</span>
+            </button>
+        </form>
+
+        {% if feedback_items %}
+        <div class="feedback-thread">
+            <h4 style="font-size: 0.9rem; font-weight: 700; color: #a5b4fc; margin-top: 1rem;">
+                Previous Feedback Iterations
+            </h4>
+            {% for fb in feedback_items %}
+            <div class="feedback-item-card">
+                <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; font-weight: 700;">
+                    Iteration #{{ fb.iteration }} &bull; {{ fb.created_at|date:"M d, H:i" }}
+                </div>
+                <div class="feedback-user-query">
+                    <b>Human Directive:</b> {{ fb.human_instruction }}
+                </div>
+                {% if fb.critique %}
+                <div class="feedback-critique-box">
+                    <b>Critique:</b> {{ fb.critique }}
+                </div>
+                {% endif %}
+                <div style="font-size: 0.85rem; color: #e2e8f0; line-height: 1.5; white-space: pre-wrap;">{{ fb.refined_output|truncatewords:80 }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- TAB 3: Data Hygiene & Cleaning Audit -->
+<div id="tabPaneHygiene" class="tab-content-pane">
+    <div class="card">
+        <div class="card-header-styled">
+            <div class="card-title-styled">
+                <i class="fa-solid fa-broom" style="color: var(--accent-amber);"></i>
+                <span>Data Normalization & Anomaly Detection Audit</span>
+            </div>
+            <span class="badge-pill badge-amber">{{ anomalies|length }} Outliers / Corrections</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+            Wholesale transaction logs often include ambiguous contractions, missing units, or price outliers. The hygiene node standardized these entries before feeding them to Argon.
+        </p>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-subtle); color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">
+                        <th style="padding: 0.75rem 1rem;">Record ID</th>
+                        <th style="padding: 0.75rem 1rem;">Raw Input Text</th>
+                        <th style="padding: 0.75rem 1rem;">Standardized Item</th>
+                        <th style="padding: 0.75rem 1rem;">Detected Issues</th>
+                        <th style="padding: 0.75rem 1rem;">Confidence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in anomalies %}
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                        <td style="padding: 0.85rem 1rem; font-family: 'JetBrains Mono', monospace; color: #a5b4fc;">{{ a.id }}</td>
+                        <td style="padding: 0.85rem 1rem; color: #fca5a5;"><code>{{ a.raw_item }}</code></td>
+                        <td style="padding: 0.85rem 1rem; color: #6ee7b7; font-weight: 600;">{{ a.cleaned }}</td>
+                        <td style="padding: 0.85rem 1rem; color: #fbbf24;">
+                            {% for issue in a.issues %}
+                                <span style="display: block; font-size: 0.8rem;">&bull; {{ issue }}</span>
+                            {% endfor %}
+                        </td>
+                        <td style="padding: 0.85rem 1rem;">
+                            <span class="badge-pill {% if a.confidence >= 0.7 %}badge-emerald{% else %}badge-amber{% endif %}">
+                                {{ a.confidence|floatformat:2 }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                            All ingested records met strict data hygiene rules with zero anomalies detected.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- TAB 4: Live Internet Grounding -->
+<div id="tabPaneSearch" class="tab-content-pane">
+    <div class="card">
+        <div class="card-header-styled">
+            <div class="card-title-styled">
+                <i class="fa-solid fa-globe" style="color: var(--accent-cyan);"></i>
+                <span>Live Internet Wholesale Product Discovery & Rate Benchmarking</span>
+            </div>
+            <span class="badge-pill badge-indigo">Surat & National Markets</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+            Real-world internet search results queried during Stage 1B to establish current wholesale market prices and fabric specifications.
+        </p>
+
+        <div class="search-card-grid">
+            {% for item in market_searches %}
+            <div class="search-item-card">
+                <div>
+                    <div class="search-title">{{ item.title }}</div>
+                    <div class="search-snippet">{{ item.snippet }}</div>
+                </div>
+                <div class="search-meta">
+                    <span class="search-price-badge">{{ item.estimated_price|default:"Wholesale Rate" }}</span>
+                    <a href="{{ item.source_url }}" target="_blank" rel="noopener noreferrer" class="search-link">
+                        <span>{{ item.market_location }}</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <p style="color: var(--text-muted); font-size: 0.85rem;">No market search records available.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- TAB 5: DAG Node Telemetry -->
+<div id="tabPaneTelemetry" class="tab-content-pane">
+    <div class="card">
+        <div class="card-header-styled">
+            <div class="card-title-styled">
+                <i class="fa-solid fa-circle-nodes" style="color: var(--accent-indigo);"></i>
+                <span>Processing log (technical)</span>
+            </div>
+            <span class="badge-pill badge-emerald">Total Latency: {{ run.execution_time_seconds }}s</span>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-subtle); color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">
+                        <th style="padding: 0.75rem 1rem;">Node ID</th>
+                        <th style="padding: 0.75rem 1rem;">Node Name</th>
+                        <th style="padding: 0.75rem 1rem;">Stage</th>
+                        <th style="padding: 0.75rem 1rem;">Status</th>
+                        <th style="padding: 0.75rem 1rem;">Execution Time</th>
+                        <th style="padding: 0.75rem 1rem;">Summary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for n in dag_nodes %}
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                        <td style="padding: 0.85rem 1rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-indigo);">Node {{ n.node_id }}</td>
+                        <td style="padding: 0.85rem 1rem; font-weight: 600; color: #ffffff;">{{ n.name }}</td>
+                        <td style="padding: 0.85rem 1rem; color: var(--text-secondary);">{{ n.stage }}</td>
+                        <td style="padding: 0.85rem 1rem;">
+                            <span class="badge-pill {% if n.status == 'COMPLETED' %}badge-emerald{% else %}badge-amber{% endif %}">
+                                {{ n.status }}
+                            </span>
+                        </td>
+                        <td style="padding: 0.85rem 1rem; font-family: 'JetBrains Mono', monospace;">{{ n.duration_ms }} ms</td>
+                        <td style="padding: 0.85rem 1rem; color: var(--text-secondary); max-width: 400px;">{{ n.output_summary }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                            No telemetry logs captured.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function switchDetailTab(tabKey) {
+        document.querySelectorAll('.detail-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content-pane').forEach(pane => pane.classList.remove('active'));
+
+        const tabMap = {
+            'report': { index: 0, paneId: 'tabPaneReport' },
+            'studio': { index: 1, paneId: 'tabPaneStudio' },
+            'hygiene': { index: 2, paneId: 'tabPaneHygiene' },
+            'search': { index: 3, paneId: 'tabPaneSearch' },
+            'telemetry': { index: 4, paneId: 'tabPaneTelemetry' },
+        };
+
+        if (tabMap[tabKey]) {
+            document.querySelectorAll('.detail-tab-btn')[tabMap[tabKey].index].classList.add('active');
+            document.getElementById(tabMap[tabKey].paneId).classList.add('active');
+        }
+    }
+
+    // Render the report through the shared sanitising renderer and build the
+    // section jump bar from whatever headings the report actually contains.
+    function renderStrategicReport() {
+        const rawElEn = document.getElementById('rawMarkdownContentEn') || document.getElementById('rawMarkdownContent');
+        const rawElHi = document.getElementById('rawMarkdownContentHi');
+        const targetEl = document.getElementById('renderedReportProse');
+        if (!targetEl) return;
+
+        var currentLang = (window.getIntelligenceLanguage) ? window.getIntelligenceLanguage() : 'en';
+        var rawMd = '';
+        if (currentLang === 'hi' && rawElHi && rawElHi.textContent.trim()) {
+            rawMd = rawElHi.textContent.trim();
+        } else if (rawElEn && rawElEn.textContent.trim()) {
+            rawMd = rawElEn.textContent.trim();
+            if (currentLang === 'hi' && window.translateIntelligenceProse) {
+                rawMd = window.translateIntelligenceProse(rawMd);
+            }
+        }
+        if (!rawMd) rawMd = (rawElEn ? rawElEn.textContent.trim() : '');
+
+        targetEl.innerHTML = window.renderMarkdownSafe(rawMd);
+
+        const nav = document.getElementById('moduleNavBar');
+        if (nav) {
+            nav.innerHTML = '';
+            const sections = targetEl.querySelectorAll('h2');
+            if (sections.length > 1) {
+                sections.forEach((h, i) => {
+                    h.id = 'sec-' + (i + 1);
+                    const a = document.createElement('a');
+                    a.href = '#' + h.id;
+                    a.className = 'module-pill-btn';
+                    a.textContent = h.textContent.replace(/\s+/g, ' ').trim();
+                    nav.appendChild(a);
+                });
+                nav.hidden = false;
+            }
+        }
+    }
+    window.addEventListener('intelligenceLanguageChanged', renderStrategicReport);
+
+    // Copy utilities
+    function copyStrategicBrief() {
+        const rawEl = document.getElementById('rawMarkdownContent');
+        if (!rawEl) return;
+        navigator.clipboard.writeText(rawEl.textContent.trim()).then(() => {
+            const label = document.getElementById('copyBriefLabel');
+            label.textContent = 'Copied to Clipboard!';
+            setTimeout(() => {
+                label.textContent = 'Copy Strategic Brief';
+            }, 2500);
+        });
+    }
+
+    function copyMasterPrompt() {
+        const promptEl = document.getElementById('masterPromptBox');
+        if (!promptEl) return;
+        navigator.clipboard.writeText(promptEl.textContent.trim()).then(() => {
+            const label = document.getElementById('copyPromptLabel');
+            label.textContent = 'Copied!';
+            setTimeout(() => {
+                label.textContent = 'Copy Prompt';
+            }, 2500);
+        });
+    }
+
+    // Initialize on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', function() {
+        renderStrategicReport();
+    });
+</script>
+{% endblock %}

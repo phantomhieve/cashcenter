@@ -1,0 +1,846 @@
+{% extends "intelligence/base.html" %}
+
+{% block title %}Business Insights &bull; {{ shop_name }}{% endblock %}
+
+{% block extra_head %}
+<script>document.documentElement.classList.add('js');</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    /* ---------- Layout & motion ---------- */
+    .ix-wrap { display: flex; flex-direction: column; gap: 2.5rem; }
+    .ix-section { scroll-margin-top: 130px; }
+    .js .ix-reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+    .js .ix-reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+        .js .ix-reveal { opacity: 1; transform: none; transition: none; }
+        * { animation: none !important; }
+    }
+
+    .ix-eyebrow { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; font-size: .8rem; color: var(--text-muted); }
+    .ix-title { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.15; margin: .5rem 0 .4rem; }
+    .ix-title span { background: linear-gradient(120deg, #a5b4fc, #6ee7b7); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .ix-sub { color: var(--text-secondary); font-size: .95rem; }
+    .ix-sub b { color: #fff; font-weight: 600; }
+
+    .ix-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
+    .ix-refresh { display: flex; flex-direction: column; align-items: flex-end; gap: .45rem; }
+    .ix-refresh-hint { font-size: .78rem; color: var(--text-muted); display: flex; align-items: center; gap: .4rem; }
+
+    /* ---------- Buttons ---------- */
+    .ix-btn { display: inline-flex; align-items: center; justify-content: center; gap: .55rem; padding: .7rem 1.35rem;
+        border-radius: 12px; font: inherit; font-weight: 600; font-size: .92rem; cursor: pointer; border: 1px solid transparent;
+        transition: transform .2s ease, box-shadow .2s ease, background .2s ease; text-decoration: none; }
+    .ix-btn:focus-visible, .ix-acc-head:focus-visible, .ix-link-btn:focus-visible { outline: 2px solid #a5b4fc; outline-offset: 3px; }
+    .ix-btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; box-shadow: 0 6px 24px rgba(99,102,241,.45); }
+    .ix-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(99,102,241,.6); }
+    .ix-btn-primary:hover i { animation: ixspin .8s ease; }
+    @keyframes ixspin { to { transform: rotate(360deg); } }
+    .ix-btn-muted { background: rgba(255,255,255,.04); color: var(--text-muted); border-color: var(--border-subtle); cursor: not-allowed; }
+    .ix-btn-ghost { background: rgba(255,255,255,.06); color: var(--text-secondary); border-color: var(--border-subtle); }
+    .ix-btn-ghost:hover { background: rgba(255,255,255,.12); color: #fff; }
+    .ix-link-btn { background: none; border: none; color: #a5b4fc; font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; padding: .25rem 0; }
+    .ix-link-btn:hover { color: #fff; }
+
+    /* ---------- Section nav ---------- */
+    .ix-nav { position: sticky; top: 62px; z-index: 80; display: flex; gap: .4rem; padding: .45rem; overflow-x: auto;
+        background: rgba(11,15,25,.88); backdrop-filter: blur(14px); border: 1px solid var(--border-subtle); border-radius: 14px; }
+    .ix-nav a { flex-shrink: 0; padding: .45rem .95rem; border-radius: 10px; font-size: .85rem; font-weight: 600;
+        color: var(--text-secondary); text-decoration: none; transition: all .2s ease; }
+    .ix-nav a:hover { color: #fff; background: rgba(255,255,255,.06); }
+    .ix-nav a.active { color: #fff; background: rgba(99,102,241,.28); box-shadow: inset 0 0 0 1px rgba(99,102,241,.5); }
+
+    /* ---------- Section headings ---------- */
+    .ix-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+    .ix-h h2 { font-size: 1.3rem; font-weight: 800; letter-spacing: -.02em; }
+    .ix-h p { color: var(--text-muted); font-size: .88rem; margin-top: .2rem; }
+    .ix-label { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #a5b4fc;
+        display: flex; align-items: center; gap: .45rem; margin-bottom: .8rem; }
+
+    /* ---------- Hero ---------- */
+    .ix-hero { display: grid; grid-template-columns: 1.25fr 1fr; gap: 1.25rem; }
+    .ix-hero-card { border-radius: 22px; padding: 1.9rem; position: relative; overflow: hidden; border: 1px solid var(--border-accent); }
+    .ix-hero-main { background: linear-gradient(145deg, rgba(99,102,241,.2), rgba(17,24,39,.85) 55%); }
+    .ix-hero-main::after { content: ''; position: absolute; width: 280px; height: 280px; right: -90px; top: -90px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(139,92,246,.35), transparent 70%); pointer-events: none; }
+    .ix-hero-side { background: linear-gradient(160deg, rgba(16,185,129,.13), rgba(17,24,39,.85) 60%); border-color: rgba(16,185,129,.28); }
+    .ix-headline { font-size: clamp(1.15rem, 1.9vw, 1.5rem); line-height: 1.5; font-weight: 600; color: #f8fafc; position: relative; z-index: 1; }
+    .ix-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.4rem; position: relative; z-index: 1; }
+    .ix-chip { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .8rem; border-radius: 999px; font-size: .78rem; font-weight: 600;
+        background: rgba(255,255,255,.07); color: var(--text-secondary); border: 1px solid var(--border-subtle); cursor: help; }
+    .ix-chip.good { background: rgba(16,185,129,.14); color: #6ee7b7; border-color: rgba(16,185,129,.35); }
+    .ix-chip.warn { background: rgba(245,158,11,.14); color: #fcd34d; border-color: rgba(245,158,11,.35); }
+    .ix-chip.bad  { background: rgba(244,63,94,.14); color: #fda4af; border-color: rgba(244,63,94,.35); }
+
+    .ix-actions { list-style: none; display: flex; flex-direction: column; gap: .9rem; }
+    .ix-actions li { display: flex; gap: .85rem; align-items: flex-start; padding: .9rem 1rem; border-radius: 14px;
+        background: rgba(11,15,25,.55); border: 1px solid rgba(255,255,255,.06); transition: transform .2s ease, border-color .2s ease; }
+    .ix-actions li:hover { transform: translateX(4px); border-color: rgba(16,185,129,.4); }
+    .ix-num { flex-shrink: 0; width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; font-weight: 800; font-size: .85rem;
+        background: linear-gradient(135deg, #10b981, #06b6d4); color: #04130e; }
+    .ix-actions b { display: block; color: #fff; font-size: .95rem; line-height: 1.35; }
+    .ix-actions span { display: block; color: var(--text-secondary); font-size: .83rem; line-height: 1.45; margin-top: .2rem; }
+
+    .ix-empty { text-align: center; padding: 3rem 1.5rem; border: 1px dashed var(--border-accent); border-radius: 22px; background: rgba(99,102,241,.06); }
+    .ix-empty i.big { font-size: 2.4rem; color: #a5b4fc; margin-bottom: 1rem; }
+    .ix-empty h3 { font-size: 1.3rem; margin-bottom: .4rem; }
+    .ix-empty p { color: var(--text-secondary); max-width: 520px; margin: 0 auto 1.4rem; }
+
+    /* ---------- KPI cards ---------- */
+    .ix-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .ix-kpi { position: relative; padding: 1.25rem 1.4rem; border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border-subtle);
+        transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; overflow: hidden; }
+    .ix-kpi:hover { transform: translateY(-3px); border-color: rgba(99,102,241,.45); box-shadow: 0 14px 34px rgba(0,0,0,.35); }
+    .ix-kpi::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #6366f1; }
+    .ix-kpi.ix-tone-good::before { background: #10b981; }
+    .ix-kpi.ix-tone-warn::before { background: #f59e0b; }
+    .ix-kpi-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: .55rem; }
+    .ix-kpi-label { font-size: .82rem; color: var(--text-secondary); font-weight: 600; display: flex; align-items: center; gap: .5rem; }
+    .ix-kpi-label i { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 9px; background: rgba(99,102,241,.16); color: #a5b4fc; font-size: .8rem; }
+    .ix-tone-good .ix-kpi-label i { background: rgba(16,185,129,.16); color: #6ee7b7; }
+    .ix-tone-warn .ix-kpi-label i { background: rgba(245,158,11,.16); color: #fcd34d; }
+    .ix-info { color: var(--text-muted); font-size: .8rem; cursor: help; }
+    .ix-kpi-value { font-size: 2rem; font-weight: 800; letter-spacing: -.03em; color: #fff; line-height: 1.1; }
+    .ix-kpi-sub { font-size: .8rem; color: var(--text-muted); margin-top: .4rem; display: flex; align-items: center; gap: .35rem; }
+    .ix-tone-warn .ix-kpi-sub { color: #fcd34d; }
+    .ix-tone-good .ix-kpi-sub { color: #6ee7b7; }
+    .ix-spark { width: 100%; height: 34px; margin-top: .7rem; display: block; }
+
+    /* ---------- Watch list ---------- */
+    .ix-watch { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .ix-watch-item { display: flex; gap: .9rem; padding: 1.05rem 1.2rem; border-radius: 16px; background: rgba(245,158,11,.08);
+        border: 1px solid rgba(245,158,11,.28); }
+    .ix-watch-item.info { background: rgba(99,102,241,.08); border-color: rgba(99,102,241,.28); }
+    .ix-watch-item i { color: #fbbf24; font-size: 1.05rem; margin-top: .15rem; }
+    .ix-watch-item.info i { color: #a5b4fc; }
+    .ix-watch-item b { display: block; color: #fff; font-size: .92rem; line-height: 1.35; }
+    .ix-watch-item span { display: block; font-size: .82rem; color: var(--text-secondary); margin-top: .25rem; line-height: 1.45; }
+
+    /* ---------- Charts / panels ---------- */
+    .ix-grid-2 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1rem; margin-top: 1rem; }
+    .ix-panel { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 1.3rem 1.5rem; }
+    .ix-panel h3 { font-size: 1rem; font-weight: 700; color: #e0e7ff; }
+    .ix-panel .cap { font-size: .8rem; color: var(--text-muted); margin: .2rem 0 1rem; }
+    .ix-chart-box { height: 260px; position: relative; }
+
+    .ix-rank { list-style: none; display: flex; flex-direction: column; gap: .85rem; }
+    .ix-rank li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .25rem 1rem; align-items: center; }
+    .ix-rank .nm { font-size: .88rem; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ix-rank .vl { font-size: .85rem; font-weight: 700; color: #fff; }
+    .ix-rank .vl small { color: var(--text-muted); font-weight: 500; margin-left: .35rem; }
+    .ix-bar { grid-column: 1 / -1; height: 7px; border-radius: 99px; background: rgba(255,255,255,.06); overflow: hidden; }
+    .ix-bar i { display: block; height: 100%; width: 0; border-radius: 99px; background: linear-gradient(90deg, #6366f1, #06b6d4); transition: width 1s cubic-bezier(.2,.8,.2,1); }
+    .ix-extra { display: none; }
+    .ix-open .ix-extra { display: grid; }
+    .ix-open tr.ix-extra { display: table-row; }
+
+    /* ---------- 30/60/90 plan ---------- */
+    .ix-plan { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; position: relative; }
+    .ix-phase { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 1.35rem 1.4rem; position: relative;
+        transition: transform .25s ease, border-color .25s ease; }
+    .ix-phase:hover { transform: translateY(-3px); border-color: rgba(99,102,241,.5); }
+    .ix-phase-tag { display: inline-block; font-size: .72rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: .25rem .7rem;
+        border-radius: 999px; margin-bottom: .75rem; }
+    .ix-phase:nth-child(1) .ix-phase-tag { background: rgba(16,185,129,.18); color: #6ee7b7; }
+    .ix-phase:nth-child(2) .ix-phase-tag { background: rgba(99,102,241,.2); color: #a5b4fc; }
+    .ix-phase:nth-child(3) .ix-phase-tag { background: rgba(245,158,11,.18); color: #fcd34d; }
+    .ix-phase h3 { font-size: 1.02rem; font-weight: 700; color: #fff; line-height: 1.35; margin-bottom: .9rem; }
+    .ix-phase ul { list-style: none; display: flex; flex-direction: column; gap: .75rem; }
+    .ix-phase li { display: flex; gap: .65rem; font-size: .86rem; line-height: 1.45; color: var(--text-secondary); }
+    .ix-phase li i { color: #34d399; font-size: .75rem; margin-top: .3rem; flex-shrink: 0; }
+    .ix-phase li b { color: #e2e8f0; font-weight: 600; display: block; }
+
+    /* ---------- Accordion ---------- */
+    .ix-acc { display: flex; flex-direction: column; gap: .75rem; }
+    .ix-acc-item { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px; overflow: hidden; transition: border-color .2s ease; }
+    .ix-acc-item.open { border-color: rgba(99,102,241,.5); }
+    .ix-acc-head { width: 100%; display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.3rem; background: none; border: none; color: inherit;
+        font: inherit; text-align: left; cursor: pointer; }
+    .ix-acc-head:hover { background: rgba(255,255,255,.03); }
+    .ix-emoji { font-size: 1.5rem; width: 2.4rem; text-align: center; flex-shrink: 0; }
+    .ix-acc-text { flex: 1; min-width: 0; }
+    .ix-acc-text b { display: block; font-size: 1rem; color: #fff; font-weight: 700; }
+    .ix-acc-text span { display: block; font-size: .84rem; color: var(--text-muted); margin-top: .2rem; line-height: 1.4; }
+    .ix-acc-item.open .ix-acc-text span { display: none; }
+    .ix-chev { color: var(--text-muted); transition: transform .3s ease; }
+    .ix-acc-item.open .ix-chev { transform: rotate(180deg); color: #a5b4fc; }
+    .ix-acc-body { display: none; padding: .25rem 1.6rem 1.6rem 4.4rem; border-top: 1px solid var(--border-subtle); }
+    .ix-acc-item.open .ix-acc-body { display: block; animation: ixfade .35s ease; }
+    @keyframes ixfade { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+    /* ---------- Rendered report text ---------- */
+    .ix-prose { color: #cbd5e1; font-size: .95rem; line-height: 1.75; }
+    .ix-prose h3 { color: #a5b4fc; font-size: 1.05rem; margin: 1.6rem 0 .6rem; font-weight: 700; }
+    .ix-prose h4 { color: #e2e8f0; font-size: .95rem; margin: 1.2rem 0 .4rem; }
+    .ix-prose p { margin-bottom: 1rem; }
+    .ix-prose ul, .ix-prose ol { margin: .4rem 0 1rem 1.3rem; display: flex; flex-direction: column; gap: .4rem; }
+    .ix-prose strong { color: #fff; }
+    .ix-prose hr { border: 0; border-top: 1px solid var(--border-subtle); margin: 1.5rem 0; }
+    .ix-prose blockquote { border-left: 3px solid #6366f1; background: rgba(99,102,241,.08); padding: .8rem 1rem; border-radius: 0 10px 10px 0; margin: 1rem 0; }
+    .ix-prose code { font-family: 'JetBrains Mono', monospace; font-size: .82rem; background: rgba(0,0,0,.4); padding: .1rem .4rem; border-radius: 5px; color: #f9a8d4; }
+    .ix-prose .table-responsive { overflow-x: auto; margin: 1rem 0; border: 1px solid var(--border-subtle); border-radius: 12px; }
+    .ix-prose table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    .ix-prose th { background: rgba(30,41,59,.8); color: #a5b4fc; text-align: left; font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; padding: .7rem 1rem; white-space: nowrap; }
+    .ix-prose td { padding: .7rem 1rem; border-top: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+
+    /* ---------- Market table ---------- */
+    .ix-table-wrap { overflow-x: auto; border: 1px solid var(--border-subtle); border-radius: 18px; background: var(--bg-card); }
+    .ix-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    .ix-table th { text-align: left; padding: .85rem 1.2rem; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted);
+        border-bottom: 1px solid var(--border-subtle); }
+    .ix-table td { padding: 1rem 1.2rem; border-top: 1px solid rgba(255,255,255,.05); vertical-align: top; }
+    .ix-table tbody tr { transition: background .2s ease; }
+    .ix-table tbody tr:hover { background: rgba(99,102,241,.06); }
+    .ix-table .t { color: #fff; font-weight: 600; }
+    .ix-table .s { color: var(--text-muted); font-size: .8rem; margin-top: .25rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 560px; }
+    .ix-price { display: inline-block; padding: .25rem .65rem; border-radius: 8px; background: rgba(16,185,129,.14); color: #6ee7b7; font-weight: 700; white-space: nowrap; }
+    .ix-table a { color: #a5b4fc; text-decoration: none; font-weight: 600; }
+    .ix-table a:hover { color: #fff; }
+    .ix-foot { margin-top: .8rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; font-size: .78rem; color: var(--text-muted); }
+
+    /* ---------- History ---------- */
+    .ix-history summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.3rem;
+        background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px; font-weight: 700; }
+    .ix-history summary::-webkit-details-marker { display: none; }
+    .ix-history[open] summary { border-radius: 16px 16px 0 0; }
+    .ix-history-list { border: 1px solid var(--border-subtle); border-top: none; border-radius: 0 0 16px 16px; background: var(--bg-card); }
+    .ix-history-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: .9rem 1.3rem; border-top: 1px solid rgba(255,255,255,.05); font-size: .88rem; }
+    .ix-history-row:first-child { border-top: none; }
+    .ix-history-row small { color: var(--text-muted); display: block; }
+    .ix-history-row a { color: #a5b4fc; text-decoration: none; font-weight: 600; }
+    .ix-history-row a:hover { color: #fff; }
+
+    /* ---------- Modal & progress overlay ---------- */
+    .ix-modal, .ix-overlay { position: fixed; inset: 0; z-index: 300; display: none; align-items: center; justify-content: center; padding: 1.25rem;
+        background: rgba(5,8,17,.78); backdrop-filter: blur(8px); }
+    .ix-modal.show, .ix-overlay.show { display: flex; animation: ixfade .25s ease; }
+    .ix-modal-card { width: 100%; max-width: 540px; background: #0f1524; border: 1px solid var(--border-accent); border-radius: 22px; padding: 1.9rem; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+    .ix-modal-card h2 { font-size: 1.35rem; font-weight: 800; margin-bottom: .5rem; }
+    .ix-modal-card > p { color: var(--text-secondary); font-size: .92rem; margin-bottom: 1.3rem; line-height: 1.55; }
+    .ix-modal-card label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: .5rem; }
+    .ix-modal-card label span { color: var(--text-muted); font-weight: 400; }
+    .ix-modal-card textarea { width: 100%; min-height: 96px; resize: vertical; background: rgba(5,8,17,.9); border: 1px solid var(--border-subtle); border-radius: 12px;
+        padding: .8rem 1rem; color: #fff; font: inherit; font-size: .9rem; outline: none; }
+    .ix-modal-card textarea:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.25); }
+    .ix-suggest { display: flex; flex-wrap: wrap; gap: .45rem; margin: .7rem 0 1.4rem; }
+    .ix-suggest button { background: rgba(99,102,241,.12); border: 1px solid rgba(99,102,241,.3); color: #c7d2fe; border-radius: 999px; padding: .3rem .8rem;
+        font: inherit; font-size: .78rem; cursor: pointer; transition: background .2s ease; }
+    .ix-suggest button:hover { background: rgba(99,102,241,.3); }
+    .ix-modal-actions { display: flex; justify-content: flex-end; gap: .7rem; }
+
+    .ix-overlay { flex-direction: column; text-align: center; gap: 1.1rem; }
+    .ix-ring { width: 74px; height: 74px; border-radius: 50%; border: 4px solid rgba(99,102,241,.2); border-top-color: #8b5cf6; animation: ixspin 1s linear infinite; }
+    .ix-overlay h2 { font-size: 1.4rem; font-weight: 800; }
+    .ix-overlay #progressMsg { color: #c7d2fe; font-size: 1rem; min-height: 1.5em; transition: opacity .3s ease; }
+    .ix-overlay small { color: var(--text-muted); }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 1000px) {
+        .ix-hero, .ix-grid-2, .ix-plan { grid-template-columns: 1fr; }
+        .ix-kpis { grid-template-columns: repeat(2, 1fr); }
+        .ix-acc-body { padding-left: 1.4rem; }
+    }
+    @media (max-width: 560px) {
+        .ix-kpis { grid-template-columns: 1fr; }
+        .ix-refresh { align-items: stretch; width: 100%; }
+        .ix-btn { width: 100%; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ix-wrap">
+
+    <!-- ============================== HEADER ============================== -->
+    <header class="ix-top ix-reveal">
+        <div>
+            <div class="ix-eyebrow">
+                <span class="brand-tag" data-en="Turnaround Intelligence" data-hi="व्यापारिक अंतर्दृष्टि (एआई)">Turnaround Intelligence</span>
+                <span><i class="fa-solid fa-location-dot"></i> <span data-en="{{ location }}" data-hi="बड़ा बाजार, दरभंगा, बिहार">{{ location }}</span></span>
+            </div>
+            <h1 class="ix-title"><span id="greeting" data-morning-en="Good morning" data-morning-hi="सुप्रभात" data-afternoon-en="Good afternoon" data-afternoon-hi="शुभ दोपहर" data-evening-en="Good evening" data-evening-hi="शुभ संध्या">Welcome back</span>, <span id="shopTitleRest" data-en="here's how {{ shop_name }} is doing" data-hi="जानिए {{ shop_name }} का कारोबार कैसा चल रहा है">here's how {{ shop_name }} is doing</span></h1>
+            <p class="ix-sub" id="headerSubtitle"
+               data-en="{% if latest_run %}Advice last refreshed <b>{{ latest_run.created_at|timesince }} ago</b>{% else %}No advice generated yet{% endif %}{% if current_fy %} &middot; Showing ledger for <b>{{ current_fy }}</b>{% endif %}"
+               data-hi="{% if latest_run %}सुझाव <b>{{ latest_run.created_at|timesince }} पहले</b> अपडेट किए गए{% else %}अभी कोई सुझाव तैयार नहीं हुआ{% endif %}{% if current_fy %} &middot; <b>{{ current_fy }}</b> का बहीखाता दिखाया जा रहा है{% endif %}">
+                {% if latest_run %}
+                    Advice last refreshed <b>{{ latest_run.created_at|timesince }} ago</b>
+                {% else %}
+                    No advice generated yet
+                {% endif %}
+                {% if current_fy %}&middot; Showing ledger for <b>{{ current_fy }}</b>{% endif %}
+            </p>
+        </div>
+
+        <div class="ix-refresh">
+            {% if can_refresh %}
+                <button type="button" class="ix-btn ix-btn-primary" id="openRefresh" onclick="openRefresh()">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span id="refreshBtnText" data-en="{% if latest_run %}Refresh insights{% else %}Generate my insights{% endif %}" data-hi="{% if latest_run %}सुझाव रिफ्रेश करें{% else %}व्यापारिक सुझाव तैयार करें{% endif %}">{% if latest_run %}Refresh insights{% else %}Generate my insights{% endif %}</span>
+                </button>
+                {% if latest_run %}<div class="ix-refresh-hint" id="refreshHint" data-en="Ready &mdash; it's been over 30 days" data-hi="तैयार &mdash; 30 दिन से अधिक हो चुके हैं"><i class="fa-regular fa-circle-check"></i> Ready &mdash; it's been over 30 days</div>{% endif %}
+            {% else %}
+                <button type="button" class="ix-btn ix-btn-muted" disabled aria-disabled="true"
+                        title="Insights can be refreshed once every 30 days so the advice stays meaningful.">
+                    <i class="fa-solid fa-lock"></i>
+                    <span id="refreshBtnText" data-en="Refresh insights" data-hi="सुझाव रिफ्रेश करें">Refresh insights</span>
+                </button>
+                <div class="ix-refresh-hint" id="refreshHint"
+                     data-en="Available in {{ quota.days_remaining }} day{{ quota.days_remaining|pluralize }} &middot; {{ quota.next_available_date|date:'M j' }}"
+                     data-hi="{{ quota.days_remaining }} दिन बाद उपलब्ध &middot; {{ quota.next_available_date|date:'j M' }}">
+                    <i class="fa-regular fa-clock"></i>
+                    Available in {{ quota.days_remaining }} day{{ quota.days_remaining|pluralize }}
+                    &middot; {{ quota.next_available_date|date:"M j" }}
+                </div>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- ============================== SECTION NAV ============================== -->
+    <nav class="ix-nav" id="sectionNav" aria-label="Page sections">
+        <a href="#overview" class="active" data-en="Overview" data-hi="एक नज़र में">Overview</a>
+        <a href="#numbers" data-en="Your numbers" data-hi="वित्तीय आंकड़े">Your numbers</a>
+        {% if report.plan %}<a href="#plan" data-en="90-day plan" data-hi="90-दिवसीय कार्ययोजना">90-day plan</a>{% endif %}
+        {% if report.sections %}<a href="#analysis" data-en="Full analysis" data-hi="विस्तृत विश्लेषण">Full analysis</a>{% endif %}
+        {% if market_searches %}<a href="#market" data-en="Market prices" data-hi="बाजार थोक भाव">Market prices</a>{% endif %}
+        {% if runs %}<a href="#history" data-en="History" data-hi="पिछले विश्लेषण">History</a>{% endif %}
+    </nav>
+
+    <!-- ============================== OVERVIEW ============================== -->
+    <section id="overview" class="ix-section ix-reveal">
+        {% if report.ok %}
+        <div class="ix-hero">
+            <div class="ix-hero-card ix-hero-main">
+                <div class="ix-label" id="heroMainLabel"><i class="fa-solid fa-bullseye"></i> <span data-en="The big picture" data-hi="मुख्य सार (The Big Picture)">The big picture</span></div>
+                <p class="ix-headline" id="heroSummary">{{ report.summary }}</p>
+                <div class="ix-chips" id="heroChips">
+                    <span class="ix-chip {{ confidence.tone }}" id="confidenceChip"
+                          title="How well this advice is backed by your own ledger and live market prices ({{ confidence.score }} out of 100)."
+                          data-en="Confidence: {{ confidence.label }}"
+                          data-hi="विश्वसनीयता: {% if confidence.label == 'High' %}उच्च{% elif confidence.label == 'Moderate' %}मध्यम{% else %}कम{% endif %}">
+                        <i class="fa-solid fa-shield-halved"></i> Confidence: {{ confidence.label }}
+                    </span>
+                    <span class="ix-chip" id="recordsReviewedChip"
+                          title="Ledger entries the AI reviewed to write this advice."
+                          data-en="{{ latest_run.total_records }} ledger entries reviewed"
+                          data-hi="{{ latest_run.total_records }} बहीखाता प्रविष्टियों की समीक्षा की गई">
+                        <i class="fa-solid fa-book-open"></i> {{ latest_run.total_records }} ledger entries reviewed
+                    </span>
+                    {% if latest_run.anomalies_flagged %}
+                    <span class="ix-chip" id="anomaliesChip"
+                          title="Entries with typos, short-forms or missing figures that were cleaned up automatically before analysis."
+                          data-en="{{ latest_run.anomalies_flagged }} entries auto-corrected"
+                          data-hi="{{ latest_run.anomalies_flagged }} प्रविष्टियां स्वतः सुधारी गईं">
+                        <i class="fa-solid fa-broom"></i> {{ latest_run.anomalies_flagged }} entries auto-corrected
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="ix-hero-card ix-hero-side">
+                <div class="ix-label" id="heroSideLabel" style="color:#6ee7b7;"><i class="fa-solid fa-list-check"></i> <span data-en="Do this first" data-hi="प्राथमिक कार्य (Do This First)">Do this first</span></div>
+                {% if report.first_actions %}
+                <ol class="ix-actions" id="heroActionsList">
+                    {% for a in report.first_actions %}
+                    <li>
+                        <span class="ix-num">{{ forloop.counter }}</span>
+                        <div><b>{{ a.lead }}</b>{% if a.detail %}<span>{{ a.detail }}</span>{% endif %}</div>
+                    </li>
+                    {% endfor %}
+                </ol>
+                {% else %}
+                <p class="ix-sub" id="heroSideEmpty" data-en="Open the full analysis below for the recommended next steps." data-hi="अनुशंसित आगामी कदमों के लिए नीचे विस्तृत विश्लेषण देखें।">Open the full analysis below for the recommended next steps.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="ix-empty">
+            <i class="fa-solid fa-wand-magic-sparkles big"></i>
+            <h3 data-en="Your first insights are one click away" data-hi="आपके पहले व्यापारिक सुझाव बस एक क्लिक दूर हैं">Your first insights are one click away</h3>
+            <p data-en="We'll read your ledger, compare your buying prices with the market and write a plain-English plan to help bring sales back up." data-hi="हम आपके बहीखाते का अध्ययन करेंगे, बाजार के थोक भावों से तुलना करेंगे और बिक्री बढ़ाने के लिए व्यावहारिक कार्ययोजना तैयार करेंगे।">We'll read your ledger, compare your buying prices with the market and write a plain-English plan to help bring sales back up.</p>
+            {% if can_refresh %}
+            <button type="button" class="ix-btn ix-btn-primary" onclick="openRefresh()"><i class="fa-solid fa-rotate"></i><span data-en="Generate my insights" data-hi="व्यापारिक सुझाव तैयार करें">Generate my insights</span></button>
+            {% endif %}
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- ============================== YOUR NUMBERS ============================== -->
+    <section id="numbers" class="ix-section ix-reveal">
+        <div class="ix-h">
+            <div>
+                <h2 data-en="Your numbers" data-hi="वित्तीय आंकड़े">Your numbers</h2>
+                <p id="numbersSubtitle"
+                   data-en="Calculated straight from your ledger{% if current_fy %} for {{ current_fy }}{% endif %}. Hover the <i class='fa-regular fa-circle-question'></i> on any card for what it means."
+                   data-hi="{% if current_fy %}{{ current_fy }} के {% endif %}आपके बहीखाते से सीधे गणना की गई। विवरण के लिए किसी भी कार्ड पर <i class='fa-regular fa-circle-question'></i> पर माउस ले जाएं।">
+                    Calculated straight from your ledger{% if current_fy %} for {{ current_fy }}{% endif %}. Hover the <i class="fa-regular fa-circle-question"></i> on any card for what it means.
+                </p>
+            </div>
+        </div>
+
+        {% if stats.has_data %}
+        <div class="ix-kpis" id="kpiContainer">
+            {% for k in stats.kpis %}
+            <article class="ix-kpi ix-tone-{{ k.tone }}">
+                <div class="ix-kpi-top">
+                    <div class="ix-kpi-label"><i class="fa-solid {{ k.icon }}"></i> <span class="kpi-label-text">{{ k.label }}</span></div>
+                    <i class="fa-regular fa-circle-question ix-info" title="{{ k.hint }}"></i>
+                </div>
+                <div class="ix-kpi-value">{{ k.value }}</div>
+                <div class="ix-kpi-sub">
+                    {% if k.trend == 'up' %}<i class="fa-solid fa-arrow-trend-up"></i>{% elif k.trend == 'down' %}<i class="fa-solid fa-arrow-trend-down"></i>{% endif %}
+                    <span>{{ k.sub }}</span>
+                </div>
+                {% if k.spark %}<svg class="ix-spark" data-values="{{ k.spark|join:',' }}" aria-hidden="true"></svg>{% endif %}
+            </article>
+            {% endfor %}
+        </div>
+
+        {% if stats.flags %}
+        <div class="ix-watch" id="flagsContainer" aria-label="Things to watch">
+            {% for f in stats.flags %}
+            <div class="ix-watch-item {{ f.level }}">
+                <i class="fa-solid {{ f.icon }}"></i>
+                <div><b>{{ f.title }}</b><span>{{ f.detail }}</span></div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="ix-grid-2">
+            <div class="ix-panel">
+                <h3 data-en="How much you bought, month by month" data-hi="माह-दर-माह खरीदारी का विवरण">How much you bought, month by month</h3>
+                <p class="cap" data-en="The latest month may still be in progress." data-hi="चालू माह अभी प्रगति पर हो सकता है।">The latest month may still be in progress.</p>
+                <div class="ix-chart-box"><canvas id="monthlyChart" aria-label="Monthly purchases bar chart" role="img"></canvas></div>
+            </div>
+            <div class="ix-panel">
+                <h3 data-en="Who you buy from" data-hi="शीर्ष सप्लायर्स (आपूर्तिकर्ता)">Who you buy from</h3>
+                <p class="cap" data-en="Share of total spend by supplier." data-hi="कुल खर्च में आपूर्तिकर्ताओं की हिस्सेदारी का प्रतिशत।">Share of total spend by supplier.</p>
+                <div class="ix-chart-box"><canvas id="supplierChart" aria-label="Spend by supplier chart" role="img"></canvas></div>
+            </div>
+        </div>
+
+        <div class="ix-panel" style="margin-top:1rem;" id="fabricPanel">
+            <div class="ix-h" style="margin-bottom:.9rem;">
+                <div>
+                    <h3 data-en="Where your money goes, by fabric" data-hi="कपड़े की किस्म के अनुसार खर्च">Where your money goes, by fabric</h3>
+                    <p class="cap" style="margin-bottom:0;" data-en="Biggest spend first." data-hi="सर्वाधिक खर्च के क्रम में।">Biggest spend first.</p>
+                </div>
+                {% if stats.fabrics|length > 5 %}<button type="button" class="ix-link-btn" id="fabricToggleBtn" data-toggle="#fabricPanel" data-total="{{ stats.fabrics|length }}" data-en="Show all {{ stats.fabrics|length }}" data-hi="सभी {{ stats.fabrics|length }} देखें">Show all {{ stats.fabrics|length }}</button>{% endif %}
+            </div>
+            <ul class="ix-rank" id="fabricRankList">
+                {% for f in stats.fabrics %}
+                <li class="{% if forloop.counter > 5 %}ix-extra{% endif %}">
+                    <span class="nm" title="{{ f.name }}">{{ f.name }}</span>
+                    <span class="vl">{{ f.value }}<small>{{ f.share }}%</small></span>
+                    <span class="ix-bar"><i data-w="{{ f.bar }}"></i></span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% else %}
+        <div class="ix-empty" style="padding:2rem 1.5rem;">
+            <i class="fa-solid fa-book big"></i>
+            <h3 data-en="No ledger entries to summarise yet" data-hi="संक्षेप के लिए अभी कोई बहीखाता प्रविष्टि नहीं है">No ledger entries to summarise yet</h3>
+            <p data-en="{% if current_fy %}Nothing has been recorded for {{ current_fy }}. {% endif %}Add supplier bills in the Ledger and your numbers will appear here automatically."
+               data-hi="{% if current_fy %}{{ current_fy }} के लिए अभी कुछ दर्ज नहीं है। {% endif %}बहीखाते में सप्लायर बिल जोड़ें और आपके आंकड़े यहां स्वतः प्रदर्शित होंगे।">
+               {% if current_fy %}Nothing has been recorded for {{ current_fy }}. {% endif %}Add supplier bills in the Ledger and your numbers will appear here automatically.
+            </p>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- ============================== 90-DAY PLAN ============================== -->
+    {% if report.plan %}
+    <section id="plan" class="ix-section ix-reveal">
+        <div class="ix-h">
+            <div>
+                <h2 data-en="Your 90-day plan" data-hi="आपकी 90-दिवसीय कार्ययोजना">Your 90-day plan</h2>
+                <p data-en="The AI's recommended order of work. Start on the left and move right." data-hi="एआई द्वारा अनुशंसित प्राथमिकताओं का क्रम। बाएं से दाएं की ओर अमल करें।">The AI's recommended order of work. Start on the left and move right.</p>
+            </div>
+        </div>
+        <div class="ix-plan" id="planContainer">
+            {% for p in report.plan|slice:":3" %}
+            <article class="ix-phase">
+                <span class="ix-phase-tag">{{ p.label }}</span>
+                <h3>{{ p.title|default:"Next steps" }}</h3>
+                {% if p.actions %}
+                <ul>
+                    {% for a in p.actions %}
+                    <li><i class="fa-solid fa-circle-check"></i><div><b>{{ a.lead }}</b>{% if a.detail %}{{ a.detail }}{% endif %}</div></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- ============================== FULL ANALYSIS ============================== -->
+    {% if report.sections %}
+    <section id="analysis" class="ix-section ix-reveal">
+        <div class="ix-h">
+            <div>
+                <h2 data-en="The full analysis" data-hi="विस्तृत विश्लेषण">The full analysis</h2>
+                <p data-en="Every detail is here &mdash; tap a topic to read it. Each shows the one-line gist first." data-hi="विस्तृत रिपोर्ट यहां उपलब्ध है — पढ़ने के लिए किसी भी विषय पर टैप करें। प्रत्येक का मुख्य सार पहले दिखाया गया है।">Every detail is here &mdash; tap a topic to read it. Each shows the one-line gist first.</p>
+            </div>
+            <div style="display:flex; gap:.9rem;">
+                <button type="button" class="ix-link-btn" id="expandAll" data-en="Expand all" data-hi="सभी खोलें">Expand all</button>
+                <button type="button" class="ix-link-btn" id="collapseAll" data-en="Collapse all" data-hi="सभी बंद करें">Collapse all</button>
+            </div>
+        </div>
+        <div class="ix-acc" id="sectionsAccordion">
+            {% for s in report.sections %}
+            <article class="ix-acc-item" id="{{ s.key }}">
+                <button type="button" class="ix-acc-head" aria-expanded="false" aria-controls="{{ s.key }}-body">
+                    <span class="ix-emoji" aria-hidden="true">{{ s.emoji }}</span>
+                    <span class="ix-acc-text">
+                        <b>{{ s.title }}</b>
+                        {% if s.headline %}<span>{{ s.headline }}</span>{% endif %}
+                    </span>
+                    <i class="fa-solid fa-chevron-down ix-chev" aria-hidden="true"></i>
+                </button>
+                <div class="ix-acc-body" id="{{ s.key }}-body" role="region">
+                    <div class="ix-prose"></div>
+                    <div class="ix-md-src" hidden>{{ s.body }}</div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% if latest_run %}
+        <p class="ix-foot" style="margin-top:1rem;">
+            <span data-en="Want the technical detail (data checks, how the advice was built)?" data-hi="क्या आप तकनीकी विवरण (डेटा सत्यापन, पाइपलाइन निष्पादन) देखना चाहते हैं?">Want the technical detail (data checks, how the advice was built)?</span>
+            <a class="ix-link-btn" href="{% url 'intelligence:run_detail' run_id=latest_run.id %}"><span data-en="Open the detailed report" data-hi="विस्तृत तकनीकी रिपोर्ट खोलें">Open the detailed report</span> <i class="fa-solid fa-arrow-right"></i></a>
+        </p>
+        {% endif %}
+    </section>
+    {% endif %}
+
+    <!-- ============================== MARKET PRICES ============================== -->
+    {% if market_searches %}
+    <section id="market" class="ix-section ix-reveal">
+        <div class="ix-h">
+            <div>
+                <h2 data-en="What the market is charging" data-hi="बाजार में मौजूदा थोक भाव">What the market is charging</h2>
+                <p data-en="Indicative wholesale prices found online for fabrics like yours &mdash; use them to sanity-check what you pay." data-hi="आपकी किस्म के कपड़ों के लिए ऑनलाइन मिले सांकेतिक थोक मूल्य — अपनी खरीद लागत की तुलना करें।">Indicative wholesale prices found online for fabrics like yours &mdash; use them to sanity-check what you pay.</p>
+            </div>
+            {% if market_searches|length > 4 %}<button type="button" class="ix-link-btn" id="marketToggleBtn" data-toggle="#marketBox" data-total="{{ market_searches|length }}" data-en="Show all {{ market_searches|length }}" data-hi="सभी {{ market_searches|length }} देखें">Show all {{ market_searches|length }}</button>{% endif %}
+        </div>
+        <div id="marketBox">
+            <div class="ix-table-wrap">
+                <table class="ix-table">
+                    <thead><tr><th data-en="Fabric" data-hi="कपड़ा / किस्म">Fabric</th><th data-en="Indicative price" data-hi="सांकेतिक थोक मूल्य">Indicative price</th><th data-en="Market" data-hi="मंडी / बाजार">Market</th><th data-en="Source" data-hi="स्रोत">Source</th></tr></thead>
+                    <tbody>
+                        {% for m in market_searches %}
+                        <tr class="{% if forloop.counter > 4 %}ix-extra{% endif %}">
+                            <td><div class="t">{{ m.title }}</div><div class="s">{{ m.snippet }}</div></td>
+                            <td><span class="ix-price">{{ m.estimated_price|default:"See source" }}</span></td>
+                            <td>{{ m.market_location|default:"—" }}</td>
+                            <td>{% if m.source_url|slice:":4" == "http" %}<a href="{{ m.source_url }}" target="_blank" rel="noopener noreferrer"><span data-en="Open" data-hi="देखें">Open</span> <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:.7rem;"></i></a>{% else %}&mdash;{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="ix-foot"><span data-en="Prices are indicative and change daily. Always confirm with the supplier before ordering." data-hi="भाव सांकेतिक हैं और प्रतिदिन बदल सकते हैं। आर्डर देने से पूर्व हमेशा सप्लायर से पुष्टि करें।">Prices are indicative and change daily. Always confirm with the supplier before ordering.</span></div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- ============================== HISTORY ============================== -->
+    {% if runs %}
+    <section id="history" class="ix-section ix-reveal">
+        <details class="ix-history">
+            <summary><span id="historySummarySpan"><i class="fa-solid fa-clock-rotate-left" style="color:#a5b4fc; margin-right:.5rem;"></i><span data-en="Past refreshes ({{ runs|length }})" data-hi="पिछले विश्लेषण ({{ runs|length }})">Past refreshes ({{ runs|length }})</span></span><i class="fa-solid fa-chevron-down ix-chev"></i></summary>
+            <div class="ix-history-list">
+                {% for r in runs %}
+                <div class="ix-history-row">
+                    <div>
+                        <b>{{ r.created_at|date:"j M Y" }}</b>{% if forloop.first %} <span class="ix-chip good" style="cursor:default; margin-left:.4rem;" data-en="Current" data-hi="वर्तमान">Current</span>{% endif %}
+                        <small data-en="{{ r.total_records }} ledger entries reviewed" data-hi="{{ r.total_records }} बहीखाता प्रविष्टियों की समीक्षा की गई">{{ r.total_records }} ledger entries reviewed</small>
+                    </div>
+                    <a href="{% url 'intelligence:run_detail' run_id=r.id %}"><span data-en="View report" data-hi="रिपोर्ट देखें">View report</span> <i class="fa-solid fa-chevron-right" style="font-size:.7rem;"></i></a>
+                </div>
+                {% endfor %}
+            </div>
+        </details>
+    </section>
+    {% endif %}
+</div>
+
+<!-- ============================== REFRESH MODAL ============================== -->
+{% if can_refresh %}
+<div class="ix-modal" id="refreshModal" role="dialog" aria-modal="true" aria-labelledby="refreshTitle">
+    <div class="ix-modal-card">
+        <h2 id="refreshTitle" data-en="{% if latest_run %}Refresh your insights{% else %}Generate your insights{% endif %}" data-hi="{% if latest_run %}नए व्यापारिक सुझाव प्राप्त करें{% else %}व्यापारिक सुझाव तैयार करें{% endif %}">{% if latest_run %}Refresh your insights{% else %}Generate your insights{% endif %}</h2>
+        <p id="refreshDesc" data-en="We'll re-read your latest ledger, check today's market prices and rewrite your plan. It takes about 3 minutes. Insights can be refreshed once every 30 days." data-hi="हम आपके नवीनतम बहीखाते का पुनरावलोकन करेंगे, आज के बाजार भाव जांचेंगे और आपकी कार्ययोजना को अपडेट करेंगे। इसमें लगभग 3 मिनट लगेंगे। सुझाव हर 30 दिन में एक बार अपडेट किए जा सकते हैं।">We'll re-read your latest ledger, check today's market prices and rewrite your plan. It takes about 3 minutes. Insights can be refreshed once every 30 days.</p>
+        <form id="refreshForm" method="post" action="{% url 'intelligence:run_analysis' %}">
+            {% csrf_token %}
+            <input type="hidden" name="source_type" value="db">
+            <label for="focusNote"><span id="focusNoteLabel" data-en="Anything you want it to focus on?" data-hi="क्या आप किसी खास विषय पर ध्यान देना चाहते हैं?">Anything you want it to focus on?</span> <span id="optionalSpan" data-en="(optional)" data-hi="(वैकल्पिक)">(optional)</span></label>
+            <textarea id="focusNote" name="human_notes" maxlength="600" placeholder="e.g. We want to grow sales in the coming Lagan season."></textarea>
+            <div class="ix-suggest">
+                <button type="button" data-en="Grow festive sales" data-hi="त्योहारी सीजन में बिक्री बढ़ाएं" data-note="Grow sales in the coming Lagan and festive season.">Grow festive sales</button>
+                <button type="button" data-en="Free up stuck money" data-hi="फंसी हुई पूंजी खाली करें" data-note="Reduce money stuck in slow-moving stock.">Free up stuck money</button>
+                <button type="button" data-en="Compete with Surat direct" data-hi="सूरत डायरेक्ट खरीद से मुकाबला" data-note="Help us compete with retailers buying directly from Surat mills.">Compete with Surat direct</button>
+            </div>
+            <div class="ix-modal-actions">
+                <button type="button" class="ix-btn ix-btn-ghost" onclick="closeRefresh()" data-en="Cancel" data-hi="रद्द करें">Cancel</button>
+                <button type="submit" class="ix-btn ix-btn-primary" id="startRefresh"><i class="fa-solid fa-rotate"></i><span data-en="Start refresh" data-hi="विश्लेषण शुरू करें">Start refresh</span></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="ix-overlay" id="refreshOverlay" role="status" aria-live="polite">
+    <div class="ix-ring" aria-hidden="true"></div>
+    <h2 data-en="Preparing your insights" data-hi="आपके सुझाव तैयार किए जा रहे हैं">Preparing your insights</h2>
+    <div id="progressMsg" data-en="Reading your ledger&hellip;" data-hi="आपके बहीखाते का अध्ययन हो रहा है&hellip;">Reading your ledger&hellip;</div>
+    <small data-en="This takes about 3 minutes. Please keep this page open." data-hi="इसमें लगभग 3 मिनट लगेंगे। कृपया इस पेज को खुला रखें।">This takes about 3 minutes. Please keep this page open.</small>
+</div>
+{% endif %}
+
+{{ stats|json_script:"stats-en-data" }}
+{{ stats_hi|json_script:"stats-hi-data" }}
+{{ report|json_script:"report-en-data" }}
+{{ report_hi|json_script:"report-hi-data" }}
+{{ chart_data|json_script:"chart-data" }}
+{{ chart_data_hi|json_script:"chart-data-hi" }}
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+(function () {
+    'use strict';
+
+    /* ---------- Greeting ---------- */
+    var h = new Date().getHours();
+    var g = document.getElementById('greeting');
+    if (g) g.textContent = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+
+    /* ---------- Scroll reveal + active nav ---------- */
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var revealEls = document.querySelectorAll('.ix-reveal');
+    if ('IntersectionObserver' in window && !reduce) {
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); animateBars(e.target); }
+            });
+        }, { threshold: 0.08 });
+        revealEls.forEach(function (el) { io.observe(el); });
+    } else {
+        revealEls.forEach(function (el) { el.classList.add('in'); animateBars(el); });
+    }
+    function animateBars(scope) {
+        scope.querySelectorAll('.ix-bar i[data-w]').forEach(function (b) {
+            requestAnimationFrame(function () { b.style.width = b.dataset.w + '%'; });
+        });
+    }
+
+    var navLinks = Array.prototype.slice.call(document.querySelectorAll('#sectionNav a'));
+    if ('IntersectionObserver' in window) {
+        var spy = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) {
+                    navLinks.forEach(function (a) { a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id); });
+                }
+            });
+        }, { rootMargin: '-35% 0px -55% 0px' });
+        navLinks.forEach(function (a) {
+            var t = document.querySelector(a.getAttribute('href'));
+            if (t) spy.observe(t);
+        });
+    }
+
+    /* ---------- Show all / fewer ---------- */
+    function bindToggles() {
+        document.querySelectorAll('[data-toggle]').forEach(function (btn) {
+            if (btn.dataset.bound) return;
+            btn.dataset.bound = '1';
+            btn.addEventListener('click', function () {
+                var box = document.querySelector(btn.dataset.toggle);
+                if (!box) return;
+                var open = box.classList.toggle('ix-open');
+                var total = btn.dataset.total || btn.textContent.replace(/[^0-9]/g, '');
+                var isHi = (window.getIntelligenceLanguage && window.getIntelligenceLanguage() === 'hi');
+                if (isHi) {
+                    btn.textContent = open ? 'कम देखें' : 'सभी ' + total + ' देखें';
+                } else {
+                    btn.textContent = open ? 'Show fewer' : 'Show all ' + total;
+                }
+                if (open) animateBars(box);
+            });
+        });
+    }
+    window.bindDashboardToggles = bindToggles;
+    bindToggles();
+
+    /* ---------- Accordion (lazy-renders each topic on first open) ---------- */
+    function setOpen(item, open) {
+        var head = item.querySelector('.ix-acc-head');
+        item.classList.toggle('open', open);
+        if (head) head.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) {
+            var prose = item.querySelector('.ix-prose');
+            var src = item.querySelector('.ix-md-src');
+            if (prose && src && !prose.dataset.done) {
+                prose.innerHTML = window.renderMarkdownSafe(src.textContent.trim());
+                prose.dataset.done = '1';
+            }
+        }
+    }
+    function bindAccordions() {
+        var items = document.querySelectorAll('.ix-acc-item');
+        items.forEach(function (item) {
+            var head = item.querySelector('.ix-acc-head');
+            if (head && !head.dataset.bound) {
+                head.dataset.bound = '1';
+                head.addEventListener('click', function () {
+                    setOpen(item, !item.classList.contains('open'));
+                });
+            }
+        });
+    }
+    window.bindDashboardAccordions = bindAccordions;
+    bindAccordions();
+
+    var ea = document.getElementById('expandAll'), ca = document.getElementById('collapseAll');
+    if (ea) ea.addEventListener('click', function () { document.querySelectorAll('.ix-acc-item').forEach(function (i) { setOpen(i, true); }); });
+    if (ca) ca.addEventListener('click', function () { document.querySelectorAll('.ix-acc-item').forEach(function (i) { setOpen(i, false); }); });
+
+    /* ---------- Sparkline ---------- */
+    function drawSparklines(root) {
+        var scope = root || document;
+        scope.querySelectorAll('svg.ix-spark').forEach(function (svg) {
+            var v = (svg.dataset.values || '').split(',').map(Number);
+            if (v.length < 2) { svg.remove(); return; }
+            var w = 200, hgt = 34, max = Math.max.apply(null, v), min = Math.min.apply(null, v), span = (max - min) || 1;
+            var pts = v.map(function (n, i) { return [(i / (v.length - 1)) * w, hgt - 4 - ((n - min) / span) * (hgt - 8)]; });
+            var line = pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
+            svg.setAttribute('viewBox', '0 0 ' + w + ' ' + hgt);
+            svg.setAttribute('preserveAspectRatio', 'none');
+            svg.innerHTML = '<defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6366f1" stop-opacity=".45"/><stop offset="1" stop-color="#6366f1" stop-opacity="0"/></linearGradient></defs>' +
+                '<polygon points="0,' + hgt + ' ' + line + ' ' + w + ',' + hgt + '" fill="url(#sg)"/>' +
+                '<polyline points="' + line + '" fill="none" stroke="#818cf8" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/>';
+        });
+    }
+    window.drawDashboardSparklines = drawSparklines;
+    drawSparklines();
+
+    /* ---------- Charts (real ledger data) ---------- */
+    function inr(v) {
+        if (v >= 1e7) return '\u20B9' + (v / 1e7).toFixed(2) + ' Cr';
+        if (v >= 1e5) return '\u20B9' + (v / 1e5).toFixed(1) + ' L';
+        return '\u20B9' + Math.round(v).toLocaleString('en-IN');
+    }
+    var dataEl = document.getElementById('chart-data');
+    if (dataEl && window.Chart) {
+        var d = JSON.parse(dataEl.textContent);
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.borderColor = 'rgba(255,255,255,.07)';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+
+        var mc = document.getElementById('monthlyChart');
+        var monthlyChartInstance = null;
+        var HINDI_MONTHS = {
+            'Jan': 'जनवरी', 'Feb': 'फ़रवरी', 'Mar': 'मार्च', 'Apr': 'अप्रैल',
+            'May': 'मई', 'Jun': 'जून', 'Jul': 'जुलाई', 'Aug': 'अगस्त',
+            'Sep': 'सितंबर', 'Oct': 'अक्टूबर', 'Nov': 'नवंबर', 'Dec': 'दिसंबर'
+        };
+        function translateMonthLabels(labels, lang) {
+            if (lang !== 'hi') return labels;
+            return labels.map(function (lbl) {
+                var parts = lbl.split(' ');
+                var m = HINDI_MONTHS[parts[0]] || parts[0];
+                return parts.length > 1 ? m + ' ' + parts[1] : m;
+            });
+        }
+
+        if (mc && d.months.length) {
+            var last = d.month_values.length - 1;
+            var initialLang = window.getIntelligenceLanguage ? window.getIntelligenceLanguage() : 'en';
+            monthlyChartInstance = new Chart(mc, {
+                type: 'bar',
+                data: {
+                    labels: translateMonthLabels(d.months, initialLang),
+                    datasets: [{ data: d.month_values, borderRadius: 8, maxBarThickness: 38,
+                    backgroundColor: d.month_values.map(function (_, i) { return i === last ? 'rgba(129,140,248,.45)' : 'rgba(99,102,241,.85)'; }) }]
+                },
+                options: { responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: function (c) { return ' ' + inr(c.raw); } } } },
+                    scales: { y: { beginAtZero: true, ticks: { callback: inr }, grid: { color: 'rgba(255,255,255,.05)' } }, x: { grid: { display: false } } } }
+            });
+        }
+        var sc = document.getElementById('supplierChart');
+        var supplierChartInstance = null;
+        function translateSupplierLabels(labels, lang) {
+            if (lang !== 'hi') return labels;
+            return labels.map(function (lbl) {
+                return (lbl === 'All others') ? 'अन्य सभी' : lbl;
+            });
+        }
+        if (sc && d.supplier_labels.length) {
+            var total = d.supplier_values.reduce(function (a, b) { return a + b; }, 0) || 1;
+            var initialLang = window.getIntelligenceLanguage ? window.getIntelligenceLanguage() : 'en';
+            supplierChartInstance = new Chart(sc, {
+                type: 'doughnut',
+                data: { labels: translateSupplierLabels(d.supplier_labels, initialLang), datasets: [{ data: d.supplier_values, borderWidth: 0, hoverOffset: 8,
+                    backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#06b6d4', '#ec4899', '#64748b'] }] },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '64%',
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12 } },
+                        tooltip: { callbacks: { label: function (c) { return ' ' + inr(c.raw) + ' (' + Math.round(c.raw / total * 100) + '%)'; } } } } }
+            });
+        }
+
+        window.addEventListener('intelligenceLanguageChanged', function (ev) {
+            var lang = ev.detail ? ev.detail.lang : 'en';
+            if (monthlyChartInstance && d.months.length) {
+                monthlyChartInstance.data.labels = translateMonthLabels(d.months, lang);
+                monthlyChartInstance.update();
+            }
+            if (supplierChartInstance && d.supplier_labels.length) {
+                supplierChartInstance.data.labels = translateSupplierLabels(d.supplier_labels, lang);
+                supplierChartInstance.update();
+            }
+        });
+    }
+
+    /* ---------- Refresh flow ---------- */
+    var modal = document.getElementById('refreshModal');
+    var overlay = document.getElementById('refreshOverlay');
+    var lastFocus = null;
+    window.openRefresh = function () {
+        if (!modal) return;
+        lastFocus = document.activeElement;
+        modal.classList.add('show');
+        setTimeout(function () { document.getElementById('focusNote').focus(); }, 50);
+    };
+    window.closeRefresh = function () {
+        if (!modal) return;
+        modal.classList.remove('show');
+        if (lastFocus) lastFocus.focus();
+    };
+    if (modal) {
+        modal.addEventListener('click', function (e) { if (e.target === modal) closeRefresh(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('show')) closeRefresh(); });
+        modal.querySelectorAll('.ix-suggest button').forEach(function (b) {
+            b.addEventListener('click', function () { var t = document.getElementById('focusNote'); t.value = b.dataset.note; t.focus(); });
+        });
+        var msgs = ['Reading your ledger\u2026', 'Checking today\u2019s market prices\u2026', 'Spotting what\u2019s selling and what\u2019s stuck\u2026',
+                    'Writing your action plan\u2026', 'Double-checking the advice against your numbers\u2026'];
+        document.getElementById('refreshForm').addEventListener('submit', function () {
+            var btn = document.getElementById('startRefresh');
+            btn.disabled = true;
+            modal.classList.remove('show');
+            overlay.classList.add('show');
+            var i = 0, el = document.getElementById('progressMsg');
+            setInterval(function () {
+                i = Math.min(i + 1, msgs.length - 1);
+                el.style.opacity = 0;
+                setTimeout(function () { el.textContent = msgs[i]; el.style.opacity = 1; }, 250);
+            }, 25000);
+        });
+    }
+})();
+</script>
+{% endblock %}

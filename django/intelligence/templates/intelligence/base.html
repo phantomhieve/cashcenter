@@ -1,0 +1,479 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Market Intelligence & AI Insights | CashCenter{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --bg-glass: rgba(31, 41, 55, 0.4);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(99, 102, 241, 0.3);
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-indigo: #6366f1;
+            --accent-indigo-hover: #4f46e5;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --accent-cyan: #06b6d4;
+            --glow-indigo: 0 0 25px rgba(99, 102, 241, 0.35);
+            --glow-emerald: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.06) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        /* Standalone Top Bar */
+        .intel-navbar {
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0.875rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .intel-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .brand-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent-indigo), #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: #ffffff;
+            box-shadow: var(--glow-indigo);
+        }
+
+        .brand-title {
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand-tag {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            border-radius: 9999px;
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.4);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .shop-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.85rem;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .shop-pill i {
+            color: var(--accent-emerald);
+        }
+
+        .btn-legacy {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.85rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-legacy:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-lock {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.85rem;
+            background: rgba(244, 63, 94, 0.15);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #fda4af;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-lock:hover {
+            background: rgba(244, 63, 94, 0.25);
+            color: #ffffff;
+        }
+
+        /* Language Toggle */
+        .lang-toggle-wrap {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .lang-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.28rem 0.65rem;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            border-radius: 9999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .lang-toggle-btn:hover {
+            background: rgba(99, 102, 241, 0.22);
+            border-color: rgba(99, 102, 241, 0.6);
+            color: #ffffff;
+        }
+
+        .lang-opt {
+            padding: 0.15rem 0.45rem;
+            border-radius: 9999px;
+            transition: all 0.2s ease;
+        }
+
+        .lang-opt.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.45);
+        }
+
+        .lang-divider {
+            color: rgba(255, 255, 255, 0.25);
+            font-weight: 400;
+            font-size: 0.75rem;
+        }
+
+        /* Container */
+        .intel-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* Alerts */
+        .alert-bar {
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .alert-success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+        }
+        .alert-error {
+            background: rgba(244, 63, 94, 0.15);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            color: #fda4af;
+        }
+        .alert-info {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+        }
+
+        /* Common utility classes */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header-styled {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .card-title-styled {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary-glow {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-indigo), #4f46e5);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 0.65rem 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            box-shadow: var(--glow-indigo);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary-glow:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 35px rgba(99, 102, 241, 0.5);
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+        }
+
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem 0.65rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-emerald {
+            background: rgba(16, 185, 129, 0.15);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-amber {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge-indigo {
+            background: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .code-box {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            background: #050811;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 1rem;
+            color: #e2e8f0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .intel-footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 1.25rem 2rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(11, 15, 25, 0.6);
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="intel-navbar">
+        <a href="{% url 'intelligence:dashboard' %}" class="intel-brand">
+            <div class="brand-icon-box">
+                <i class="fa-solid fa-atom"></i>
+            </div>
+            <div class="brand-title">
+                <span>Business Insights</span>
+                <span class="brand-tag">AI</span>
+            </div>
+        </a>
+
+        <div class="nav-actions">
+            <!-- Language Toggle (English / हिन्दी) -->
+            <div class="lang-toggle-wrap">
+                <button type="button" class="lang-toggle-btn" id="intelLangToggle" onclick="window.toggleIntelligenceLanguage()" title="Switch Language / भाषा बदलें" aria-label="Switch to Hindi">
+                    <span class="lang-opt active" data-lang="en">EN</span>
+                    <span class="lang-divider">/</span>
+                    <span class="lang-opt" data-lang="hi">हिन्दी</span>
+                </button>
+            </div>
+
+            {% if shop_name %}
+            <div class="shop-pill">
+                <i class="fa-solid fa-store"></i>
+                <span>{{ shop_name }}</span>
+            </div>
+            {% endif %}
+
+            {% if current_fy %}
+            <div class="shop-pill">
+                <i class="fa-regular fa-calendar"></i>
+                <span>{{ current_fy }}</span>
+            </div>
+            {% endif %}
+
+            <a href="{% url 'ledger_list' %}" class="btn-legacy" title="Return to Legacy Shop Ledger">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Shop Ledger</span>
+            </a>
+
+            <a href="{% url 'intelligence:lock_dashboard' %}" class="btn-lock" title="Lock Intelligence Dashboard">
+                <i class="fa-solid fa-lock"></i>
+                <span>Lock</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="intel-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert-bar {% if message.tags == 'error' %}alert-error{% elif message.tags == 'success' %}alert-success{% else %}alert-info{% endif %}">
+                    <i class="fa-solid {% if message.tags == 'error' %}fa-triangle-exclamation{% elif message.tags == 'success' %}fa-circle-check{% else %}fa-circle-info{% endif %}"></i>
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="intel-footer">
+        <div>
+            <span>CashCenter Insights &bull; Powered by Google Gemini</span>
+        </div>
+        <div>
+            <span>Advice refreshes once every 30 days &bull; Based on your own ledger and live market prices</span>
+        </div>
+    </footer>
+
+    <!-- Marked.js Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- DOMPurify Security Sanitizer -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+    <!-- Market Intelligence Bilingual i18n Engine (EN / HI) -->
+    <script src="{% static 'intelligence/js/i18n.js' %}"></script>
+    <script>
+        /* Shared: markdown -> sanitised HTML.
+           Uses DOMPurify for defense-in-depth sanitization with a secure fallback to DOMParser.
+           Strips active scripts, frames, inline handlers, and javascript: URIs. */
+        window.renderMarkdownSafe = function (md) {
+            var rawHtml = (window.marked && marked.parse)
+                ? marked.parse(md, { gfm: true, breaks: false })
+                : '<p>' + md.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\n\n/g, '</p><p>') + '</p>';
+
+            var cleanHtml;
+            if (window.DOMPurify && DOMPurify.sanitize) {
+                cleanHtml = DOMPurify.sanitize(rawHtml, {
+                    USE_PROFILES: { html: true },
+                    FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'link', 'meta', 'form'],
+                    FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'style'],
+                    ADD_ATTR: ['target', 'rel']
+                });
+            } else {
+                var doc = new DOMParser().parseFromString(rawHtml, 'text/html');
+                doc.querySelectorAll('script,style,iframe,object,embed,link,meta,form').forEach(function (n) { n.remove(); });
+                doc.body.querySelectorAll('*').forEach(function (el) {
+                    Array.prototype.slice.call(el.attributes).forEach(function (a) {
+                        var v = (a.value || '').trim().toLowerCase();
+                        if (a.name.indexOf('on') === 0 || ((a.name === 'href' || a.name === 'src') && v.indexOf('javascript:') === 0)) {
+                            el.removeAttribute(a.name);
+                        }
+                    });
+                });
+                cleanHtml = doc.body.innerHTML;
+            }
+
+            var wrapDoc = new DOMParser().parseFromString(cleanHtml, 'text/html');
+            wrapDoc.body.querySelectorAll('a').forEach(function (a) {
+                a.setAttribute('target', '_blank');
+                a.setAttribute('rel', 'noopener noreferrer');
+            });
+            wrapDoc.querySelectorAll('table').forEach(function (t) {
+                var w = wrapDoc.createElement('div');
+                w.className = 'table-responsive';
+                t.parentNode.insertBefore(w, t);
+                w.appendChild(t);
+            });
+            return wrapDoc.body.innerHTML;
+        };
+    </script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

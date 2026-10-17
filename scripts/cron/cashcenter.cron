@@ -1,0 +1,12 @@
+# CashCenter Periodic Crontab Configuration
+# Place this file in /etc/cron.d/cashcenter or install with: crontab -u cashcenter cashcenter.cron
+#
+# Daily check at 02:00 AM:
+# The management command checks whether 30 days have passed since each active user's
+# previous intelligence report, and triggers Gemini AI DAG analysis for eligible shops.
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# Run 30-day AI insight evaluation every night at 2:00 AM IST (20:30 UTC)
+0 2 * * * cashcenter-deploy /var/www/cashcenter/scripts/run_intelligence_cron.sh >> /var/log/cashcenter/intelligence_cron.log 2>&1
