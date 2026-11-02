@@ -476,7 +476,8 @@
                     if (window.DOMPurify && DOMPurify.sanitize) {
                         el.innerHTML = DOMPurify.sanitize(val);
                     } else {
-                        el.textContent = val.replace(/<[^>]*>/g, '');
+                        var parsedDoc = new DOMParser().parseFromString(val, 'text/html');
+                        el.textContent = parsedDoc.body.textContent || '';
                     }
                 } else {
                     el.textContent = val;
