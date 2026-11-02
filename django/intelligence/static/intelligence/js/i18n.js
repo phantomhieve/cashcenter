@@ -473,7 +473,11 @@
             var val = (currentLang === 'hi') ? el.getAttribute('data-hi') : el.getAttribute('data-en');
             if (val !== null && val !== undefined) {
                 if (val.indexOf('<') !== -1) {
-                    el.innerHTML = val;
+                    if (window.DOMPurify && DOMPurify.sanitize) {
+                        el.innerHTML = DOMPurify.sanitize(val);
+                    } else {
+                        el.textContent = val.replace(/<[^>]*>/g, '');
+                    }
                 } else {
                     el.textContent = val;
                 }

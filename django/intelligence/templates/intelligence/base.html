@@ -438,6 +438,20 @@
                 ? marked.parse(md, { gfm: true, breaks: false })
                 : '<p>' + md.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\n\n/g, '</p><p>') + '</p>';
 
+            function isSafeUrl(rawVal) {
+                if (!rawVal) return false;
+                var trimmed = String(rawVal).trim().replace(/[\x00-\x1f\x7f-\x9f]/g, '');
+                if (trimmed.startsWith('#') || (trimmed.startsWith('/') && !trimmed.startsWith('//'))) {
+                    return true;
+                }
+                try {
+                    var parsed = new URL(trimmed, window.location.origin);
+                    return parsed.protocol === 'http:' || parsed.protocol === 'https:' || parsed.protocol === 'mailto:';
+                } catch (e) {
+                    return false;
+                }
+            }
+
             var cleanHtml;
             if (window.DOMPurify && DOMPurify.sanitize) {
                 cleanHtml = DOMPurify.sanitize(rawHtml, {
@@ -451,9 +465,13 @@
                 doc.querySelectorAll('script,style,iframe,object,embed,link,meta,form').forEach(function (n) { n.remove(); });
                 doc.body.querySelectorAll('*').forEach(function (el) {
                     Array.prototype.slice.call(el.attributes).forEach(function (a) {
-                        var v = (a.value || '').trim().toLowerCase();
-                        if (a.name.indexOf('on') === 0 || ((a.name === 'href' || a.name === 'src') && v.indexOf('javascript:') === 0)) {
+                        var attrName = a.name.toLowerCase();
+                        if (attrName.indexOf('on') === 0) {
                             el.removeAttribute(a.name);
+                        } else if (attrName === 'href' || attrName === 'src') {
+                            if (!isSafeUrl(a.value)) {
+                                el.removeAttribute(a.name);
+                            }
                         }
                     });
                 });
