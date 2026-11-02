@@ -14,11 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	let content_add = document.querySelector('#alert_add_content');
 	if (params.get('sucessful')) {
 		element_add.style.display = "block";
-		content_add.innerHTML = `${params.get('sucessful')}`
+		content_add.textContent = params.get('sucessful');
 	}
 	else if (params.get('update')) {
 		element_add.style.display = "block";
-		content_add.innerHTML = `${params.get('update')}`
+		content_add.textContent = params.get('update');
 	}
 	else
 		element_add.style.display = "none";

@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let content_delete = document.querySelector('#alert_delete_content');
     if (params.get('lr-no')) {
         element_delete.style.display = "block";
-        content_delete.innerHTML = `${params.get('lr-no')}`
+        content_delete.textContent = params.get('lr-no');
     }
     else
         element_delete.style.display = "none";
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let content_update = document.querySelector('#alert_update_content');
     if (params.get('update')) {
         element_update.style.display = "block";
-        content_update.innerHTML = `${params.get('update')}`
+        content_update.textContent = params.get('update');
     }
     else
         element_update.style.display = "none";

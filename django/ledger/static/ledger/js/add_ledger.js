@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let content_add = document.querySelector('#alert_add_content');
     if (params.get('sucessful')) {
         element_add.style.display = "block";
-        content_add.innerHTML = `${params.get('sucessful')}`
+        content_add.textContent = params.get('sucessful');
     }
     else
         element_add.style.display = "none";

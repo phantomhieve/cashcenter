@@ -95,7 +95,11 @@ class AIGateway:
                 latency_ms=round((time.time() - start_t) * 1000, 2),
             )
 
-        endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{resolved_model}:generateContent?key={active_key}"
+        endpoint = f"https://generativelanguage.googleapis.com/v1beta/models/{resolved_model}:generateContent"
+        headers = {
+            "x-goog-api-key": active_key,
+            "Content-Type": "application/json",
+        }
         contents = []
         if system_instruction:
             contents.append({"role": "user", "parts": [{"text": f"SYSTEM INSTRUCTION: {system_instruction}"}]})
@@ -113,7 +117,7 @@ class AIGateway:
         try:
             # Deep reasoning models (Argon) require sufficient time to author extensive reports
             call_timeout = 120 if "argon" in resolved_model else 45
-            resp = requests.post(endpoint, json=payload, timeout=call_timeout)
+            resp = requests.post(endpoint, headers=headers, json=payload, timeout=call_timeout)
             if resp.status_code == 200:
                 data = resp.json()
                 candidates = data.get("candidates", [])
@@ -128,9 +132,14 @@ class AIGateway:
                         tokens_used=tokens,
                         latency_ms=round((time.time() - start_t) * 1000, 2),
                     )
-            logger.error(f"Gemini API returned status {resp.status_code}: {resp.text}")
+            try:
+                err_data = resp.json().get("error", {})
+                err_summary = err_data.get("message", "API request rejected")
+                logger.error("Gemini API returned status %s: %s", resp.status_code, err_summary)
+            except Exception:
+                logger.error("Gemini API returned status %s", resp.status_code)
         except Exception as e:
-            logger.exception(f"Gemini API request failed: {e}")
+            logger.warning("Gemini API request failed: %s", type(e).__name__)
 
         # Fallback to simulation if network or key error occurs
         simulated_text = self._simulate_text(prompt, system_instruction, resolved_model)
